@@ -1,0 +1,45 @@
+.quick-nav-list {
+    color: black !important;
+}
+.full-width {
+    width: 100%;
+}
+
+.onlinkIndicator {
+    color: gray;
+}
+.isOnline {
+    color: #0bda0b !important;
+}
+
+body {
+    font-size: 1.2em;
+}
+
+.dataTables_filter input[type="search"].form-control-sm {
+    min-width: 300px !important;
+}
+
+.make-small {
+    font-size: 0.7em;
+}
+
+.copa-custom {
+    background-color: green !important;
+}
+
+.Pending {
+    color: indigo;
+}
+
+.Clear {
+    color: rgb(209, 209, 209);
+}
+
+.Done {
+    color: green;
+}
+
+.ToDo {
+    color: red;
+}
