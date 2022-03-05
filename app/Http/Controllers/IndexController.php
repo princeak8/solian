@@ -42,6 +42,32 @@ class IndexController extends BaseController
     {
         $file = $request->file('photo');
         $result = $request->file('photo')->storeOnCloudinary('solian/products');
-        dd($result);
+        $url = $result->getPath(); // Get the url of the uploaded file; http
+        $secureUrl = $result->getSecurePath(); // Get the url of the uploaded file; https
+        $size = $result->getSize(); // Get the size of the uploaded file in bytes
+        $rSize = $result->getReadableSize(); // Get the size of the uploaded file in bytes, megabytes, gigabytes or terabytes. E.g 1.8 MB
+        $type = $result->getFileType(); // Get the type of the uploaded file
+        $filename = $result->getFileName(); // Get the file name of the uploaded file
+        $originalFilename = $result->getOriginalFileName(); // Get the file name of the file before it was uploaded to Cloudinary
+        $publicId = $result->getPublicId(); // Get the public_id of the uploaded file
+        $ext = $result->getExtension(); // Get the extension of the uploaded file
+        $width = $result->getWidth(); // Get the width of the uploaded file
+        $height = $result->getHeight(); // Get the height of the uploaded file
+        $time = $result->getTimeUploaded(); // Get the time the file was uploaded
+        $uploadData = [
+            "url" => $url,
+            "secureUrl" => $secureUrl,
+            "size" => $size,
+            "rSize" => $rSize,
+            "type" => $type,
+            "filename" => $filename,
+            "originalFilename" => $originalFilename,
+            "publicId" => $publicId,
+            "ext" => $ext,
+            "width" => $width,
+            "height" => $height,
+            "time" => $time,
+        ];
+        dd($uploadData);
     }
 }
