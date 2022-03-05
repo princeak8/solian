@@ -54,6 +54,7 @@ class IndexController extends BaseController
         $width = $result->getWidth(); // Get the width of the uploaded file
         $height = $result->getHeight(); // Get the height of the uploaded file
         $time = $result->getTimeUploaded(); // Get the time the file was uploaded
+        $mime = $result->getMimeType();
         $uploadData = [
             "url" => $url,
             "secureUrl" => $secureUrl,
