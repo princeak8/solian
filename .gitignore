@@ -17,4 +17,5 @@ yarn-error.log
 .well-known/
 error_log
 web.config
+docs/
 

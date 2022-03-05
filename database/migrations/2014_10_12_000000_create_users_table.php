@@ -19,9 +19,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->foreignId('role_id');
+            $table->string('phone_number');
+            $table->integer('address_id')->nullable();
+            $table->string('email_token', 255)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
+        \Artisan::call('db:seed', array('--class' => 'UserSeeder'));
     }
 
     /**

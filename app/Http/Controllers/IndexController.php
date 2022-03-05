@@ -41,7 +41,7 @@ class IndexController extends BaseController
     public function  upload(Request $request)
     {
         $file = $request->file('photo');
-        $result = $request->file('photo')->storeOnCloudinary();
+        $result = $request->file('photo')->storeOnCloudinary('solian/products');
         dd($result);
     }
 }
