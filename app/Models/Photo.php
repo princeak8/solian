@@ -14,6 +14,11 @@ class Photo extends Model
         return $this->belongsTo('App\Models\Product', 'product_id');
     }
 
+    public function file()
+    {
+        return $this->belongsTo('App\Models\File', 'file_id');
+    }
+
     public static function slides()
     {
         $slides = Self::where('slide', '1')->get();

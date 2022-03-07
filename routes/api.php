@@ -19,3 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/upload', 'IndexController@upload');
+
+Route::post('/admin/update_product_photos', 'Admin\ProductController@update_product_photos');
+Route::post('/admin/update_slides', 'Admin\ProductController@update_slides');
+Route::post('/admin/update_collections', 'Admin\ProductController@update_collections');

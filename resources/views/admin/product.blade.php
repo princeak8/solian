@@ -48,7 +48,7 @@
             <div class="row">
                 <div class="col-8">
                     @foreach($product->photos as $productPhoto)
-                        <img id="photo-{{$productPhoto->id}}" src="{{ asset('uploads/products/'.$productPhoto->name) }}" alt="" title="" @if($productPhoto->name==$product->main) class="photos d-block" @else class="photos d-none" @endif style="width:100%; height:30em;" />
+                        <img id="photo-{{$productPhoto->id}}" src="{{ $productPhoto->file->secure_url }}" alt="" title="" @if($productPhoto->name==$product->main) class="photos d-block" @else class="photos d-none" @endif style="width:100%; height:30em;" />
                     @endforeach
                     <h3>Product Photos<button type="button" id="add-photo" data-open="0" class="btn btn-sm btn-primary ml-3">Add Photo(s)</a></h3>
                     <div id="app" class="d-none form-group">
@@ -87,7 +87,7 @@
                     <div id="thumbnails" class="row">
                         @foreach($product->photos as $productPhoto)
                             <div class="col-3">
-                                <img data-id="photo-{{$productPhoto->id}}" class="thumb-photo" src="{{ asset('uploads/products/'.$productPhoto->name) }}" alt="" title="" style="width:100%; height:10em;" />
+                                <img data-id="photo-{{$productPhoto->id}}" class="thumb-photo" src="{{ $productPhoto->file->thumbnail }}" alt="" title="" style="width:100%; height:10em;" />
                                 <div class="row">
                                    <span class="pt-1"> Main</span>
                                    <input type="radio" class="col-4 form-control" name="main" value="{{$productPhoto->id}}" @if($productPhoto->name==$product->main) checked @endif />

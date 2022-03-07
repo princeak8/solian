@@ -16,16 +16,22 @@ class Product extends Model
      */
     protected $fillable = [];
 
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        // your other new column
+    ];
+
     public function getMainAttribute()
     {
         $mainPhoto = '';
         $firstPhoto = '';
         foreach($this->photos as $photo) {
             if(empty($firstPhoto)) {
-                $firstPhoto = $photo->name;
+                $firstPhoto = $photo->file->secure_url;
             }
             if($photo->main == 1) {
-                $mainPhoto = $photo->name;
+                $mainPhoto = $photo->file->secure_url;
             }
         }
         if(empty($mainPhoto)) {
