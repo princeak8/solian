@@ -13,7 +13,7 @@
                 <div class="row">
                     @foreach($products as $product)
                         <div class="col-4">
-                            <img src="{{ $product->main }}" alt="" title="" style="width:100%; height:15em;" />
+                            <img src="{{ $product->mainthumb }}" alt="" title="" style="width:100%; height:15em;" />
                             <span>{{$product->name}}</span><br/>
                             <span>N{{number_format($product->price)}} | Qty: {{$product->quantity}}</span><br/>
                             @foreach($product->collections as $collection)

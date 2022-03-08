@@ -40,6 +40,24 @@ class Product extends Model
         return $mainPhoto;
     }
 
+    public function getMainthumbAttribute()
+    {
+        $mainPhoto = '';
+        $firstPhoto = '';
+        foreach($this->photos as $photo) {
+            if(empty($firstPhoto)) {
+                $firstPhoto = $photo->file->thumbnail;
+            }
+            if($photo->main == 1) {
+                $mainPhoto = $photo->file->thumbnail;
+            }
+        }
+        if(empty($mainPhoto)) {
+            $mainPhoto = $firstPhoto;
+        }
+        return $mainPhoto;
+    }
+
     public function getNewPriceAttribute()
     {
         $rate = 1;
