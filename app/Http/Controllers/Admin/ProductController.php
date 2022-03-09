@@ -37,24 +37,61 @@ class ProductController extends Controller
     {
         $product = $this->productService->product($id);
         if($product) {
-            $product = new ProductResource($product);
             return view('admin/product', compact('product'));
         }
         return redirect('admin/products');
     }
 
-    public function update_product_photos()
+    public function product_form($id = null)
     {
-        $this->productService->update();
+        $productCollections = [];
+        $collectionsData = [];
+        $sizesData = [];
+        $productSizes = [];
+        try{
+            $productData = $this->productService->productForm($id);
+            if(!$productData['product'])  return redirect('admin/products')->with('error', 'The product was not found');
+
+            $title = $productData['title'];
+            $product = $productData['product'];
+            $collectionsData = $productData['collectionsData'];
+            $productCollections = $productData['productCollections'];
+            $sizesData = $productData['sizesData'];
+            $productSizes = $productData['productSizes'];
+            //dd($collectionsData);
+            //dd($productSizes);
+            return view('admin/product_form', compact('title', 'product', 'collectionsData', 'productCollections', 'sizesData', 'productSizes'));
+        } catch (\Throwable $th) {
+            echo $th->getMessage();
+            return redirect('admin/products')->with('error', $th->getMessage());
+        }
     }
 
-    public function update_slides()
+    public function save(ProductRequest $request)
     {
-        $this->photoService->update();
-    }
-
-    public function update_collections()
-    {
-        $this->photoService->update_collections();
+        $post = $request->all();
+        //dd($post['sizes']);
+        $id = $request->get('id');
+        try{
+            if($id==null) {
+                //Add action
+                $product = $this->productService->save($post);
+            }else{
+                //edit action
+                $product = $this->productService->product($id);
+                if($product) $this->productService->update($post, $product);
+            }
+            if($product) {
+                $this->productService->save_product_collections($post['collections'], $product);
+                $this->productService->save_product_sizes($post['sizes'], $product);
+            }
+            if($id==null) {
+                return redirect('admin/products');
+            }
+            return back()->with("msg", "Product edited successfully");
+        } catch (\Throwable $th) {
+            echo $th->getMessage();
+            return back()->with('error', $th->getMessage());
+        }
     }
 }

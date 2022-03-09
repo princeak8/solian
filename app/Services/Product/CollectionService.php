@@ -31,6 +31,15 @@ class CollectionService
         return Collection::where('id', $id)->where('deleted', '0')->first();
     }
 
+    public function  collectionData($collections)
+    {
+        $collectionsData = [];
+        foreach($collections as $collection) {
+            $collectionsData[$collection->id] = $collection->name;
+        }
+        return $collectionsData;
+    }
+
     //public function updatePhoto($file, $photo)
 }
 

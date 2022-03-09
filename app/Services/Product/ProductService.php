@@ -13,8 +13,23 @@ use App\Models\Collection;
 use App\Models\Order_status;
 use App\Models\File;
 
+use App\Services\Product\CollectionService;
+use App\Services\Product\SizeService;
+use App\Services\Product\PhotoService;
+
 class ProductService
 {
+
+    private $collectionService;
+    private $sizeService;
+    private $photoService;
+
+    public function __construct()
+    {
+        $this->collectionService = new CollectionService;
+        $this->sizeService = new SizeService;
+        $this->photoService = new PhotoService;
+    }
 
     public function allProducts()
     {
@@ -31,71 +46,155 @@ class ProductService
         return Product::where('id', $id)->where('deleted', '0')->first();
     }
 
-    public function update()
+    public function productCollections($product)
     {
-        $products = $this->products();
-        if($products->count() > 0) {
-           foreach($products as $product) {
-               if($product->photos->count() > 0) {
-                   foreach($product->photos as $photo) {
-                       $path = 'uploads/products/'.$photo->name;
-                       //dd(asset('uploads/products/'.$photo->name));
-                        $filePathParts = pathinfo(asset($path));
-                        $dimension = getimagesize($path);
-                        $width = $dimension[0];
-                        $height = $dimension[1];
-                        $mime = $dimension['mime'];
-                        $size = filesize($path);
-                        $formattedSize = $this->convertSize($size);
-                        $type = 'image';
-                        $url = $filePathParts['dirname'].'/'.$filePathParts['basename'];
-                        $ext = $filePathParts['extension'];
-                        // dd($dimension);
-                        // dd($type);
-                        $file = new File;
-                        $file->user_id = 2;
-                        $file->file_type = $type;
-                        $file->mime_type = $mime;
-                        $file->original_filename = $photo->name;
-                        $file->filename = $photo->name;
-                        $file->extension = $ext;
-                        $file->size = $size;
-                        $file->formatted_size = $formattedSize;
-                        $file->url = $url;
-                        $file->secure_url = $url;
-                        $file->upload_date = $photo->created_at;
-                        $file->height = $height;
-                        $file->width = $width;
-                        $file->save();
-                        $photo->file_id = $file->id;
-                        
-                        $photo->update();
-                        
-                   }
-               }
-           } 
+        $productCollections = [];
+        if($product->collections->count() > 0) {
+            foreach($product->collections as $collection) {
+                $productCollections[] = $collection->id;
+            }
         }
-        dd('done');
-        $environment = env('ENVIRONMENT', 'local');
-        $url = asset('uploads/products/thumbnails/'.$product->main);
-        if(isset($data['name'])) $product->name = $data['name'];
-        if(isset($data['quantity'])) $product->quantity = $data['quantity'];
-        if(isset($data['price'])) $product->price = $data['price'];
-        if(isset($data['description'])) $product->description = $data['description']; 
-        $product->update();
-        dd($environment);
+        return $productCollections;
     }
 
-    private function convertSize($size)
+    public function productSizes($product)
     {
-        $formatted = '';
-        $len = strlen($size);
-        if($len < 4) $formatted = $size.'Bytes'; 
-        if($len > 3 && $len < 7) $formatted = round((float)($size/1024), 1).'KB';
-        if($len > 6 && $len < 11) $formatted = round((float)(($size/1024)/1024), 1).'MB';
-        if($len > 10 && $len < 14) $formatted = round((float)((($size/1024)/1024)/1024), 1).'GB';
-        //return (float)$formatted;
-        return $formatted;
+        $productSizes = [];
+        if($product->product_sizes->count() > 0) {
+            foreach($product->product_sizes as $productSize) {
+                $productSizes[] = $productSize->size_id;
+            }
+        }
+        return $productSizes;
+    }
+
+    public function productForm($id)
+    {
+        $productCollections = [];
+        $collectionsData = [];
+        $sizesData = [];
+        $productSizes = [];
+        $product = new Product;
+        $title = 'Add a new Product';
+        if ($id != null) {
+            $title = 'Edit Product';
+            $product = $this->product($id);
+            if($product) {
+                if($product->collections->count() > 0) {
+                    foreach($product->collections as $collection) {
+                        $productCollections[] = $collection->id;
+                    }
+                }
+                if($product->product_sizes->count() > 0) {
+                    foreach($product->product_sizes as $productSize) {
+                        $productSizes[] = $productSize->size_id;
+                    }
+                }
+            }
+        }
+        $sizes = $this->sizeService->sizes();
+        foreach($sizes as $size) {
+            $sizesData[$size->id] = $size->size;
+        }
+        $collections = $this->collectionService->collections();
+        foreach($collections as $collection) {
+            $collectionsData[$collection->id] = $collection->name;
+        }
+        return  [
+                    'productCollections' => $productCollections,
+                    'collectionsData' => $collectionsData,
+                    'sizesData' => $sizesData,
+                    'productSizes' => $productSizes,
+                    'product' => $product,
+                    'title' => $title
+                ];
+    }
+
+    public function saveUpdate()
+    {
+        
+            if($id==null) {
+                $product->save();
+                
+            }else{
+                $product->update();
+            }
+    }
+
+    public function save($post)
+    {
+        $user_id = $post['user_id'];
+        $product = new Product;
+        $product->name = $post['name'];
+        $product->price = $post['price'];
+        $product->quantity = $post['quantity'];
+        $product->description = $post['description'];
+        $product->save();
+        $category['id'] = $post->id;
+        $category['name'] = 'product';
+        $deleted_photos = [];
+        if(isset($post['photos']) && !empty($post['photos'])) {
+            $photos = $post['photos'];
+            if(!empty($post['deleted_photos'])) {
+                $deleted_photos = explode(',', $post['deleted_photos']); 
+            }
+            $this->photoService->savePhotos($photos, $user_id, $category, $deleted_photos=[]);
+        }
+        return $product;
+    }
+
+    public function update($post, $product)
+    {
+        if(isset($post['name'])) $product->name = $post['name'];
+        if(isset($post['price'])) $product->price = $post['price'];
+        if(isset($post['quantity'])) $product->quantity = $post['quantity'];
+        if(isset($post['description'])) $product->description = $post['description'];
+        $product->update();
+        return $product;
+    }
+
+    public function save_product_collections($collectionIds, $product)
+    {
+        $existingCollections = [];
+        if($product->product_collections->count() > 0) {
+            foreach($product->product_collections as $productCollection) {
+                if(!in_array($productCollection->collection->id, $collectionIds)) {
+                    $productCollection->delete();
+                }else{
+                    $existingCollections[] = $productCollection->collection->id;
+                }
+            }
+        }
+        foreach($collectionIds as $collection_id) {
+            if(!in_array($collection_id, $existingCollections)) {
+                $product_collection = new Product_collection;
+                $product_collection->product_id = $product->id;
+                $product_collection->collection_id = $collection_id;
+                $product_collection->save();
+            }
+        }
+    }
+
+    public function save_product_sizes($sizeIds, $product)
+    {
+        $existingSizes = [];
+        if($product->product_sizes->count() > 0) {
+            foreach($product->product_sizes as $productSize) {
+                if(!in_array($productSize->size->id, $sizeIds)) {
+                    $productSize->delete();
+                }else{
+                    $existingSizes[] = $productSize->size->id;
+                }
+            }
+        }
+        foreach($sizeIds as $size_id) {
+            if(!in_array($size_id, $existingSizes)) {
+                $product_size = new Product_size;
+                $product_size->product_id = $product->id;
+                $product_size->size_id = $size_id;
+                $product_size->save();
+            }
+        }
     }
 
     //public function updatePhoto($file, $photo)

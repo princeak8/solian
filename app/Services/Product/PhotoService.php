@@ -11,8 +11,17 @@ use App\Models\Product;
 use App\Models\File;
 use App\Models\Collection;
 
+use App\Services\Product\FileService;
+
 class PhotoService
 {
+
+    private $fileService;
+
+    public function __construct()
+    {
+        $this->fileService = new FileService;
+    }
 
     public function allPhotos()
     {
@@ -37,6 +46,32 @@ class PhotoService
     public function collections()
     {
         return Photo::whereNotNull('collection_id')->where('deleted', '0')->get();
+    }
+
+    /*
+        Saves multiple photos
+        params: 
+            $photos: Array of the photos to be uploaded
+            $user_id: The Id of the user uploading
+            $category: The category the photo belongs to as an array of the name and id of the category like product, collection, etc
+    */
+    public function savePhotos($photos, $user_id, $category, $deleted_photos=[])
+    {
+        foreach($photos as $p) {
+            $photo = new Photo;
+            $file_type = 'image';
+            if(!in_array($p->getClientOriginalName(), $deleted_photos)) {
+                $file = $this->fileService->save($p, $file_type, $user_id);
+                if($file && $file != null) {
+                    $photo->file_id = $file->id;
+                    switch($category['name']) {
+                        case 'product' : $photo->product_id = $category['id']; break;
+                        case 'collection' : $photo->collection_id = $category['id']; break;
+                    }
+                }
+                $photo->save();
+            }
+        }
     }
 
     public function update()

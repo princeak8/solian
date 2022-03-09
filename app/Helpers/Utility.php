@@ -109,6 +109,7 @@ class Utility
 
             $upload_success = $file->move(self::$file_path.$dir, $f->url);
             if ($upload_success) {
+                $f->file_url = self::$file_path.$dir.'/'.$f->url;
                 $Intervention_img = new ImageManager(); //make an instance of the Image manager Class
                 //dd(self::$file_path.$dir.'/'.$f->url);
                 $img = $Intervention_img->make(self::$file_path.$dir.'/'.$f->url);//re-create the image using the Image manager object
