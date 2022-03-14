@@ -20,6 +20,11 @@ class PhotoController extends Controller
         $this->photoService = new PhotoService;
     }
 
+    public function photos()
+    {
+        return view('admin/photos');
+    }
+
     public function add_photos(SavePhotoRequest $request)
     {
         $post = $request->all();
