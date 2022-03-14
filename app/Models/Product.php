@@ -81,6 +81,11 @@ class Product extends Model
         return $price;
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id');
+    }
+
     public function photos()
     {
         $photos = $this->hasMany('App\Models\Photo', 'product_id', 'id')->where('deleted', '0');

@@ -48,7 +48,7 @@
                 <a href="{{url('admin/products')}}">Products</a> / 
                 <p class="m-0 font-weight-bold text-secondary">
                     {{$title}}
-                    @if($product->id != null) 
+                    @if(!empty($product)) 
                         <a href="{{url('admin/product/'.$product->id)}}" class="btn btn-secondary">{{$product->name}}</a>
                     @endif
                 </p>
@@ -59,9 +59,15 @@
                 <p>Please Add a collection before adding products</p>
             @else
                 <div if="form-container">
-                    {!! Form::model($product, ['url' => "admin/product/save?id=$product->id",'method' => 'post', 'files' => true, 
-                        'id'=>'productForm', 'class'=>'form-horizontal', 'onsubmit'=>'return save();'])
-                    !!}
+                    @if(empty($product))
+                        {!! Form::open(['url' => "admin/product/save",'method' => 'post', 'files' => true, 
+                            'id'=>'productForm', 'class'=>'form-horizontal', 'onsubmit'=>'return save();'])
+                        !!}
+                    @else
+                        {!! Form::model($product, ['url' => "admin/product/update?id=$product->id",'method' => 'post', 'files' => true, 
+                            'id'=>'productForm', 'class'=>'form-horizontal', 'onsubmit'=>'return save();'])
+                        !!}
+                    @endif
                         @include('inc.message')
 
                         <div class="form-group">
@@ -111,14 +117,14 @@
                         <div class="form-group">
                             {{Form::textarea("description", old("description"), ["class" => "form-control", "placeholder"=>"Description of product"]) }}
                         </div>
-                        @if($product->id == null)
+                        @if(empty($product))
                             <div id="app" class="form-group row">
                                 <p class="col-12">Add Product Photos</p>
                                 
                                 <p v-if="photoError != ''" class="col-12 alert alert-danger">@{{photoError}}</p>
                                 <div class="dropbox col-8">
                                     <div id="photos">
-                                        <input type="file" multiple name="photos[]" class="input-file" accept="image/*" required>
+                                        <input type="file" multiple name="photos[]" class="input-file" accept="image/*">
                                     </div>
                                     
                                     <p v-if="isInitial">

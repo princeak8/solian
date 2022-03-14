@@ -38,6 +38,11 @@ class PhotoService
         return Photo::where('id', $id)->where('deleted', '0')->first();
     }
 
+    public function productMain($product_id)
+    {
+        return Photo::where('product_id', $product_id)->where('main', 1)->first();
+    }
+
     public function slides()
     {
         return Photo::where('slide', 1)->where('deleted', '0')->get();
@@ -55,7 +60,7 @@ class PhotoService
             $user_id: The Id of the user uploading
             $category: The category the photo belongs to as an array of the name and id of the category like product, collection, etc
     */
-    public function savePhotos($photos, $user_id, $category, $deleted_photos=[])
+    public function savePhotos($photos, $user_id, $deleted_photos=[], $category=[])
     {
         foreach($photos as $p) {
             $photo = new Photo;
@@ -64,14 +69,35 @@ class PhotoService
                 $file = $this->fileService->save($p, $file_type, $user_id);
                 if($file && $file != null) {
                     $photo->file_id = $file->id;
-                    switch($category['name']) {
-                        case 'product' : $photo->product_id = $category['id']; break;
-                        case 'collection' : $photo->collection_id = $category['id']; break;
+                    if(!empty($category)) {
+                        switch($category['name']) {
+                            case 'product' : $photo->product_id = $category['id']; break;
+                            case 'collection' : $photo->collection_id = $category['id']; break;
+                        }
                     }
                 }
                 $photo->save();
             }
         }
+    }
+
+    public function changeProductMainPhoto($product, $photo)
+    {
+        $oldMain = $this->productMain($product->id);
+        if(!$oldMain || ($oldMain && $oldMain->id != $photo->id)) {
+            $photo->main = 1;
+            $photo->update();
+        }
+        if($oldMain) {
+            $oldMain->main = 0;
+            $oldMain->update();
+        }
+    }
+
+    public function delete($photo)
+    {
+        $photo->deleted = 1;
+        $photo->update();
     }
 
     public function update()

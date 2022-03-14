@@ -10,6 +10,8 @@ use App\Models\Payment;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Collection;
+use App\Models\Product_collection;
+use App\Models\Product_size;
 use App\Models\Order_status;
 use App\Models\File;
 
@@ -74,7 +76,7 @@ class ProductService
         $collectionsData = [];
         $sizesData = [];
         $productSizes = [];
-        $product = new Product;
+        $product = '';
         $title = 'Add a new Product';
         if ($id != null) {
             $title = 'Edit Product';
@@ -129,8 +131,9 @@ class ProductService
         $product->price = $post['price'];
         $product->quantity = $post['quantity'];
         $product->description = $post['description'];
+        $product->user_id = $user_id;
         $product->save();
-        $category['id'] = $post->id;
+        $category['id'] = $product->id;
         $category['name'] = 'product';
         $deleted_photos = [];
         if(isset($post['photos']) && !empty($post['photos'])) {
@@ -138,7 +141,7 @@ class ProductService
             if(!empty($post['deleted_photos'])) {
                 $deleted_photos = explode(',', $post['deleted_photos']); 
             }
-            $this->photoService->savePhotos($photos, $user_id, $category, $deleted_photos=[]);
+            $this->photoService->savePhotos($photos, $user_id, $deleted_photos, $category);
         }
         return $product;
     }

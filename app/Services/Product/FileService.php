@@ -30,16 +30,16 @@ class FileService
         $url = '';
         $secureUrl = '';
         if($environment=='local') {
-            $uploadedPhoto = Utility::UploadFile($p, 'products', Auth::user()->id);
+            $uploadedPhoto = Utility::UploadFile($file, 'products', Auth::user()->id);
             $filename = $uploadedPhoto->name;
-            $url = $uploadedPhoto->file_url;
+            $url = env('APP_URL').$uploadedPhoto->file_url;
             $secureUrl = $url;
-            $dimensions = getimagesize($p);
-            $width = $dimension[0];
-            $height = $dimension[1];
+            $dimensions = getimagesize($uploadedPhoto->file_url);
+            $width = $dimensions[0];
+            $height = $dimensions[1];
         }
         if($environment=='remote') {
-            $uploadedPhoto = $p->storeOnCloudinary('solian/products');
+            $uploadedPhoto = $file->storeOnCloudinary('solian/products');
             $filename = $uploadedPhoto->getFileName();
             $url = $uploadedPhoto->getPath();
             $secureUrl = $uploadedPhoto->getSecurePath();
@@ -51,24 +51,24 @@ class FileService
             $rSize = $result->getReadableSize(); // Get the size of the uploaded file in bytes, megabytes, gigabytes or terabytes. E.g 1.8 MB 
         }
         if($uploadedPhoto && $uploadedPhoto != null) {
-            $file = new File;
-            $file->user_id = $user__id;
-            $file->file_type = $file_type;
-            $file->mime_type = $file->getClientMimeType();
-            $file->original_filename = $file->getClientOriginalName();
-            $file->extension = $file->getClientOriginalExtension();
-            $file->size = (isset($size)) ? $size : filesize($file);
-            $file->formatted_size = (isset($rSize)) ? $rSize : $this->convertSize($file->size);
-            $file->filename = $filename;
-            $file->url = $url;
-            $file->secure_url = $url;
-            if(isset($publicId)) $file->public_id = $publicId;
-            $file->width = $width;
-            $file->height = $height;
-            $file->save();
+            $fileObj = new File;
+            $fileObj->user_id = $user_id;
+            $fileObj->file_type = $file_type;
+            $fileObj->mime_type = $file->getClientMimeType();
+            $fileObj->original_filename = $file->getClientOriginalName();
+            $fileObj->extension = $file->getClientOriginalExtension();
+            $fileObj->size = (isset($size)) ? $size : filesize($uploadedPhoto->file_url);
+            $fileObj->formatted_size = (isset($rSize)) ? $rSize : $this->convertSize($fileObj->size);
+            $fileObj->filename = $filename;
+            $fileObj->url = $url;
+            $fileObj->secure_url = $url;
+            if(isset($publicId)) $fileObj->public_id = $publicId;
+            $fileObj->width = $width;
+            $fileObj->height = $height;
+            $fileObj->save();
             
         }
-        return (isset($file)) ? $file : null;
+        return (isset($fileObj)) ? $fileObj : null;
     }
 
     private function convertSize($size)

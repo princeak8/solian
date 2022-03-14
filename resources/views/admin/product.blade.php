@@ -87,10 +87,12 @@
                     <div id="thumbnails" class="row">
                         @foreach($product->photos as $productPhoto)
                             <div class="col-3">
+                                
                                 <img data-id="photo-{{$productPhoto->id}}" class="thumb-photo" src="{{ $productPhoto->file->thumbnail }}" alt="" title="" style="width:100%; height:10em;" />
+                                <p class="alert alert-danger d-none" id="photo-main-error-{{$productPhoto->id}}">this is an error</p>
                                 <div class="row">
                                    <span class="pt-1"> Main</span>
-                                   <input type="radio" class="col-4 form-control" name="main" value="{{$productPhoto->id}}" @if($productPhoto->name==$product->main) checked @endif />
+                                   <input type="radio" class="col-4 form-control" name="main" value="{{$productPhoto->id}}" @if($productPhoto->file->secure_url==$product->main) checked @endif />
                                     @if($product->photos->count() > 1) 
                                         <a href="{{url('admin/product/photo/delete/'.$productPhoto->id)}}" class="btn btn-danger" onclick="return confirm('Are You Sure You want to Delete this photo?')">Delete</a>
                                     @endif
@@ -135,18 +137,31 @@
                 $('#'+id).addClass('d-block');
             })
             $('input[name=main]').change(function() {
+                console.log('change');
                 var productId = $('input[name=product_id]').val();
                 var photoId = $(this).val();
                 var url = "{{url('admin/product/change_main')}}";
                 var formData =  {product_id:productId, photo_id: photoId};
                 //console.log(photoId);
+                var self = $(this)
                 axios.post(url, formData)
                     .then(function (res) {
-                        console.log('status: ',res.data.status);
+                        console.log('status: ',res.data.statusCode);
+                        if(res.data.statusCode != 200) {
+                            console.log('heloo');
+                            self.prop('checked', false);
+                            $('#photo-main-error-'+photoId).html(res.data.message);
+                            $('#photo-main-error-'+photoId).removeClass('d-none');
+                            setTimeout(
+                                () => {
+                                    $('#photo-main-error-'+photoId).addClass('d-none');
+                                },
+                                30000);
+                        }
                     })
                     .catch(function(error) {
                         console.log("An error occured while trying to perform the operation "+error.message);
-                        throw error;
+                        $(this).attr('checked',false);
                     });
             })
             $('#add-photo').click(function() {

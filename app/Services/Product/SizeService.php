@@ -11,14 +11,14 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Collection;
 use App\Models\Order_status;
-use App\Models\File;
+use App\Models\Size;
 
 class SizeService
 {
 
     public function sizes()
     {
-        return Product::all();
+        return Size::all();
     }
 
     public function size($id)

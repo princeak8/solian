@@ -42,15 +42,20 @@ Route::group([
     Route::get('/company', 'CompanyController@index');
     Route::post('/company/update_field', 'CompanyController@update_field');
 
+    //Photo routes
+    Route::get('/photos', 'PhotoController@photos');
+    Route::post('/photo/add', 'PhotoController@add_photos');
+
     //Products routes
     Route::get('/products', 'ProductController@index');
     Route::get('/product/create', 'ProductController@product_form');
     Route::get('/product/edit/{id}', 'ProductController@product_form');
     Route::post('/product/save', 'ProductController@save');
+    Route::post('/product/update', 'ProductController@update');
     Route::get('/product/delete/{id}', 'ProductController@delete');
     Route::post('/product/change_main', 'ProductController@change_main');
     Route::post('/product/photo/save', 'ProductController@add_photo');
-    Route::get('/product/photo/delete/{id}', 'ProductController@delete_photo');
+    Route::get('/product/photo/delete/{id}', 'PhotoController@delete');
     Route::get('/product/{id}', 'ProductController@show');
 
     //collection routes
