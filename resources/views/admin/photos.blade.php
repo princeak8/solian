@@ -30,6 +30,10 @@
 			text-align: center;
 			padding: 50px 0;
 		}
+        .icons {
+            transform: scale(4);
+        }
+        
     </style>
 @stop
 
@@ -43,6 +47,19 @@
                 <a href="{{url('admin/product/create_photo')}}" class="btn btn-sm btn-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Add Photo
                 </a>
+                @include('layouts/admin/photos_header')
+                <div>
+                    <span>
+                        <div class="btn btn-primary">Add Photo(s) to Product</div>
+      <select>
+        <option value="Select Product">Select Product</option>
+        <option value="Evening Gown">Evening Gown</option>
+        <option value="Casuals">Casuals</option>
+      </select>
+                        <div class="btn btn-primary">Add Photo(s) to Slides</div>
+                    </span>
+                </div>
+
                  <!-- Modal Begins-->
                  <div class="dropdown col-md-12 row" style="width:100%; margin-left:-4em;">
                         
@@ -92,7 +109,12 @@
                             <span>
                                 <img src="{{asset('assets/img/product/product-1.jpg')}}" alt="" style="width:100%; height:15em; object-fit: cover; padding-bottom: 1em;">
                             </span>
-                            <a href class="btn btn-danger">Delete</a>
+                                <span class="icons" style="transform:scale(4);">
+                                    <input type="checkbox" id="" name="">
+                                </span>
+                                <span class="icons"  style="transform:scale(4);">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </span>
                         </div>
                         <div class="col-3">
                             <span>
@@ -122,6 +144,26 @@
 
 @section('js')
     <script type="application/javascript">
+        $('.dropdown-menu').on('click', function(event){
+            var events = $._data(document, 'events') || {};
+            events = events.click || [];
+            for(var i = 0; i < events.length; i++) {
+                if(events[i].selector) {
+
+                    //Check if the clicked element matches the event selector
+                    if($(event.target).is(events[i].selector)) {
+                        events[i].handler.call(event.target, event);
+                    }
+
+                    // Check if any of the clicked element parents matches the 
+                    // delegated event selector (Emulating propagation)
+                    $(event.target).parents(events[i].selector).each(function(){
+                        events[i].handler.call(this, event);
+                    });
+                }
+            }
+            event.stopPropagation(); //Always stop propagation
+        });
         function save()
         {
             var edit = $('input[name=edit]').val();
