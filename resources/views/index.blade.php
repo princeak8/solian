@@ -8,7 +8,7 @@
         <div class="carousel-inner">
             @foreach($slides as $slide)
                 <div class="carousel-item @if($slide->active==1) active @endif">
-                    <img class="d-block w-100" src="{{asset('uploads/slides/'.$slide->name)}}" alt="First slide">
+                    <img class="d-block w-100" src="{{$slide->file->secure_url}}" alt="First slide">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-md-push-3 col-sm-12 col-xs-12">	
@@ -74,14 +74,14 @@
                             <div class="box"><?php $i = 0; ?>
                                 @foreach($product->photos as $productPhoto) <?php $i++; ?>
                                     <a href="{{url('product/'.$product->name)}}">
-                                        <img @if($i==1) class="lazyload img-back" @else class="lazyload img-front" @endif data-src="{{asset('uploads/products/'.$productPhoto->name)}}" 
+                                        <img @if($i==1) class="lazyload img-back" @else class="lazyload img-front" @endif data-src="{{$productPhoto->file->secure_url}}" 
                                             alt=""
                                         >
                                     </a>
                                     @if($i==2) @break @endif
                                 @endforeach
                                 <ul class="product__hover">
-                                    <li><a href="{{asset('uploads/products/'.$product->main)}}" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                    <li><a href="{{$product->main}}" class="image-popup"><span class="arrow_expand"></span></a></li>
                                     <!--<li><a href="#"><span class="icon_heart_alt"></span></a></li>-->
                                     <li><a href="javascript:void(0)" onclick="add_to_cart({{$product}})"><span class="icon_bag_alt"></span></a></li>
                                 </ul>
@@ -97,11 +97,15 @@
                                     <i class="fa fa-star"></i>
                                 </div>
                                 -->
-                                <div class="sizes">
-                                    @foreach($product->product_sizes as $productSize) 
-                                        <a href="#">{{$productSize->size->size}}</a>
-                                    @endforeach
-                                </div>
+                                
+                                    <div class="sizes">
+                                        @foreach($product->product_sizes as $productSize) 
+                                            @if($productSize->size)
+                                                <a href="#">{{$productSize->size->size}}</a>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                
                                 <div class="productprice">
                                     <span class="currency-sign">{{Session::get('currency_sign')}}</span>
                                     <span class="currency" data-value="{{$product->price}}">{{number_format($product->new_price, 2)}}</span>
@@ -127,7 +131,7 @@
             @foreach($collections as $collection)
                     <div class="col-6">
                         <div class="content-wrapper">
-                            <img class="lazyload" data-src="{{asset('uploads/collections/'.$collection->photo)}}" alt="" style="height: 28em; margin-top:5em;">
+                            <img class="lazyload" data-src="{{$collection->photo->file->secure_url}}" alt="" style="height: 28em; margin-top:5em;">
                             <div class="text-wrapper">
                                 <h2>{{$collection->name}}</h2>
                                 <a href="{{url('collection/'.$collection->name)}}" class="btn btn-warning">Shop now</a>

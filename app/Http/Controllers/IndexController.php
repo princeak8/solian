@@ -34,7 +34,7 @@ class IndexController extends BaseController
         }*/
         $collections = Collection::where('deleted', '0')->orderBy('created_at', 'desc')->get();
         $slides = Photo::slides();
-        //dd($collections);
+        //dd($slides);
         return view('index', compact('company', 'products', 'collections', 'slides'));
     }
 

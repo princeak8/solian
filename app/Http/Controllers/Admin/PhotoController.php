@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Http\Requests\AddPhotosRequest;
+
 use App\Services\Product\ProductService;
 use App\Services\Product\PhotoService;
 
@@ -15,26 +17,35 @@ class PhotoController extends Controller
 
     public function __construct()
     {
-        $this->middleware('adminAuth');
+        //$this->middleware('adminAuth');
         $this->productService = new ProductService;
         $this->photoService = new PhotoService;
     }
 
     public function photos()
     {
-        return view('admin/photos');
+        $photos = [];
+        try{
+            $photos = $this->photoService->unattachedPhotos();
+        } catch (\Throwable $th) {
+            \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+        }
+        return view('admin/photos', compact('photos'));
     }
 
-    public function add_photos(SavePhotoRequest $request)
+    public function add_photos(AddPhotosRequest $request)
     {
         $post = $request->all();
+        //dd($post);
         $deleted_photos = [];
         if(isset($post['deleted_photos']) && !empty($post['deleted_photos'])) {
             $deleted_photos = explode(',', $post['deleted_photos']); 
         }
         try{
-            $this->photoService->savePhotos($post['photos'], auth::user()->id, $deleted_photos);
-            return back();
+            $user_id = 1; 
+            //auth::user()->id;
+            $this->photoService->savePhotos($post['photos'], $user_id, $deleted_photos);
+            return back()->with('msg', "Photos Added successfully");
         } catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
             return back()->with('error', $th->getMessage());

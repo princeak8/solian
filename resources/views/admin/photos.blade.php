@@ -61,9 +61,13 @@
                 </div>
 
                  <!-- Modal Begins-->
+
                  <div class="dropdown col-md-12 row" style="width:100%; margin-left:-4em;">
                         
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="width:100%;">
+                        {!! Form::open(['url' => "admin/photo/add",'method' => 'post', 'files' => true, 
+                            'class'=>'form-horizontal', 'onsubmit'=>'return save();'])
+                        !!}
                         @if(empty($product))
                             <div id="app" class="form-group row">
                                 <p class="col-12">Add Product Photos</p>
@@ -104,6 +108,7 @@
             </h6>
         </div>
         <div class="card-body">
+            @include('inc.message')
             <div class="row">
                         <div class="col-3">
                             <span>
@@ -166,18 +171,15 @@
         });
         function save()
         {
-            var edit = $('input[name=edit]').val();
-            if(edit==0) {
-                if(app.photos.length <= 0) {
-                    app.photoError = "Please add atleast one photo";
-                    console.log(app.deletedPhotos);
-                    setInterval(()=>{ app.photoError = ''; }, 5000);
-                    return false;
-                }else{
-                    $('input[name=deleted_photos]').val(app.deletedPhotos);
-                    console.log(app.deletedPhotos);
-                    return true;
-                }
+            if(app.photos.length <= 0) {
+                app.photoError = "Please add atleast one photo";
+                console.log(app.deletedPhotos);
+                setInterval(()=>{ app.photoError = ''; }, 5000);
+                return false;
+            }else{
+                $('input[name=deleted_photos]').val(app.deletedPhotos);
+                console.log(app.deletedPhotos);
+                return true;
             }
             return true;
         }

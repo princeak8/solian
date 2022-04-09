@@ -30,13 +30,15 @@ class FileService
         $url = '';
         $secureUrl = '';
         if($environment=='local') {
-            $uploadedPhoto = Utility::UploadFile($file, 'products', Auth::user()->id);
+            //dd('here4');
+            $uploadedPhoto = Utility::UploadFile($file, 'products', $user_id);
             $filename = $uploadedPhoto->name;
             $url = env('APP_URL').$uploadedPhoto->file_url;
             $secureUrl = $url;
             $dimensions = getimagesize($uploadedPhoto->file_url);
             $width = $dimensions[0];
             $height = $dimensions[1];
+            //dd('here5');
         }
         if($environment=='remote') {
             $uploadedPhoto = $file->storeOnCloudinary('solian/products');
@@ -47,9 +49,10 @@ class FileService
             $uploadDate = $uploadedPhoto->getTimeUploaded();
             $width = $uploadedPhoto->getWidth(); 
             $height = $uploadedPhoto->getHeight();
-            $size = $result->getSize(); // Get the size of the uploaded file in bytes
-            $rSize = $result->getReadableSize(); // Get the size of the uploaded file in bytes, megabytes, gigabytes or terabytes. E.g 1.8 MB 
+            $size = $uploadedPhoto->getSize(); // Get the size of the uploaded file in bytes
+            $rSize = $uploadedPhoto->getReadableSize(); // Get the size of the uploaded file in bytes, megabytes, gigabytes or terabytes. E.g 1.8 MB 
         }
+        //dd('here6');
         if($uploadedPhoto && $uploadedPhoto != null) {
             $fileObj = new File;
             $fileObj->user_id = $user_id;
@@ -66,8 +69,10 @@ class FileService
             $fileObj->width = $width;
             $fileObj->height = $height;
             $fileObj->save();
+            //dd('here7');
             
         }
+        //dd('here8');
         return (isset($fileObj)) ? $fileObj : null;
     }
 

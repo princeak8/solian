@@ -33,6 +33,11 @@ class PhotoService
         return Photo::where('deleted', '0')->orderBy('created_at', 'desc')->get();
     }
 
+    public function unattachedPhotos()
+    {
+        return Photo::where('deleted', '0')->whereNull('product_id')->whereNull('collection_id')->orderBy('created_at', 'desc')->get();
+    }
+
     public function photo($id)
     {
         return Photo::where('id', $id)->where('deleted', '0')->first();
@@ -66,6 +71,7 @@ class PhotoService
             $photo = new Photo;
             $file_type = 'image';
             if(!in_array($p->getClientOriginalName(), $deleted_photos)) {
+                //dd('here3');
                 $file = $this->fileService->save($p, $file_type, $user_id);
                 if($file && $file != null) {
                     $photo->file_id = $file->id;
@@ -76,9 +82,12 @@ class PhotoService
                         }
                     }
                 }
+                //dd('here2');
                 $photo->save();
+                //dd('here1');
             }
         }
+        //dd('here');
     }
 
     public function changeProductMainPhoto($product, $photo)
@@ -98,56 +107,6 @@ class PhotoService
     {
         $photo->deleted = 1;
         $photo->update();
-    }
-
-    public function update()
-    {
-        $slides = $this->slides();
-        if($slides->count() > 0) {
-           foreach($slides as $slide) {
-                       $path = 'uploads/slides/'.$slide->name;
-                       //dd(asset('uploads/products/'.$photo->name));
-                        $filePathParts = pathinfo(asset($path));
-                        $dimension = getimagesize($path);
-                        $width = $dimension[0];
-                        $height = $dimension[1];
-                        $mime = $dimension['mime'];
-                        $size = filesize($path);
-                        $formattedSize = $this->convertSize($size);
-                        $type = 'image';
-                        $url = $filePathParts['dirname'].'/'.$filePathParts['basename'];
-                        $ext = $filePathParts['extension'];
-                        // dd($dimension);
-                        // dd($type);
-                        $file = new File;
-                        $file->user_id = 2;
-                        $file->file_type = $type;
-                        $file->mime_type = $mime;
-                        $file->original_filename = $slide->name;
-                        $file->filename = $slide->name;
-                        $file->extension = $ext;
-                        $file->size = $size;
-                        $file->formatted_size = $formattedSize;
-                        $file->url = $url;
-                        $file->secure_url = $url;
-                        $file->upload_date = $slide->created_at;
-                        $file->height = $height;
-                        $file->width = $width;
-                        $file->save();
-                        $slide->file_id = $file->id;
-                        
-                        $slide->update();
-           } 
-        }
-        dd('done');
-        $environment = env('ENVIRONMENT', 'local');
-        $url = asset('uploads/products/thumbnails/'.$product->main);
-        if(isset($data['name'])) $product->name = $data['name'];
-        if(isset($data['quantity'])) $product->quantity = $data['quantity'];
-        if(isset($data['price'])) $product->price = $data['price'];
-        if(isset($data['description'])) $product->description = $data['description']; 
-        $product->update();
-        dd($environment);
     }
 
     public function update_collections()
