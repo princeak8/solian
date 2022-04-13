@@ -35,9 +35,9 @@
 
 <div>
     <div class="head-bg">
-            <a class="activ photoHeader" href="/"><span>Unattached Photos</span></a>
-            <a class="photoHeader" href="/"><span>Product Photos</span></a>
-            <a class="photoHeader"  href="/"><span>Collection Photos</span></a>
-            <a class="photoHeader"  href="/"><span>Slides</span></a>
+            <a class="activ photoHeader" href="{{url('photos')}}"><span>Unattached Photos</span></a>
+            <a class="photoHeader" href="{{url('admin/product_photos')}}"><span>Product Photos</span></a>
+            <a class="photoHeader"  href="{{url('admin/collection_photos')}}"><span>Collection Photos</span></a>
+            <a class="photoHeader"  href="{{url('admin/slide_photos')}}"><span>Slides</span></a>
     </div>
 </div>
