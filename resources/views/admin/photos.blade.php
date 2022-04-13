@@ -147,7 +147,7 @@
                     @endforeach
                 @else 
                     No unattached photos
-                @endif
+                 @endif
                         
             </div>
         </div>
@@ -158,6 +158,7 @@
 
 @section('js')
     <script type="application/javascript">
+        
         $('.dropdown-menu').on('click', function(event){
             var events = $._data(document, 'events') || {};
             events = events.click || [];
