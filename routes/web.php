@@ -44,7 +44,11 @@ Route::group([
 
     //Photo routes
     Route::get('/photos', 'PhotoController@photos');
+    Route::get('/product_photos', 'PhotoController@product_photos');
+    Route::get('/collection_photos', 'PhotoController@collection_photos');
+    Route::get('/slide_photos', 'PhotoController@slide_photos');
     Route::post('/photo/add', 'PhotoController@add_photos');
+    Route::post('/photo/delete/{id}', 'PhotoController@delete');
 
     //Products routes
     Route::get('/products', 'ProductController@index');

@@ -38,6 +38,21 @@ class PhotoService
         return Photo::where('deleted', '0')->whereNull('product_id')->whereNull('collection_id')->where('slide', 0)->orderBy('created_at', 'desc')->get();
     }
 
+    public function productPhotos()
+    {
+        return Photo::where('deleted', '0')->whereNotNull('product_id')->orderBy('created_at', 'desc')->get();
+    }
+
+    public function collectionPhotos()
+    {
+        return Photo::where('deleted', '0')->whereNotNull('collection_id')->orderBy('created_at', 'desc')->get();
+    }
+
+    public function slidePhotos()
+    {
+        return Photo::where('deleted', '0')->where('slide', 1)->orderBy('created_at', 'desc')->get();
+    }
+
     public function photo($id)
     {
         return Photo::where('id', $id)->where('deleted', '0')->first();
