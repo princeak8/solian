@@ -48,7 +48,7 @@ Route::group([
     Route::get('/collection_photos', 'PhotoController@collection_photos');
     Route::get('/slide_photos', 'PhotoController@slide_photos');
     Route::post('/photo/add', 'PhotoController@add_photos');
-    Route::post('/photo/delete/{id}', 'PhotoController@delete');
+    Route::get('/photo/delete/{id}', 'PhotoController@delete');
 
     //Products routes
     Route::get('/products', 'ProductController@index');
