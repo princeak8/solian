@@ -33,6 +33,39 @@ class PhotoController extends Controller
         return view('admin/photos', compact('photos'));
     }
 
+    public function product_photos()
+    {
+        $photos = [];
+        try{
+            $photos = $this->photoService->productPhotos();
+        } catch (\Throwable $th) {
+            \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+        }
+        return view('admin/product_photos', compact('photos'));
+    }
+
+    public function collection_photos()
+    {
+        $photos = [];
+        try{
+            $photos = $this->photoService->collectionPhotos();
+        } catch (\Throwable $th) {
+            \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+        }
+        return view('admin/collection_photos', compact('photos'));
+    }
+
+    public function slide_photos()
+    {
+        $photos = [];
+        try{
+            $photos = $this->photoService->slidePhotos();
+        } catch (\Throwable $th) {
+            \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+        }
+        return view('admin/slide_photos', compact('photos'));
+    }
+
     public function add_photos(AddPhotosRequest $request)
     {
         $post = $request->all();
@@ -66,5 +99,10 @@ class PhotoController extends Controller
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
             return back()->with('error', 'An error occured, please contact the Administrator');
         }
+    }
+
+    public function add_to_product(AddPhotosToProductRequest $request)
+    {
+
     }
 }
