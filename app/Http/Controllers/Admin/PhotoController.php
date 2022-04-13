@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Http\Requests\AddPhotosRequest;
+use App\Http\Requests\AddPhotosToProductRequest;
 
 use App\Services\Product\ProductService;
 use App\Services\Product\PhotoService;
