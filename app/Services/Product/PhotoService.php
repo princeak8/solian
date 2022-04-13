@@ -35,7 +35,7 @@ class PhotoService
 
     public function unattachedPhotos()
     {
-        return Photo::where('deleted', '0')->whereNull('product_id')->whereNull('collection_id')->orderBy('created_at', 'desc')->get();
+        return Photo::where('deleted', '0')->whereNull('product_id')->whereNull('collection_id')->where('slide', 0)->orderBy('created_at', 'desc')->get();
     }
 
     public function productPhotos()

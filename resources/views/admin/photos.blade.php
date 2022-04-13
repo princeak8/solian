@@ -20,18 +20,33 @@
 			position: absolute;
 			cursor: pointer;
 		}
-
 		.dropbox:hover {
 			background: lightblue; /* when mouse over to the drop zone, change color */
 		}
-
+        .activv, .top-text:hover {
+            font-size: 20px;
+            margin: 0.5em;
+		}
+        .top-link{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .top-link-inner{
+            display: flex;
+            flex-direction: row;
+            font-size: 12px;
+        }
 		.dropbox p {
 			font-size: 1.2em;
 			text-align: center;
 			padding: 50px 0;
 		}
         .icons {
-            transform: scale(4);
+            transform: scale(1.5);
+        }
+        .fa-trash {
+            color: red;
         }
         
     </style>
@@ -48,17 +63,21 @@
                     Add Photo
                 </a>
                 @include('layouts/admin/photos_header')
-                <div>
-                    <span>
-                        <div class="btn btn-primary">Add Photo(s) to Product</div>
-      <select>
-        <option value="Select Product">Select Product</option>
-        <option value="Evening Gown">Evening Gown</option>
-        <option value="Casuals">Casuals</option>
-      </select>
-                        <div class="btn btn-primary">Add Photo(s) to Slides</div>
-                    </span>
+                <div class="top-link">
+                    <div class="top-link-inner" style="display: flex; flex-direction: row;">
+                        <span style="display: flex; flex-direction: column;">
+                            <a href="#" class="top-text activv">Add Photo(s) to Product</a>
+                         </span>
+                        <a href="#" class="top-text ml-5">Add Photo(s) to Slides</a>
+                    </div>
+                    
+                    <a href="#" class="btn btn-success btn-sm">Save</a>
                 </div>
+                <select>
+                    <option value="Select Product">Select Product</option>
+                    <option value="Evening Gown">Evening Gown</option>
+                    <option value="Casuals">Casuals</option>
+                </select>
 
                  <!-- Modal Begins-->
 
@@ -110,37 +129,27 @@
         <div class="card-body">
             @include('inc.message')
             <div class="row">
+                @if($photos->count() > 0)
+                    @foreach($photos as $photo)
                         <div class="col-3">
                             <span>
-                                <img src="{{asset('assets/img/product/product-1.jpg')}}" alt="" style="width:100%; height:15em; object-fit: cover; padding-bottom: 1em;">
+                                <img alt="" style="width:100%; height:15em; object-fit: cover; padding-bottom: 1em;" src="{{$photo->file->secure_url}}" />
                             </span>
-                                <span class="icons" style="transform:scale(4);">
+                            <div class="container" style="display: flex; justify-content: space-between;">
+                                <span class="icons">
                                     <input type="checkbox" id="" name="">
                                 </span>
-                                <span class="icons"  style="transform:scale(4);">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                <span class="icons">
+                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                 </span>
+                            </div>
                         </div>
-                        <div class="col-3">
-                            <span>
-                                <img src="{{asset('assets/img/product/product-2.jpg')}}" alt="" style="width:100%; height:15em; object-fit: cover; padding-bottom: 1em;">
-                            </span>
-                            <a href class="btn btn-danger">Delete</a>
-                        </div>
-                        <div class="col-3">
-                            <span>
-                                <img src="{{asset('assets/img/product/product-3.jpg')}}" alt="" style="width:100%; height:15em; object-fit: cover; padding-bottom: 1em;">
-                            </span>
-                            <a href class="btn btn-danger">Delete</a>
-                        </div>
-                        <div class="col-3">
-                            <span>
-                                <img src="{{asset('assets/img/product/product-4.jpg')}}" alt="" style="width:100%; height:15em; object-fit: cover; padding-bottom: 1em;">
-                            </span>
-                            <a href class="btn btn-danger">Delete</a>
-                        </div>
-                    </div>
-                <p style="padding-top: 1em;">No Products has been added at this point</p>    
+                    @endforeach
+                @else 
+                    No unattached photos
+                @endif
+                        
+            </div>
         </div>
     </div>
 </div>
