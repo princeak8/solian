@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use Storage;
+use Illuminate\Support\Facades\Storage;
 
 use App\Services\Order\OrderService;
 use App\Services\Payment\PaymentService;
@@ -45,7 +45,7 @@ class IndexController extends Controller
 
     public function dropbox()
     {
-        $allFiles = collect(Storage::disk('dropbox')->read('Photos'))->map(function($file) {
+        $allFiles = collect(Storage::disk('dropbox')->files('Photos'))->map(function($file) {
             return Storage::disk('dropbox')->url($file);
         });
         dd($allFiles);
