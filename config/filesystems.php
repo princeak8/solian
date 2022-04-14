@@ -53,6 +53,13 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
 
+        'dropbox' => [
+            'driver' => 'dropbox',
+            'app_secret' => env('DROPBOX_APP_SECRET'),
+            'token' => env('DROPBOX_AUTHORIZATION_TOKEN'),
+            'visibility' => 'public',
+        ],
+
     ],
 
     /*
