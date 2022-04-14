@@ -41,7 +41,7 @@ class FileService
             //dd('here5');
         }
         if($environment=='remote') {
-            $uploadedPhoto = Storage::disk('dropbox')->put('posts/featured_images', $file);
+            $uploadedPhoto = Storage::disk('dropbox')->put('posts', $file);
             $url = Storage::disk('dropbox')->url($uploadedPhoto);
             $secure_url = $url;
             $filename = $url;
