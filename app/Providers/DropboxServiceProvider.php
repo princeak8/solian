@@ -46,9 +46,9 @@ class DropboxServiceProvider extends ServiceProvider
             $adapter = new DropboxAdapter(new DropboxClient(
                 $config['token']
             ));
- 
+            $config['case_sensitive'] = false;
             return new FilesystemAdapter(
-                new Filesystem($adapter, $config),
+                new Filesystem($adapter, $config), 
                 $adapter,
                 $config
             );
