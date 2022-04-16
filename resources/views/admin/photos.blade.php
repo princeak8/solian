@@ -129,15 +129,15 @@
         <div class="card-body">
             @include('inc.message')
             <div class="row">
-                @if($photos->count() > 0)
-                    @foreach($photos as $photo)
+                @if($dropBoxPhotos->count() > 0)
+                    @foreach($dropBoxPhotos as $photoUrl)
                         <div class="col-3">
                             <span>
-                                <img alt="" style="width:100%; height:15em; object-fit: cover; padding-bottom: 1em;" src="{{$photo->file->secure_url}}" />
+                                <img alt="" style="width:100%; height:15em; padding-bottom: 1em;" src="{{$photoUrl}}" />
                             </span>
                             <div class="container" style="display: flex; justify-content: space-between;">
                                 <span class="icons">
-                                    <input type="checkbox" id="" name="">
+                                    <input type="checkbox" id="" name="" data-url="{{$photoUrl}}">
                                 </span>
                                 <span class="icons">
                                     <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
