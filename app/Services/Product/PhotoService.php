@@ -88,6 +88,7 @@ class PhotoService
             if(!in_array($p->getClientOriginalName(), $deleted_photos)) {
                 //dd('here3');
                 $file = $this->fileService->save($p, $file_type, $user_id);
+                dd($file);
                 if($file && $file != null) {
                     $photo->file_id = $file->id;
                     if(!empty($category)) {
