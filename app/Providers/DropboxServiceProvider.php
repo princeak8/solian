@@ -48,7 +48,7 @@ class DropboxServiceProvider extends ServiceProvider
             ));
             $config['case_sensitive'] = false;
             return new FilesystemAdapter(
-                new Filesystem($adapter, $config), 
+                new Filesystem($adapter, ['case_sensitive' => false]), 
                 $adapter,
                 $config
             );
