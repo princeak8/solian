@@ -45,7 +45,7 @@ class IndexController extends Controller
 
     public function dropbox()
     {
-        dd(Storage::disk('dropbox')->files('Photos'));
+        dd(Storage::disk('dropbox')->files('Phot'));
         $allFiles = collect(Storage::disk('dropbox')->files('Photos'))->map(function($file) {
             return Storage::disk('dropbox')->url($file);
         });
