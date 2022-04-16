@@ -140,13 +140,13 @@
                                     <input type="checkbox" id="" name="">
                                 </span>
                                 <span class="icons">
-                                    <a href="#"><i class="delPhoto fa fa-trash" id="" aria-hidden="true"></i></a>
+                                    <a href="{{url('admin/photo/delete/'.$photo->id)}}"><i class="fa fa-trash" id="" aria-hidden="true"></i></a>
                                 </span>
                             </div>
                         </div>
                     @endforeach
                 @else 
-                
+
                     No unattached photos
                  @endif
                         

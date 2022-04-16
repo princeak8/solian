@@ -5,12 +5,8 @@
         .newPhoto { 
             margin-bottom: 2em;
         }
-        .prodName{
-            margin: 1em;
-        }
         .icons {
             transform: scale(1.5);
-            margin: 0 2em;
         }
         .fa-trash {
             color: red;
@@ -29,8 +25,6 @@
                 @include('layouts/admin/photos_header')
         </div>
         <div class="card-body">
-            <h4 class="prodName">Ankara Gown</h4>
-
             @include('inc.message')
             <div class="row">
                 @if($photos->count() > 0)
@@ -56,34 +50,7 @@
                         
             </div>
         </div>
-        <div class="card-body">
-            <h4 class="prodName">Petit Gown</h4>
 
-            @include('inc.message')
-            <div class="row">
-                @if($photos->count() > 0)
-                    @foreach($photos as $photo)
-                        <div class="col-3 newPhoto">
-                            <span>
-                                <img alt="" style="width:100%; height:15em; object-fit: cover; padding-bottom: 1em;" src="{{$photo->file->secure_url}}" />
-                            </span>
-                            <div class="container" style="display: flex; justify-content: space-between;">
-                                <span class="icons">
-                                    <input type="checkbox" data-id="{{$photo->id}}" name="">
-                                </span>
-                                <span class="icons">
-                                    <a href="{{url('admin/photo/delete/'.$photo->id)}}"><i class="fa fa-trash" id="" aria-hidden="true"></i></a>
-                                </span>
-                            </div>
-                        </div>
-                    @endforeach
-                @else 
-                
-                    No unattached photos
-                 @endif
-                        
-            </div>
-        </div>
     </div>
 </div>
 <!-- /.container-fluid -->
