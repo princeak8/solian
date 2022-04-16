@@ -50,6 +50,8 @@ Route::group([
     Route::post('/photo/add', 'PhotoController@add_photos');
     Route::get('/photo/delete/{id}', 'PhotoController@delete');
 
+    Route::get('/dropbox', 'IndexController@dropbox');
+
     //Products routes
     Route::get('/products', 'ProductController@index');
     Route::get('/product/create', 'ProductController@product_form');

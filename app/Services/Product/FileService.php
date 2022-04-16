@@ -41,18 +41,24 @@ class FileService
             //dd('here5');
         }
         if($environment=='remote') {
-            $uploadedPhoto = $file->storeOnCloudinary('solian/products');
-            $filename = $uploadedPhoto->getFileName();
-            $url = $uploadedPhoto->getPath();
-            $secureUrl = $uploadedPhoto->getSecurePath();
-            $publicId = $uploadedPhoto->getPublicId();
-            $uploadDate = $uploadedPhoto->getTimeUploaded();
-            $width = $uploadedPhoto->getWidth(); 
-            $height = $uploadedPhoto->getHeight();
-            $size = $uploadedPhoto->getSize(); // Get the size of the uploaded file in bytes
-            $rSize = $uploadedPhoto->getReadableSize(); // Get the size of the uploaded file in bytes, megabytes, gigabytes or terabytes. E.g 1.8 MB 
+            $uploadedPhoto = Storage::disk('dropbox')->put('posts', $file);
+            $url = Storage::disk('dropbox')->url($uploadedPhoto);
+            $secure_url = $url;
+            $filename = $url;
+
+            // $uploadedPhoto = $file->storeOnCloudinary('solian/products');
+            // $filename = $uploadedPhoto->getFileName();
+            // $url = $uploadedPhoto->getPath();
+            // $secureUrl = $uploadedPhoto->getSecurePath();
+            // $publicId = $uploadedPhoto->getPublicId();
+            // $uploadDate = $uploadedPhoto->getTimeUploaded();
+            // $width = $uploadedPhoto->getWidth(); 
+            // $height = $uploadedPhoto->getHeight();
+            // $size = $uploadedPhoto->getSize(); // Get the size of the uploaded file in bytes
+            // $rSize = $uploadedPhoto->getReadableSize(); // Get the size of the uploaded file in bytes, megabytes, gigabytes or terabytes. E.g 1.5 MB
         }
-        //dd('here6');
+        //dd('here6')
+        dd($uploadedPhoto);
         if($uploadedPhoto && $uploadedPhoto != null) {
             $fileObj = new File;
             $fileObj->user_id = $user_id;

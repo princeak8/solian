@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Storage;
+
 use App\Services\Order\OrderService;
 use App\Services\Payment\PaymentService;
 
@@ -39,5 +41,14 @@ class IndexController extends Controller
         $orders = Order::orderBy('created_at', 'desc')->limit(5)->get();
         $payments = Payment::orderBy('created_at', 'desc')->limit(5)->get();
         return view('admin/index', compact('products', 'collections', 'orders', 'payments'));
+    }
+
+    public function dropbox()
+    {
+        dd(collect(Storage::disk('dropbox')->files('web')));
+        $allFiles = collect(Storage::disk('dropbox')->files('Photos'))->map(function($file) {
+            return Storage::disk('dropbox')->url($file);
+        });
+        dd($allFiles);
     }
 }

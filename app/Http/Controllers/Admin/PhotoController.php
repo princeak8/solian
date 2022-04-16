@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Storage;
+
 use App\Http\Requests\AddPhotosRequest;
 use App\Http\Requests\AddPhotosToProductRequest;
 
@@ -28,10 +30,15 @@ class PhotoController extends Controller
         $photos = [];
         try{
             $photos = $this->photoService->unattachedPhotos();
+            $dropBoxPhotos = collect(Storage::disk('dropbox')->files('web'))->map(function($file) {
+                return Storage::disk('dropbox')->url($file);
+            });
         } catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+            dd($th->getMessage());
         }
-        return view('admin/photos', compact('photos'));
+
+        return view('admin/photos', compact('photos', 'dropBoxPhotos'));
     }
 
     public function product_photos()
