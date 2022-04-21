@@ -4,14 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use stdClass;
+
+use Intervention\Image\ImageManager;
 
 use App\Http\Requests\AddPhotosRequest;
 use App\Http\Requests\AddPhotosToProductRequest;
 
 use App\Services\Product\ProductService;
 use App\Services\Product\PhotoService;
+use App\Services\DropboxService;
 
 class PhotoController extends Controller
 {
@@ -25,19 +32,54 @@ class PhotoController extends Controller
         $this->photoService = new PhotoService;
     }
 
+    
+
     public function photos()
     {
+        //dd(env('as'));
         $photos = [];
         try{
             $photos = $this->photoService->unattachedPhotos();
-            $dropBoxPhotos = collect(Storage::disk('dropbox')->files('web'))->map(function($file) {
-                return Storage::disk('dropbox')->url($file);
+            $dropBoxPhotos = [];
+            // collect(Storage::disk('dropbox')->files('web'))->map(function($file) {
+                //return $file;
+            // });
+            //config(['DROPBOX_AUTHORIZATION_TOKEN' => 'sl.BGIMRgZbnwB879k14pOJJqL_d7ushrVDQ830tJm7mzolG2P0iO2bG78qjX6R1PFi4vgB-Y6eSfSnUqug_GkafJh_uksxgknaHQKeyqQ-bXIlqISd_UuPTs3MfeIoAk9f2ymn_gS9']);
+            //$this->setEnvironmentValue('DROPBOX_AUTHORIZATION_TOKEN', 'sl.BGIMRgZbnwB879k14pOJJqL_d7ushrVDQ830tJm7mzolG2P0iO2bG78qjX6R1PFi4vgB-Y6eSfSnUqug_GkafJh_uksxgknaHQKeyqQ-bXIlqISd_UuPTs3MfeIoAk9f2ymn_gS9');
+            //dd(env('DROPBOX_AUTHORIZATION_TOKEN'));
+            $files = Storage::disk('dropbox')->files('web');
+            //dd($files);
+            $dropBoxPhotos = collect($files)->map(function($file) {
+                $f = new stdClass();
+                $f->file = $file;
+                $f->url = Storage::disk('dropbox')->url($file);
+                return $f;
             });
+                //$img = new ImageManager(); 
+                // $img = ImageManager::make(Storage::disk('dropbox')->url($file)); //instance of the Image manager Class
+                // $thumb = $img->resize(300, 200);
+                
+                // $f->url = Storage::disk('dropbox')->url($file);
+                
+                // $f->filename = File::basename($f->url);
+                //$photosDetails[] = $f;
+                //return Storage::disk('dropbox')->size($file);
+            // foreach($files as $file) {
+            //     $f = new stdClass();
+            //     $f->file = $file;
+            //     $f->url = Storage::disk('dropbox')->url($file);
+            //     $dropBoxPhotos[] = $f;
+            // }
+            //dd($dropBoxPhotos);
         } catch (\Throwable $th) {
+            //dd($th->getResponse()->getReasonPhrase());
+            if($th->getResponse()->getStatusCode() == 401) {
+                DropboxService::refreshToken();
+                $this->photos();
+            }
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
             dd($th->getMessage());
         }
-
         return view('admin/photos', compact('photos', 'dropBoxPhotos'));
     }
 
@@ -111,6 +153,23 @@ class PhotoController extends Controller
 
     public function add_to_product(AddPhotosToProductRequest $request)
     {
-
+        try{
+            $post = $request->all();
+            if($this->productService->product($post['product_id'])) {
+                $this->photoService->addPhotosToProduct($post['photos'], $post['product_id'], auth::user()->id);
+                return response()->json([
+                    'statusCode' => 200,
+                    'message' => 'Photo added to product successfully'
+                ], 200);
+            }else{
+                return response()->json([
+                    'statusCode' => 404,
+                    'message' => 'Product does not exist'
+                ], 404);
+            }
+        }catch (\Throwable $th) {
+            \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+            return back()->with('error', 'An error occured, please contact the Administrator');
+        }
     }
 }

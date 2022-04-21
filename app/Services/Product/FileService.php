@@ -3,7 +3,8 @@
 namespace App\Services\Product;
 
 use DB;
-use Storage;
+use Illuminate\Support\Facades\Storage;
+//use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Payment;
@@ -80,6 +81,31 @@ class FileService
         }
         //dd('here8');
         return (isset($fileObj)) ? $fileObj : null;
+    }
+
+    public function addDropBoxPhotos($photos, $user_id) 
+    {
+        $fileIds = [];
+        foreach($photos as $photo) {
+            $fileObj = new File;
+            $fileObj->url = Storage::disk('dropbox')->url($photo);
+            $fileObj->user_id = $user_id;
+            $fileObj->secure_url = $fileObj->url;
+            $fileObj->file_type = 'image';
+            $filePathParts = pathinfo($photo);
+            $dimension = getimagesize($fileObj->url);
+            $fileObj->extension = $filePathParts['extension'];
+            $fileObj->filename = $filePathParts['basename'];
+            $fileObj->width = $dimension[0];
+            $fileObj->height = $dimension[1];
+            $fileObj->mime = $dimension['mime'];
+            $fileObj->type = 'image';
+            $fileObj->size = Storage::disk('dropbox')->size($file);
+            $fileObj->formattedSize = $this->convertSize($f->size);
+            $fileObj->save();
+            $fileIds[] = $fileObj->id;
+        }
+        return $fileIds;
     }
 
     private function convertSize($size)

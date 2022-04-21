@@ -106,6 +106,17 @@ class PhotoService
         //dd('here');
     }
 
+    public function addPhotosToProduct($photos, $product_id, $user_id)
+    {
+        $fileIds = $this->fileService->addDropBoxPhotos($photos, $user_id);
+        foreach($fileIds as $file_id) {
+            $photo = new Photo;
+            $photo->file_id = $file_id;
+            $photo->product_id = $product_id;
+            $photo->save();
+        }
+    }
+
     public function changeProductMainPhoto($product, $photo)
     {
         $oldMain = $this->productMain($product->id);
