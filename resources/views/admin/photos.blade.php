@@ -133,20 +133,19 @@
                     @foreach($dropBoxPhotos as $photoUrl)
                         <div class="col-3">
                             <span>
-                                <img alt="" style="width:100%; height:15em; padding-bottom: 1em;" src="{{$photoUrl}}" />
+                                <img alt="" style="width:auto; height:20em; object-fit: cover; padding-bottom: 1em;" src="{{$photoUrl}}" />
                             </span>
                             <div class="container" style="display: flex; justify-content: space-between;">
                                 <span class="icons">
                                     <input type="checkbox" id="" name="" data-url="{{$photoUrl}}">
                                 </span>
                                 <span class="icons">
-                                    <a href="{{url('admin/photo/delete/'.$photo->id)}}"><i class="fa fa-trash" id="" aria-hidden="true"></i></a>
+                                    <a href="{{url('admin/photo/delete/'.$photoUrl)}}"><i class="fa fa-trash" id="" aria-hidden="true"></i></a>
                                 </span>
                             </div>
-                        </div>
+                        </div>       
                     @endforeach
                 @else 
-
                     No unattached photos
                  @endif
                         
