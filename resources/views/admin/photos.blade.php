@@ -130,14 +130,14 @@
             @include('inc.message')
             <div class="row">
                 @if($dropBoxPhotos->count() > 0)
-                    @foreach($dropBoxPhotos as $photoUrl)
+                    @foreach($dropBoxPhotos as $photo)
                         <div class="col-3">
                             <span>
-                                <img alt="" style="width:100%; height:15em; padding-bottom: 1em;" src="{{$photoUrl}}" />
+                                <img alt="" style="width:100%; height:15em; padding-bottom: 1em; object-fit: fill;" class="lazyload img-back" src="{{$photo->url}}" />
                             </span>
                             <div class="container" style="display: flex; justify-content: space-between;">
                                 <span class="icons">
-                                    <input type="checkbox" id="" name="" data-url="{{$photoUrl}}">
+                                    <input type="checkbox" id="" name="" data-file="{{$photo->file}}">
                                 </span>
                                 <span class="icons">
                                     <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
@@ -158,6 +158,35 @@
 
 @section('js')
     <script type="application/javascript">
+
+        let imgInput = document.getElementById('image-input');
+        imgInput.addEventListener('change', function (e) {
+            if (e.target.files) {
+                let imageFile = e.target.files[0];
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = document.createElement("img");
+                    img.onload = function (event) {
+                        // Dynamically create a canvas element
+                        var canvas = document.createElement("canvas");
+
+                        // var canvas = document.getElementById("canvas");
+                        var ctx = canvas.getContext("2d");
+
+                        // Actual resizing
+                        ctx.drawImage(img, 0, 0, 300, 300);
+
+                        // Show resized image in preview element
+                        var dataurl = canvas.toDataURL(imageFile.type);
+                        document.getElementById("preview").src = dataurl;
+                    }
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(imageFile);
+            }
+        });
+
+
         $('.dropdown-menu').on('click', function(event){
             var events = $._data(document, 'events') || {};
             events = events.click || [];

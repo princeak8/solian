@@ -3,15 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
 use session;
 use stdClass;
 use App\Models\Currency;
 use App\Models\Currency_rate;
+use App\Helpers\Helper;
+
+use App\Services\DropboxService;
 
 class BaseController extends Controller
 {
     public function __construct()
     {
+
+        if(time() < env('DROPBOX_TOKEN_EXPIRY') || ((env('DROPBOX_TOKEN_EXPIRY') - time()) <= 60)) {
+            //If the dropbox token has expired or will expire in less than 1minute
+            DropboxService::refreshToken();
+        }
+
+
         if(!session('currency')) {
             if(env('currency')){ //if default currency is set in the env file
                 session(['currency' => env('currency')]);

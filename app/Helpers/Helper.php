@@ -58,6 +58,41 @@ use App\Models\Currency_rate;
             return $price;
         }
 
+        public static function setEnvironmentValue($envKey, $envValue, $new=false)
+        {
+            $envFile = app()->environmentFilePath();
+            $str = file_get_contents($envFile);
+
+            $oldValue = env($envKey);
+            //dd($oldValue);
+
+            $str = str_replace("{$envKey}={$oldValue}", "{$envKey}={$envValue}\n", $str);
+            //dd($str);
+            $fp = fopen($envFile, 'w');
+            fwrite($fp, $str);
+            fclose($fp);
+            //dd(env($envKey));
+        }
+
+        public static function setMultiEnvironmentValue($envVars)
+        {
+            $envFile = app()->environmentFilePath();
+            $str = file_get_contents($envFile);
+            foreach($envVars as $envKey=>$envValue) {
+                $oldValue = env($envKey);
+                if($oldValue != null) {
+                    $str = str_replace("{$envKey}={$oldValue}", "{$envKey}={$envValue}\n", $str);
+                }else{
+                    $str .= "\n {$envKey}={$envValue}\n";
+                }
+            }
+            //dd($str);
+            $fp = fopen($envFile, 'w');
+            fwrite($fp, $str);
+            fclose($fp);
+            //dd(env($envKey));
+        }
+
     }
 
 ?>
