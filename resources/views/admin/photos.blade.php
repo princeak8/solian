@@ -58,10 +58,11 @@
  <div class="container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Products-Gallery 
+            <h6 class="m-0 font-weight-bold text-primary">Products-Gallery
                 <a href="{{url('admin/product/create_photo')}}" class="btn btn-sm btn-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Add Photo
                 </a>
+            </h6>
                 @include('layouts/admin/photos_header')
                 <div class="top-link">
                     <div class="top-link-inner" style="display: flex; flex-direction: row;">
@@ -78,7 +79,6 @@
                     <option value="Evening Gown">Evening Gown</option>
                     <option value="Casuals">Casuals</option>
                 </select>
-
                  <!-- Modal Begins-->
 
                  <div class="dropdown col-md-12 row" style="width:100%; margin-left:-4em;">
@@ -124,32 +124,37 @@
                         </div>
                     </div>
                     <!-- Modal Ends-->
-            </h6>
         </div>
         <div class="card-body">
             @include('inc.message')
-            <div class="row">
-                @if($dropBoxPhotos->count() > 0)
-                    @foreach($dropBoxPhotos as $photo)
-                        <div class="col-3">
-                            <span>
-                                <img alt="" style="width:100%; height:15em; padding-bottom: 1em; object-fit: fill;" class="lazyload img-back" src="{{$photo->url}}" />
-                            </span>
-                            <div class="container" style="display: flex; justify-content: space-between;">
-                                <span class="icons">
-                                    <input type="checkbox" id="" name="" data-file="{{$photo->file}}">
+                <div class="row">
+                    @if($dropBoxPhotos->count() > 0)
+                        @foreach($dropBoxPhotos as $photo)
+                            <!-- <div class="col-3">
+                                <span>
+                                    <img alt="" style="width:100%; height:15em; padding-bottom: 1em; object-fit: fill;" class="lazyload img-back" src="{{$photo->url}}" />
                                 </span>
-                                <span class="icons">
-                                    <a href="{{url('admin/photo/delete/'.$photo->url)}}"><i class="fa fa-trash" id="" aria-hidden="true"></i></a>
-                                </span>
-                            </div>
-                        </div>       
-                    @endforeach
-                @else 
-                    No unattached photos
-                 @endif
-                        
-            </div>
+                                <div class="container" style="display: flex; justify-content: space-between;">
+                                    <span class="icons">
+                                        <input type="checkbox" id="" class="checkbox" value="{{$photo->file}}">
+                                    </span>
+                                    <span class="icons">
+                                        <a href="{{url('admin/photo/delete/'.$photo->url)}}"><i class="fa fa-trash" id="" aria-hidden="true"></i></a>
+                                    </span>
+                                </div>
+                            </div>     -->
+                             
+                        @endforeach
+                    @else 
+                        No unattached photos
+                    @endif
+
+                    <div class="print-values">
+                        <p id="valueList"></p>
+                    </div>
+                            
+                </div>
+           
         </div>
     </div>
 </div>
@@ -159,37 +164,8 @@
 @section('js')
     <script type="application/javascript">
 
-<<<<<<< HEAD
-=======
-        let imgInput = document.getElementById('image-input');
-        imgInput.addEventListener('change', function (e) {
-            if (e.target.files) {
-                let imageFile = e.target.files[0];
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    var img = document.createElement("img");
-                    img.onload = function (event) {
-                        // Dynamically create a canvas element
-                        var canvas = document.createElement("canvas");
-
-                        // var canvas = document.getElementById("canvas");
-                        var ctx = canvas.getContext("2d");
-
-                        // Actual resizing
-                        ctx.drawImage(img, 0, 0, 300, 300);
-
-                        // Show resized image in preview element
-                        var dataurl = canvas.toDataURL(imageFile.type);
-                        document.getElementById("preview").src = dataurl;
-                    }
-                    img.src = e.target.result;
-                }
-                reader.readAsDataURL(imageFile);
-            }
-        });
 
 
->>>>>>> 7f77b101075455db58f16f502adecc10b35ec8b2
         $('.dropdown-menu').on('click', function(event){
             var events = $._data(document, 'events') || {};
             events = events.click || [];
@@ -355,8 +331,6 @@
                 $('#photos').append(`<input type="file" multiple name="photos[]" class="input-file" accept="image/*">`);
             })
 
-          
-
             var Options = '';
             $('#collections :selected').each(function(e) {
                 Options += `<option class="col-12" value="${this.value}">${this.text}</option>`
@@ -393,5 +367,7 @@
             });
             
         })
+
+        
     </script>
 @stop

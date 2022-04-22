@@ -46,25 +46,3 @@
         <a class="photo-title" href="{{url('admin/slide_photos')}}"><span>Slides</span></a>
     </nav>
 </div>
-
-@section('js')
-    <script type="application/javascript">
-        //  $(document).ready(function() {
-        //     $('.photoHeader').click(function(event){
-        //         event.preventDefault()
-        //         console.log('check');
-        //     $('a').removeClass("activ");
-        //     $(this).addClass("activ");
-        //     });    
-        // });
-        const currentLocation = location.href;
-        const menuItem = document.querySelectorAll('a');
-        const menuLength = menuItem.length
-        for(let i = 0; i<menuLength; i++){
-            if(menuItem[i].href === currentLocation){
-                menuItem[i].className = "activ"
-            };
-        };
-    </script>
-
-@stop
