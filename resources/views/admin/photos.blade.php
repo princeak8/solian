@@ -127,34 +127,28 @@
         </div>
         <div class="card-body">
             @include('inc.message')
-                <div class="row">
-                    @if($dropBoxPhotos->count() > 0)
-                        @foreach($dropBoxPhotos as $photo)
-                            <!-- <div class="col-3">
-                                <span>
-                                    <img alt="" style="width:100%; height:15em; padding-bottom: 1em; object-fit: fill;" class="lazyload img-back" src="{{$photo->url}}" />
+            <div class="row">
+                @if($dropBoxPhotos->count() > 0)
+                    @foreach($dropBoxPhotos as $photo)
+                        <!-- <div class="col-3">
+                            <span>
+                                <img alt="" style="width:100%; height:15em; padding-bottom: 1em; object-fit: fill;" class="lazyload img-back" src="{{$photo->url}}" />
+                            </span>
+                            <div class="container" style="display: flex; justify-content: space-between;">
+                                <span class="icons">
+                                    <input type="checkbox" id="" name="" data-file="{{$photo->file}}">
                                 </span>
-                                <div class="container" style="display: flex; justify-content: space-between;">
-                                    <span class="icons">
-                                        <input type="checkbox" id="" class="checkbox" value="{{$photo->file}}">
-                                    </span>
-                                    <span class="icons">
-                                        <a href="{{url('admin/photo/delete/'.$photo->url)}}"><i class="fa fa-trash" id="" aria-hidden="true"></i></a>
-                                    </span>
-                                </div>
-                            </div>     -->
-                             
-                        @endforeach
-                    @else 
-                        No unattached photos
-                    @endif
-
-                    <div class="print-values">
-                        <p id="valueList"></p>
-                    </div>
-                            
-                </div>
-           
+                                <span class="icons">
+                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                </span>
+                            </div>
+                        </div> -->
+                    @endforeach
+                @else 
+                    No unattached photos
+                @endif
+                        
+            </div>
         </div>
     </div>
 </div>
@@ -163,7 +157,7 @@
 
 @section('js')
     <script type="application/javascript">
-
+        console.log('working');
 
 
         $('.dropdown-menu').on('click', function(event){
