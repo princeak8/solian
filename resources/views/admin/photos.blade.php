@@ -140,7 +140,7 @@
                                     <input type="checkbox" id="" name="" data-file="{{$photo->file}}">
                                 </span>
                                 <span class="icons">
-                                    <a href="{{url('admin/photo/delete/'.$photoUrl)}}"><i class="fa fa-trash" id="" aria-hidden="true"></i></a>
+                                    <a href="{{url('admin/photo/delete/'.$photo->url)}}"><i class="fa fa-trash" id="" aria-hidden="true"></i></a>
                                 </span>
                             </div>
                         </div>       
