@@ -21,7 +21,7 @@ class DropboxService
             "refresh_token" => env('DROPBOX_REFRESH_TOKEN'),
             "grant_type"=>"refresh_token"
         ])->json();
-        if(!$res['error'] && $res['access_token'] && !empty($res['access_token'])) {
+        if(!isset($res['error']) && $res['access_token'] && !empty($res['access_token'])) {
             $res['expiry'] = $res['expires_in'] + time();
             // Helper::setEnvironmentValue('DROPBOX_AUTHORIZATION_TOKEN', $res['access_token']);
             // Helper::setEnvironmentValue('DROPBOX_TOKEN_EXPIRY', $res['expiry']);
