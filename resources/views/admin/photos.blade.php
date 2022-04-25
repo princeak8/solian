@@ -136,26 +136,11 @@
         <div class="card-body">
             @include('inc.message')
             <div class="row">
-                @if($dropBoxPhotos->count() > 0)
-                    @foreach($dropBoxPhotos as $photo)
-                        <div class="col-3">
-                            <span>
-                                <img alt="" style="width:100%; height:15em; padding-bottom: 1em; object-fit: fill;" class="lazyload img-back" src="{{$photo->url}}" />
-                            </span>
-                            <div class="container" style="display: flex; justify-content: space-between;">
-                                <span class="icons">
-                                    <input type="checkbox" id="" class="checkbox" name="" value="{{$photo->file}}">
-                                </span>
-                                <span class="icons">
-                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                </span>
-                            </div>
-                        </div>
-                    @endforeach
-                @else 
-                    No unattached photos
-                @endif
-                  <input type="text" value="{{$email}}" name="email" />      
+                <p id="loading" class="d-none mb-3">Loading...</p>
+                
+                <div id="dropboxPhotos" class="row mt-5"></div>
+                
+                <input type="hidden" value="{{$email}}" name="email" />      
             </div>
         </div>
     </div>
@@ -166,10 +151,11 @@
 
 @section('js')
     <script type="application/javascript">
-        console.log('working');
+
         var checkedPhotosArr = [];
         
-        $('.checkbox').click(function(e){
+        $(document).on('click', '.checkbox', function(e){
+            console.log('clicked');
             if(this.checked == true) {
                 checkedPhotosArr.push(this.value);
                 console.log(checkedPhotosArr);
@@ -185,10 +171,23 @@
             //console.log('adding photos');
             let category = $('input[name=category]').val();
             if(category=='product') {
-                let product = $('select[name=product-id]').val();
-                if(product != '') {
+                let productId = $('select[name=product-id]').val();
+                if(productId != '') {
                     //Add photos
-                console.log(addPhotos);
+                    console.log(checkedPhotosArr);
+                    let url = "{{url('admin/photo/add_to_product')}}";
+                    var token = $('meta[name="csrf-token"]').attr('content');
+                    let formData =  {photos: checkedPhotosArr, product_id: productId, _token: token};
+                    //console.log(`email: ${email} token: ${token}`);
+                    axios.post(url, formData)
+                    .then((res) => {
+                        console.log(res);
+                        if(res.status == 200) {
+                            checkedPhotosArr.forEach((id) => {
+                                $('#'+id).remove();
+                            })
+                        }
+                    })
 
                 }else{
                     console('please choose a product to add photos to');
@@ -361,7 +360,63 @@
 
         });
 
+        function isLoading(status)
+        {
+            (status) ? $('#loading').removeClass('d-none') : $('#loading').addClass('d-none');
+        }
         $(document).ready(function() {
+            //When document loads
+            isLoading(true);
+            //make a POST Request using axios to get dropbox photos
+
+            let url = "{{url('admin/photo/get_dropbox_photos')}}";
+            var token = $('meta[name="csrf-token"]').attr('content');
+            let email = $('input[name=email]').val();
+            let formData =  {email: email, _token: token};
+            //console.log(`email: ${email} token: ${token}`);
+            axios.post(url, formData)
+            .then((res) => {
+                isLoading(false);
+                console.log('result ', res);
+                if(res.status == 200) {
+                    console.log('photos: ',res.data.photos);
+                    if(res.data.photos.length > 0) {
+
+                        //loop through the photos
+                        let photoContent = '';
+                        res.data.photos.forEach((photo) => {
+                            photoContent += `
+                            <div class="col-3" id="${photo.file}">
+                                <span>
+                                    <img alt="" style="width:100%; height:15em; padding-bottom: 1em; object-fit: fill;" class="lazyload img-back" src="${photo.url}" />
+                                </span>
+                                <div class="container" style="display: flex; justify-content: space-between;">
+                                    <span class="icons">
+                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}">
+                                    </span>
+                                    <span class="icons">
+                                        <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                    </span>
+                                </div>
+                            </div>
+                            `;
+                        })
+                        $('#dropboxPhotos').html(photoContent);
+                    }else{
+                        //The photos is empty
+                        $('#dropboxPhotos').html('<p> No photos available </p>');
+                    } 
+                }else{
+                    console.log('error:', res.data.message);
+                }
+            })
+            .catch((error) => {
+                isLoading(false);
+                console.log("An error occured while trying to perform the operation "+error.message);
+                throw error;
+            });
+
+            //console log what we return
             //To enable adding more photos after initial multiple selections
             $(document).on('change', '.input-file', function(e) {
                 app.filesChange(e.target, e.target.files);
