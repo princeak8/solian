@@ -86,6 +86,54 @@ class ProductService
         dd($environment);
     }
 
+    public function update_collections()
+    {
+        $collections = Collection::all();
+        if($collections->count() > 0) {
+           foreach($collections as $collection) {
+               if(!empty($collection->photo)) {
+                       $path = 'uploads/collections/'.$collection->photo;
+                       //dd(asset('uploads/products/'.$photo->name));
+                        $filePathParts = pathinfo(asset($path));
+                        $dimension = getimagesize($path);
+                        $width = $dimension[0];
+                        $height = $dimension[1];
+                        $mime = $dimension['mime'];
+                        $size = filesize($path);
+                        $formattedSize = $this->convertSize($size);
+                        $type = 'image';
+                        $url = $filePathParts['dirname'].'/'.$filePathParts['basename'];
+                        $ext = $filePathParts['extension'];
+                        // dd($dimension);
+                        // dd($type);
+                        $file = new File;
+                        $file->user_id = 2;
+                        $file->file_type = $type;
+                        $file->mime_type = $mime;
+                        $file->original_filename = $collection->photo;
+                        $file->filename = $collection->photo;
+                        $file->extension = $ext;
+                        $file->size = $size;
+                        $file->formatted_size = $formattedSize;
+                        $file->url = $url;
+                        $file->secure_url = $url;
+                        $file->upload_date = $collection->created_at;
+                        $file->height = $height;
+                        $file->width = $width;
+                        $file->save();
+                        $photo = new Photo;
+                        $photo->file_id = $file->id;
+                        $photo->collection_id = $collection->id;
+                        $photo->name = '';
+                        $photo->save();
+                        $collection->photo_id = $photo->id;
+                        $collection->update();
+               }
+           } 
+        }
+        dd('done');
+    }
+
     private function convertSize($size)
     {
         $formatted = '';
@@ -99,6 +147,8 @@ class ProductService
     }
 
     //public function updatePhoto($file, $photo)
+
+
 }
 
 ?>

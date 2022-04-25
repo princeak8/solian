@@ -27,7 +27,7 @@ class PhotoController extends Controller
 
     public function __construct()
     {
-        //$this->middleware('adminAuth');
+        $this->middleware('adminAuth');
         $this->productService = new ProductService;
         $this->photoService = new PhotoService;
     }
@@ -38,23 +38,19 @@ class PhotoController extends Controller
     {
         //dd(env('as'));
         $photos = [];
+        $email = auth::user()->email;
         try{
             $photos = $this->photoService->unattachedPhotos();
             $dropBoxPhotos = [];
-            // collect(Storage::disk('dropbox')->files('web'))->map(function($file) {
-                //return $file;
+            $dropBoxPhotos = collect($dropBoxPhotos);
+            // $files = Storage::disk('dropbox')->files('web');
+            // // dd($files);
+            // $dropBoxPhotos = collect($files)->map(function($file) {
+            //     $f = new stdClass();
+            //     $f->file = $file;
+            //     $f->url = Storage::disk('dropbox')->url($file);
+            //     return $f;
             // });
-            //config(['DROPBOX_AUTHORIZATION_TOKEN' => 'sl.BGIMRgZbnwB879k14pOJJqL_d7ushrVDQ830tJm7mzolG2P0iO2bG78qjX6R1PFi4vgB-Y6eSfSnUqug_GkafJh_uksxgknaHQKeyqQ-bXIlqISd_UuPTs3MfeIoAk9f2ymn_gS9']);
-            //$this->setEnvironmentValue('DROPBOX_AUTHORIZATION_TOKEN', 'sl.BGIMRgZbnwB879k14pOJJqL_d7ushrVDQ830tJm7mzolG2P0iO2bG78qjX6R1PFi4vgB-Y6eSfSnUqug_GkafJh_uksxgknaHQKeyqQ-bXIlqISd_UuPTs3MfeIoAk9f2ymn_gS9');
-            //dd(env('DROPBOX_AUTHORIZATION_TOKEN'));
-            $files = Storage::disk('dropbox')->files('web');
-            //dd($files);
-            $dropBoxPhotos = collect($files)->map(function($file) {
-                $f = new stdClass();
-                $f->file = $file;
-                $f->url = Storage::disk('dropbox')->url($file);
-                return $f;
-            });
                 //$img = new ImageManager(); 
                 // $img = ImageManager::make(Storage::disk('dropbox')->url($file)); //instance of the Image manager Class
                 // $thumb = $img->resize(300, 200);
@@ -70,7 +66,7 @@ class PhotoController extends Controller
             //     $f->url = Storage::disk('dropbox')->url($file);
             //     $dropBoxPhotos[] = $f;
             // }
-            //dd($dropBoxPhotos);
+            // dd($dropBoxPhotos);
         } catch (\Throwable $th) {
             //dd($th->getResponse()->getReasonPhrase());
             if($th->getResponse()->getStatusCode() == 401) {
@@ -80,7 +76,42 @@ class PhotoController extends Controller
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
             dd($th->getMessage());
         }
-        return view('admin/photos', compact('photos', 'dropBoxPhotos'));
+        return view('admin/photos', compact('photos', 'dropBoxPhotos', 'email'));
+    }
+    /*
+        Returns Json
+    */
+    public function get_dropbox_photos(Request $request)
+    {
+        $post = $request->all();
+        if(isset($post['email']) && !empty($post['email'])) {
+            if($post['email'] == auth::user()->email) {
+                try{
+                    $photos = $this->photoService->getDropboxPhotos();
+                    return response()->json([
+                        'statusCode' => 200,
+                        'photos' => $photos
+                    ], 200);
+                }catch (\Throwable $th) {
+                    if($th->getResponse()->getStatusCode() == 401) {
+                        DropboxService::refreshToken();
+                        $this->photos();
+                    }
+                    \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+                    dd($th->getMessage());
+                }
+            }else{
+                return response()->json([
+                    'statusCode' => 401,
+                    'message' => 'Wrong Email'
+                ], 401);
+            }
+        }else{
+            return response()->json([
+                'statusCode' => 404,
+                'message' => 'Email missing'
+            ], 404);
+        }
     }
 
     public function product_photos()

@@ -155,7 +155,7 @@
                 @else 
                     No unattached photos
                 @endif
-                        
+                  <input type="text" value="{{$email}}" name="email" />      
             </div>
         </div>
     </div>

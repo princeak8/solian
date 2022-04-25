@@ -51,6 +51,8 @@ Route::group([
     Route::post('/photo/add_to_product', 'PhotoController@add_to_product');
     Route::get('/photo/delete/{id}', 'PhotoController@delete');
 
+    Route::post('/photo/get_dropbox_photos', 'PhotoController@get_dropbox_photos');
+
     Route::get('/dropbox', 'IndexController@dropbox');
 
     //Products routes

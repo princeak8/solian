@@ -3,8 +3,9 @@
 namespace App\Services\Product;
 
 use DB;
-use Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use stdClass;
 
 use App\Models\Photo;
 use App\Models\Product;
@@ -136,64 +137,18 @@ class PhotoService
         $photo->update();
     }
 
-    public function update_collections()
+    public function getDropboxPhotos()
     {
-        $collections = Collection::all();
-        if($collections->count() > 0) {
-           foreach($collections as $collection) {
-               if(!empty($collection->photo)) {
-                       $path = 'uploads/collections/'.$collection->photo;
-                       //dd(asset('uploads/products/'.$photo->name));
-                        $filePathParts = pathinfo(asset($path));
-                        $dimension = getimagesize($path);
-                        $width = $dimension[0];
-                        $height = $dimension[1];
-                        $mime = $dimension['mime'];
-                        $size = filesize($path);
-                        $formattedSize = $this->convertSize($size);
-                        $type = 'image';
-                        $url = $filePathParts['dirname'].'/'.$filePathParts['basename'];
-                        $ext = $filePathParts['extension'];
-                        // dd($dimension);
-                        // dd($type);
-                        $file = new File;
-                        $file->user_id = 2;
-                        $file->file_type = $type;
-                        $file->mime_type = $mime;
-                        $file->original_filename = $collection->photo;
-                        $file->filename = $collection->photo;
-                        $file->extension = $ext;
-                        $file->size = $size;
-                        $file->formatted_size = $formattedSize;
-                        $file->url = $url;
-                        $file->secure_url = $url;
-                        $file->upload_date = $collection->created_at;
-                        $file->height = $height;
-                        $file->width = $width;
-                        $file->save();
-                        $photo = new Photo;
-                        $photo->file_id = $file->id;
-                        $photo->collection_id = $collection->id;
-                        $photo->name = '';
-                        $photo->save();
-                        $collection->photo_id = $photo->id;
-                        $collection->update();
-               }
-           } 
-        }
-        dd('done');
-    }
-
-    private function convertSize($size)
-    {
-        $formatted = '';
-        $len = strlen($size);
-        if($len < 4) $formatted = $size.'Bytes'; 
-        if($len > 3 && $len < 7) $formatted = round((float)($size/1024), 1).'KB';
-        if($len > 6 && $len < 11) $formatted = round((float)(($size/1024)/1024), 1).'MB';
-        if($len > 10 && $len < 14) $formatted = round((float)((($size/1024)/1024)/1024), 1).'GB';
-        //return (float)$formatted;
-        return $formatted;
+        $dropBoxPhotos = [];
+        $files = Storage::disk('dropbox')->files('web');
+        // dd($files);
+        $dropBoxPhotos = collect($files)->map(function($file) {
+            $f = new stdClass();
+            $f->file = $file;
+            $f->url = Storage::disk('dropbox')->url($file);
+            return $f;
+        });
+        return $dropBoxPhotos;
     }
 
     //public function updatePhoto($file, $photo)
