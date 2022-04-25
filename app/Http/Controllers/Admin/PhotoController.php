@@ -95,10 +95,14 @@ class PhotoController extends Controller
                 }catch (\Throwable $th) {
                     if($th->getResponse()->getStatusCode() == 401) {
                         DropboxService::refreshToken();
-                        $this->photos();
+
+                        //$this->get_dropbox_photos();
                     }
                     \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
-                    dd($th->getMessage());
+                    return response()->json([
+                        'statusCode' => 401,
+                        'message' => 'An error occured '.$th->getMessage()
+                    ], 401);
                 }
             }else{
                 return response()->json([
