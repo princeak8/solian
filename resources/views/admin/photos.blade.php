@@ -58,7 +58,7 @@
  <div class="container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Products-Gallery
+            <h6 class="m-0 font-weight-bold text-primary">Products-Gallery 
                 <a href="{{url('admin/product/create_photo')}}" class="btn btn-sm btn-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Add Photo
                 </a>
@@ -66,19 +66,23 @@
                 @include('layouts/admin/photos_header')
                 <div class="top-link">
                     <div class="top-link-inner" style="display: flex; flex-direction: row;">
+                        <p id="error" class="d-none">
+                            <span class="alert alert-danger"></span>
+                        </p>
                         <span style="display: flex; flex-direction: column;">
-                            <a href="#" class="top-text activv">Add Photo(s) to Product</a>
+                            <a href="#" class="top-text activv" onclick="switchCategory('product')">Add Photo(s) to Product</a>
                          </span>
-                        <a href="#" class="top-text ml-5">Add Photo(s) to Slides</a>
+                        <a href="#" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slides</a>
                     </div>
                     
-                    <a href="#" class="btn btn-success btn-sm">Save</a>
+                    <a href="#" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
                 </div>
-                <select>
-                    <option value="Select Product">Select Product</option>
-                    <option value="Evening Gown">Evening Gown</option>
-                    <option value="Casuals">Casuals</option>
+                <select name="product-id">
+                    <option value="1">Select Product</option>
+                    <option value="5">Evening Gown</option>
+                    <option value="6">Casuals</option>
                 </select>
+
                  <!-- Modal Begins-->
 
                  <div class="dropdown col-md-12 row" style="width:100%; margin-left:-4em;">
@@ -124,25 +128,29 @@
                         </div>
                     </div>
                     <!-- Modal Ends-->
-        </div>
+            
+       
+                </div>
+                 <!-- Modal Ends-->
+
         <div class="card-body">
             @include('inc.message')
             <div class="row">
                 @if($dropBoxPhotos->count() > 0)
                     @foreach($dropBoxPhotos as $photo)
-                        <!-- <div class="col-3">
+                        <div class="col-3">
                             <span>
                                 <img alt="" style="width:100%; height:15em; padding-bottom: 1em; object-fit: fill;" class="lazyload img-back" src="{{$photo->url}}" />
                             </span>
                             <div class="container" style="display: flex; justify-content: space-between;">
                                 <span class="icons">
-                                    <input type="checkbox" id="" name="" data-file="{{$photo->file}}">
+                                    <input type="checkbox" id="" class="checkbox" name="" value="{{$photo->file}}">
                                 </span>
                                 <span class="icons">
                                     <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                 </span>
                             </div>
-                        </div> -->
+                        </div>
                     @endforeach
                 @else 
                     No unattached photos
@@ -151,6 +159,7 @@
             </div>
         </div>
     </div>
+    <input type="text" name="category" value="product"/>
 </div>
 <!-- /.container-fluid -->
 @stop
@@ -158,7 +167,42 @@
 @section('js')
     <script type="application/javascript">
         console.log('working');
+        var checkedPhotosArr = [];
+        
+        $('.checkbox').click(function(e){
+            if(this.checked == true) {
+                checkedPhotosArr.push(this.value);
+                console.log(checkedPhotosArr);
+            } else {
+                    // REMOVE VALUE FROM ARRAY WHEN IT IS UNCHECKED
+                checkedPhotosArr = checkedPhotosArr.filter(e => e !== this.value);
+            }
+        });
 
+        function addPhotos()
+        {
+            //Adding selected photos to their corresponding categories
+            //console.log('adding photos');
+            let category = $('input[name=category]').val();
+            if(category=='product') {
+                let product = $('select[name=product-id]').val();
+                if(product != '') {
+                    //Add photos
+                console.log(addPhotos);
+
+                }else{
+                    console('please choose a product to add photos to');
+                    $('#error span').html('please choose a product to add photos to');
+                    $('#error').removeClass('d-none');
+                }
+            }
+        }
+
+        function switchCategory(category)
+        {
+            console.log('switch category');
+            $('input[name=category]').val(category);
+        }
 
         $('.dropdown-menu').on('click', function(event){
             var events = $._data(document, 'events') || {};
@@ -355,13 +399,6 @@
 
                 return false;            
             });
-
-            $(".delPhoto")on('click', function () {
-                $(this).closest(".newPhoto").remove();
-            });
-            
         })
-
-        
     </script>
 @stop
