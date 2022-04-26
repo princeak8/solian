@@ -6,6 +6,7 @@ use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use stdClass;
+use Illuminate\Support\Facades\Http;
 
 use App\Models\Photo;
 use App\Models\Product;
@@ -137,18 +138,65 @@ class PhotoService
         $photo->update();
     }
 
-    public function getDropboxPhotos()
+    public function getDropboxPhotos($page=1)
     {
         $dropBoxPhotos = [];
         $files = Storage::disk('dropbox')->files('web');
+        $entries = [];
         // dd($files);
-        $dropBoxPhotos = collect($files)->map(function($file) {
-            $f = new stdClass();
-            $f->file = $file;
-            $f->url = Storage::disk('dropbox')->url($file);
-            return $f;
-        });
+        // $dropBoxPhotos = collect($files)->map(function($file) {
+        //     //return $f;
+        // });
+        $start = ($page-1) * 24;
+        $end = $start + 24;
+        $max = (count($files) > $end) ? $end : count($files);
+        for($i=$start; $i<$max; $i++) {
+            // $f = new stdClass();
+            $e = new stdClass();
+            // $f->file = $files[$i];
+            //$f->url = Storage::disk('dropbox')->url($files[$i]);
+
+            $e->format = "jpeg";
+            $e->mode = "strict";
+            $e->path = "/".$files[$i];
+            $e->size = env("DROPBOX_THUMBNAIL_SIZE", "w640h480");
+            // $dropBoxPhotos[] = $f;
+            $entries[] = $e;
+        } 
+        if(count($entries) > 0) {
+            $thumbs = $this->getThumbnails($entries);
+            if($thumbs != null) {
+                if(count($thumbs['entries']) > 0) {
+                    $th = $thumbs['entries'];
+                    //dd($dropBoxPhotos);
+                    foreach($thumbs['entries'] as $thumb) {
+                        $f = new stdClass();
+                        $f->thumb = $thumb['thumbnail'];
+                        $arr = explode('/', $thumb['metadata']['path_lower']);
+                        array_shift($arr);
+                        $path = implode('/', $arr);
+                        $f->file = $path;
+                        $f->url = Storage::disk('dropbox')->url($path);
+                        $dropBoxPhotos[] = $f;
+                    }
+                }
+            }else{
+                throw new \Exception("Error attempting to get thumbnails, verify request payload");
+            }
+        }
+       
         return $dropBoxPhotos;
+    }
+
+    public function getThumbnails($entries)
+    {
+        $res = Http::withHeaders([
+            "Authorization" => "Bearer ".env('DROPBOX_AUTHORIZATION_TOKEN'),
+            "Content-Type" => "application/json"
+        ])->post("https://content.dropboxapi.com/2/files/get_thumbnail_batch",[
+            "entries" => $entries
+        ])->json();
+        return $res;
     }
 
     //public function updatePhoto($file, $photo)

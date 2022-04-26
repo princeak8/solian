@@ -37,6 +37,7 @@ class PhotoController extends Controller
     public function photos()
     {
         //dd(env('as'));
+        // $this->_handleDropboxPhotos();
         $photos = [];
         $email = auth::user()->email;
         try{
@@ -84,25 +85,10 @@ class PhotoController extends Controller
     public function get_dropbox_photos(Request $request)
     {
         $post = $request->all();
+        $page = (isset($post['page'])) ? $post['page'] : 1;
         if(isset($post['email']) && !empty($post['email'])) {
             if($post['email'] == auth::user()->email) {
-                try{
-                    $photos = $this->photoService->getDropboxPhotos();
-                    return response()->json([
-                        'statusCode' => 200,
-                        'photos' => $photos
-                    ], 200);
-                }catch (\Throwable $th) {
-                    if($th->getResponse()->getStatusCode() == 401) {
-                        DropboxService::refreshToken();
-                        //$this->photos();
-                    }
-                    \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
-                    return response()->json([
-                        'statusCode' => 401,
-                        'message' => 'An error occured '.$th->getMessage()
-                    ], 401);
-                }
+                return $this->_handleDropboxPhotos($page);
             }else{
                 return response()->json([
                     'statusCode' => 401,
@@ -114,6 +100,28 @@ class PhotoController extends Controller
                 'statusCode' => 404,
                 'message' => 'Email missing'
             ], 404);
+        }
+    }
+
+    private function _handleDropboxPhotos($page=1, $retries=0)
+    {
+        try{
+            $photos = $this->photoService->getDropboxPhotos($page);
+            return response()->json([
+                'statusCode' => 200,
+                'photos' => $photos
+            ], 200);
+        }catch (\Throwable $th) {
+            if($th->getResponse()->getStatusCode() == 401) {
+                DropboxService::refreshToken();
+                $retries++;
+                //if($retries <= 5) $this->_handleDropboxPhotos($page, $retries);
+            }
+            \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+            return response()->json([
+                'statusCode' => 401,
+                'message' => 'An error occured '.$th->getMessage()
+            ], 401);
         }
     }
 

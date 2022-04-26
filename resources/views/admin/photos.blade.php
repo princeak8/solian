@@ -137,7 +137,6 @@
             @include('inc.message')
             <div class="row">
                 <p id="loading" class="d-none mb-3">Loading...</p>
-                
                 <div id="dropboxPhotos" class="row mt-5"></div>
                 
                 <input type="hidden" value="{{$email}}" name="email" />      
@@ -380,15 +379,17 @@
                 console.log('result ', res);
                 if(res.status == 200) {
                     console.log('photos: ',res.data.photos);
+                    let setWidth = 150;
                     if(res.data.photos.length > 0) {
 
                         //loop through the photos
                         let photoContent = '';
+                        let imgBinaryPrefix = 'data:image/svg+xml;base64,';
                         res.data.photos.forEach((photo) => {
                             photoContent += `
                             <div class="col-3" id="${photo.file}">
                                 <span>
-                                    <img alt="" style="width:100%; height:15em; padding-bottom: 1em; object-fit: fill;" class="lazyload img-back" src="${photo.url}" />
+                                    <img alt="" style="width:100%; height:15em; padding-bottom: 1em; object-fit: fill;" class="lazyload img-back" src="${imgBinaryPrefix+photo.thumb}" />
                                 </span>
                                 <div class="container" style="display: flex; justify-content: space-between;">
                                     <span class="icons">
@@ -413,6 +414,7 @@
             .catch((error) => {
                 isLoading(false);
                 console.log("An error occured while trying to perform the operation "+error.message);
+                $('#dropboxPhotos').html('<p class="alert alert-danger">Oops!.. An error occured while attempting to fetch your photos, Please reload.. If error persists, contact the Administrator</p>');
                 throw error;
             });
 

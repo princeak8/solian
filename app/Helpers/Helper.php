@@ -81,7 +81,7 @@ use App\Models\Currency_rate;
             foreach($envVars as $envKey=>$envValue) {
                 $oldValue = env($envKey);
                 if($oldValue != null) {
-                    $str = str_replace("{$envKey}={$oldValue}", "{$envKey}={$envValue}\n", $str);
+                    $str = str_replace("{$envKey}={$oldValue}", "{$envKey}={$envValue}", $str);
                 }else{
                     $str .= "\n {$envKey}={$envValue}\n";
                 }

@@ -51,6 +51,14 @@ Route::group([
     Route::post('/photo/add_to_product', 'PhotoController@add_to_product');
     Route::get('/photo/delete/{id}', 'PhotoController@delete');
 
+    Route::get('/photo/test', function() {
+        $str = "/web/Img_234";
+        $arr = explode('/', $str);
+        array_shift($arr);
+        $str = implode('/', $arr);
+        dd($str);
+    });
+
     Route::post('/photo/get_dropbox_photos', 'PhotoController@get_dropbox_photos');
 
     Route::get('/dropbox', 'IndexController@dropbox');
