@@ -136,7 +136,7 @@
         <div class="card-body">
             @include('inc.message')
             <div class="row">
-                <p id="loading" class="d-none mb-3">Loading...</p>
+                <p id="loading" class="d-none mb-3"><img src="{{asset('/assets/img/Loading_icon.gif') }}" style="position:absolute; transform: scale(0.3); height:14em; left:-4em; top:8em;" alt="image"></p>
                 
                 <div id="dropboxPhotos" class="row mt-5"></div>
                 
