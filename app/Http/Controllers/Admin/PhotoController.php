@@ -115,7 +115,7 @@ class PhotoController extends Controller
             if($th->getResponse()->getStatusCode() == 401) {
                 DropboxService::refreshToken();
                 $retries++;
-                //if($retries <= 5) $this->_handleDropboxPhotos($page, $retries);
+                if($retries <= 5) $this->_handleDropboxPhotos($page, $retries);
             }
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
             return response()->json([

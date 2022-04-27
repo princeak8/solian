@@ -385,7 +385,7 @@
 
                         //loop through the photos
                         let photoContent = '';
-                        let imgBinaryPrefix = 'data:image/svg+xml;base64,';
+                        let imgBinaryPrefix = 'data:image/jpg;base64,';
                         res.data.photos.forEach((photo) => {
                             photoContent += `
                             <div class="col-3" id="${photo.file}">
