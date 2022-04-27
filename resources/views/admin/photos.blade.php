@@ -48,7 +48,6 @@
         .fa-trash {
             color: red;
         }
-        
     </style>
 @stop
 
@@ -136,7 +135,7 @@
         <div class="card-body">
             @include('inc.message')
             <div class="row">
-                <p id="loading" class="d-none mb-3"><img src="{{asset('/assets/img/Loading_icon.gif') }}" style="position:absolute; transform: scale(0.3); height:14em; left:-4em; top:8em;" alt="image"></p>
+                <p id="loading" class="d-none mb-3" style="height: 4em; border: 1px blue solid;"><img src="{{asset('/assets/img/loading-spinner.gif') }}" style="position:absolute; transform: scale(0.5); height:14em; left:40%; top:8.5em; border-radius: 50%;" alt="image"></p>
                 
                 <div id="dropboxPhotos" class="row mt-5"></div>
                 
@@ -169,16 +168,21 @@
         {
             //Adding selected photos to their corresponding categories
             //console.log('adding photos');
+            console.log(checkedPhotosArr);
             let category = $('input[name=category]').val();
             if(category=='product') {
                 let productId = $('select[name=product-id]').val();
                 if(productId != '') {
                     //Add photos
-                    console.log(checkedPhotosArr);
                     let url = "{{url('admin/photo/add_to_product')}}";
                     var token = $('meta[name="csrf-token"]').attr('content');
                     let formData =  {photos: checkedPhotosArr, product_id: productId, _token: token};
                     //console.log(`email: ${email} token: ${token}`);
+                    formData.photos = formData.photos.map(str => {
+                        const [file, thumb, url] = str.split(',');
+                        return { file, thumb, url };
+                    })
+                    console.log(formData.photos);
                     axios.post(url, formData)
                     .then((res) => {
                         console.log(res);
@@ -390,11 +394,11 @@
                             photoContent += `
                             <div class="col-3" id="${photo.file}">
                                 <span>
-                                    <img alt="" style="width:100%; height:15em; padding-bottom: 1em; object-fit: fill;" class="lazyload img-back" src="${imgBinaryPrefix+photo.thumb}" />
+                                    <img alt="" style="width:100%; height:24em; border-radius:10px; transform: scale(0.7); object-fit: cover;" class="lazyload img-back" src="${imgBinaryPrefix+photo.thumb}" />
                                 </span>
-                                <div class="container" style="display: flex; justify-content: space-between;">
+                                <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                     <span class="icons">
-                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}">
+                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file},${photo.thumb},${photo.url}">
                                     </span>
                                     <span class="icons">
                                         <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>

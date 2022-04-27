@@ -37,7 +37,7 @@ class PhotoController extends Controller
     public function photos()
     {
         //dd(env('as'));
-        // $this->_handleDropboxPhotos();
+        //$this->_handleDropboxPhotos();
         $photos = [];
         $email = auth::user()->email;
         try{
@@ -112,11 +112,11 @@ class PhotoController extends Controller
                 'photos' => $photos
             ], 200);
         }catch (\Throwable $th) {
-            if($th->getResponse()->getStatusCode() == 401) {
-                DropboxService::refreshToken();
-                $retries++;
-                if($retries <= 5) $this->_handleDropboxPhotos($page, $retries);
-            }
+            // if($th->getResponse()->getStatusCode() == 401) {
+            //     DropboxService::refreshToken();
+            //     $retries++;
+            //     if($retries <= 5) $this->_handleDropboxPhotos($page, $retries);
+            // }
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
             return response()->json([
                 'statusCode' => 401,
