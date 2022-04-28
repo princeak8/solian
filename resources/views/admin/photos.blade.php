@@ -156,7 +156,10 @@
         $(document).on('click', '.checkbox', function(e){
             console.log('clicked');
             if(this.checked == true) {
-                checkedPhotosArr.push(this.value);
+                let file = this.value;
+                let thumb = $(this).data("thumb");
+                let url = $(this).data("url");
+                checkedPhotosArr.push({file, thumb, url});
                 console.log(checkedPhotosArr);
             } else {
                     // REMOVE VALUE FROM ARRAY WHEN IT IS UNCHECKED
@@ -178,20 +181,28 @@
                     var token = $('meta[name="csrf-token"]').attr('content');
                     let formData =  {photos: checkedPhotosArr, product_id: productId, _token: token};
                     //console.log(`email: ${email} token: ${token}`);
-                    formData.photos = formData.photos.map(str => {
-                        const [file, thumb, url] = str.split(',');
-                        return { file, thumb, url };
+                    // formData.photos = formData.photos.map(str => {
+                    //     const [file, thumb, url] = str.split(',');
+                    //     return { file, thumb, url };
+                    // })
+                    console.log(formData);
+                    checkedPhotosArr.forEach(({ file }) => {
+                        // let arr = file.split('_');
+                        // let filename = arr[arr.length-1];
+                        // let filenameArr = filename.split('.');
+                        // let file = filenameArr[0];
+                        file = getFilenumber(file);
+                        $('#'+file).remove();
                     })
-                    console.log(formData.photos);
-                    axios.post(url, formData)
-                    .then((res) => {
-                        console.log(res);
-                        if(res.status == 200) {
-                            checkedPhotosArr.forEach((id) => {
-                                $('#'+id).remove();
-                            })
-                        }
-                    })
+                    // axios.post(url, formData)
+                    // .then((res) => {
+                    //     console.log(res);
+                    //     if(res.status == 200) {
+                    //         checkedPhotosArr.forEach((id) => {
+                    //             $('#'+id).remove();
+                    //         })
+                    //     }
+                    // })
 
                 }else{
                     console('please choose a product to add photos to');
@@ -368,6 +379,12 @@
         {
             (status) ? $('#loading').removeClass('d-none') : $('#loading').addClass('d-none');
         }
+        function getFilenumber(file) {
+            let arr = file.split('_');
+            let filename = arr[arr.length-1];
+            let filenameArr = filename.split('.');
+            return filenameArr[0];
+        }
         $(document).ready(function() {
             //When document loads
             isLoading(true);
@@ -391,14 +408,21 @@
                         let photoContent = '';
                         let imgBinaryPrefix = 'data:image/jpg;base64,';
                         res.data.photos.forEach((photo) => {
+                            //web/_mg_7718.jpg
+                            // let arr = photo.file.split('_');
+                            // let filename = arr[arr.length-1];
+                            // let filenameArr = filename.split('.');
+                            // let file = filenameArr[0];
+                            let file = getFilenumber(photo.file);
+                            console.log('file: ', file);
                             photoContent += `
-                            <div class="col-3" id="${photo.file}">
+                            <div class="col-3" id="${file}">
                                 <span>
                                     <img alt="" style="width:100%; height:24em; border-radius:10px; transform: scale(0.7); object-fit: cover;" class="lazyload img-back" src="${imgBinaryPrefix+photo.thumb}" />
                                 </span>
                                 <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                     <span class="icons">
-                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file},${photo.thumb},${photo.url}">
+                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}">
                                     </span>
                                     <span class="icons">
                                         <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
