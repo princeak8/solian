@@ -168,7 +168,6 @@ class PhotoService
             $thumbs = $this->getThumbnails($entries);
             dd($thumbs);
             if(count($thumbs) > 0) {
-                dd('success');
                 if(count($thumbs['entries']) > 0) {
                     $th = $thumbs['entries'];
                     //dd($dropBoxPhotos);
@@ -201,7 +200,7 @@ class PhotoService
             "Content-Type" => "application/json"
         ])->post("https://content.dropboxapi.com/2/files/get_thumbnail_batch",[
             "entries" => $entries
-        ]);
+        ])->json();
         return $res;
     }
 
