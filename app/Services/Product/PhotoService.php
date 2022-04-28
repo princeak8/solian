@@ -166,9 +166,9 @@ class PhotoService
         $thumbs = [];
         if(count($entries) > 0) {
             $thumbs = $this->getThumbnails($entries);
-            dd($thumbs);
-            if(count($thumbs) > 0) {
-                dd('success');
+            //dd($thumbs);
+            if($thumbs != null) {
+                //dd('success');
                 if(count($thumbs['entries']) > 0) {
                     $th = $thumbs['entries'];
                     //dd($dropBoxPhotos);
@@ -184,7 +184,7 @@ class PhotoService
                     }
                 }
             }else{
-                dd('fail');
+                //dd('fail');
                 $msg = '';
                 //foreach($entries as $e)
                 throw new \Exception("Error attempting to get thumbnails, verify request payload");
@@ -201,7 +201,7 @@ class PhotoService
             "Content-Type" => "application/json"
         ])->post("https://content.dropboxapi.com/2/files/get_thumbnail_batch",[
             "entries" => $entries
-        ]);
+        ])->json();
         return $res;
     }
 
