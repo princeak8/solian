@@ -65,9 +65,6 @@
                 @include('layouts/admin/photos_header')
                 <div class="top-link">
                     <div class="top-link-inner" style="display: flex; flex-direction: row;">
-                        <p id="error" class="d-none">
-                            <span class="alert alert-danger"></span>
-                        </p>
                         <span style="display: flex; flex-direction: column;">
                             <a href="#" class="top-text activv" onclick="switchCategory('product')">Add Photo(s) to Product</a>
                          </span>
@@ -77,9 +74,10 @@
                     <a href="#" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
                 </div>
                 <select name="product-id">
-                    <option value="1">Select Product</option>
-                    <option value="5">Evening Gown</option>
-                    <option value="6">Casuals</option>
+                    <option value="">Select Product</option>
+                    @if($products->count() > 0)
+                        @foreach($products as $product) <option value="{{$product->id}}">{{$product->name}}</option> @endforeach
+                    @endif
                 </select>
 
                  <!-- Modal Begins-->
@@ -136,7 +134,9 @@
             @include('inc.message')
             <div class="row">
                 <p id="loading" class="d-none mb-3" style="height: 4em; border: 1px blue solid;"><img src="{{asset('/assets/img/loading-spinner.gif') }}" style="position:absolute; transform: scale(0.5); height:14em; left:40%; top:8.5em; border-radius: 50%;" alt="image"></p>
-                
+                <div id="errors" class="d-none">
+                    <span class="alert alert-danger"></span>
+                        </div>
                 <div id="dropboxPhotos" class="row mt-5"></div>
                 
                 <input type="hidden" value="{{$email}}" name="email" />      
@@ -159,7 +159,8 @@
                 let file = this.value;
                 let thumb = $(this).data("thumb");
                 let url = $(this).data("url");
-                checkedPhotosArr.push({file, thumb, url});
+                let size = $(this).data("size");
+                checkedPhotosArr.push({file, thumb, url, size});
                 console.log(checkedPhotosArr);
             } else {
                     // REMOVE VALUE FROM ARRAY WHEN IT IS UNCHECKED
@@ -171,11 +172,12 @@
         {
             //Adding selected photos to their corresponding categories
             //console.log('adding photos');
-            console.log(checkedPhotosArr);
+            //console.log(checkedPhotosArr);
             let category = $('input[name=category]').val();
             if(category=='product') {
                 let productId = $('select[name=product-id]').val();
                 if(productId != '') {
+                    //console.log(productId);
                     //Add photos
                     let url = "{{url('admin/photo/add_to_product')}}";
                     var token = $('meta[name="csrf-token"]').attr('content');
@@ -185,29 +187,23 @@
                     //     const [file, thumb, url] = str.split(',');
                     //     return { file, thumb, url };
                     // })
-                    console.log(formData);
-                    checkedPhotosArr.forEach(({ file }) => {
-                        // let arr = file.split('_');
-                        // let filename = arr[arr.length-1];
-                        // let filenameArr = filename.split('.');
-                        // let file = filenameArr[0];
-                        file = getFilenumber(file);
-                        $('#'+file).remove();
+                    console.log('formdata: ',formData);
+                    
+                    axios.post(url, formData)
+                    .then((res) => {
+                        console.log('response: ',res);
+                        if(res.status == 200) {
+                            checkedPhotosArr.forEach(({ file }) => {
+                                file = getFilenumber(file);
+                                $('#'+file).remove();
+                            })
+                        }
                     })
-                    // axios.post(url, formData)
-                    // .then((res) => {
-                    //     console.log(res);
-                    //     if(res.status == 200) {
-                    //         checkedPhotosArr.forEach((id) => {
-                    //             $('#'+id).remove();
-                    //         })
-                    //     }
-                    // })
 
                 }else{
-                    console('please choose a product to add photos to');
-                    $('#error span').html('please choose a product to add photos to');
-                    $('#error').removeClass('d-none');
+                    console.log('please choose a product to add photos to');
+                    $('#errors span').html('please choose a product to add photos to');
+                    $('#errors').removeClass('d-none');
                 }
             }
         }
@@ -402,17 +398,12 @@
                 if(res.status == 200) {
                     console.log('photos: ',res.data.photos);
                     let setWidth = 150;
-                    if(res.data.photos.length > 0) {
+                    if(Object.keys(res.data.photos).length > 0) {
 
                         //loop through the photos
                         let photoContent = '';
                         let imgBinaryPrefix = 'data:image/jpg;base64,';
                         res.data.photos.forEach((photo) => {
-                            //web/_mg_7718.jpg
-                            // let arr = photo.file.split('_');
-                            // let filename = arr[arr.length-1];
-                            // let filenameArr = filename.split('.');
-                            // let file = filenameArr[0];
                             let file = getFilenumber(photo.file);
                             console.log('file: ', file);
                             photoContent += `
@@ -422,7 +413,7 @@
                                 </span>
                                 <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                     <span class="icons">
-                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}">
+                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
                                     </span>
                                     <span class="icons">
                                         <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>

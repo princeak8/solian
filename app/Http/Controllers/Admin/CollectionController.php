@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 
 use App\Services\Product\ProductService;
@@ -18,6 +19,7 @@ class CollectionController extends Controller
     public function __construct()
     {
         $this->middleware('adminAuth');
+        new BaseController;
         $this->collectionService = new CollectionService;
         $this->productService = new ProductService;
         $this->photoService = new PhotoService;

@@ -88,20 +88,22 @@ class FileService
         $fileIds = [];
         foreach($photos as $photo) {
             $fileObj = new File;
-            $fileObj->url = Storage::disk('dropbox')->url($photo);
+            $fileObj->url = $photo['url'];
+            $fileObj->thumb = $photo['thumb'];
+            $fileObj->path = $photo['file'];
             $fileObj->user_id = $user_id;
             $fileObj->secure_url = $fileObj->url;
             $fileObj->file_type = 'image';
-            $filePathParts = pathinfo($photo);
+            $filePathParts = pathinfo($photo['file']);
             $dimension = getimagesize($fileObj->url);
             $fileObj->extension = $filePathParts['extension'];
             $fileObj->filename = $filePathParts['basename'];
             $fileObj->width = $dimension[0];
             $fileObj->height = $dimension[1];
-            $fileObj->mime = $dimension['mime'];
-            $fileObj->type = 'image';
-            $fileObj->size = Storage::disk('dropbox')->size($file);
-            $fileObj->formattedSize = $this->convertSize($f->size);
+            $fileObj->mime_type = $dimension['mime'];
+            $fileObj->file_type = 'image';
+            $fileObj->size = $photo['size'];
+            $fileObj->formatted_size = $this->convertSize($fileObj->size);
             $fileObj->save();
             $fileIds[] = $fileObj->id;
         }

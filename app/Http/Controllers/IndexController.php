@@ -19,6 +19,7 @@ use App\Models\Currency_rate;
 
 class IndexController extends BaseController
 {
+    
     public function index()
     {
         //dd(session('all_currencies'));

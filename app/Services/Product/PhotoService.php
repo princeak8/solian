@@ -6,6 +6,7 @@ use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use stdClass;
+use session;
 use Illuminate\Support\Facades\Http;
 
 use App\Models\Photo;
@@ -38,6 +39,11 @@ class PhotoService
     public function unattachedPhotos()
     {
         return Photo::where('deleted', '0')->whereNull('product_id')->whereNull('collection_id')->where('slide', 0)->orderBy('created_at', 'desc')->get();
+    }
+
+    public function attachedPhotos()
+    {
+        return Photo::whereNotNull('product_id')->orWhereNotNull('collection_id')->orWhere('slide', 1)->orderBy('created_at', 'desc')->get();
     }
 
     public function productPhotos()
@@ -108,9 +114,8 @@ class PhotoService
         //dd('here');
     }
 
-    public function addPhotosToProduct($photos, $product_id, $user_id)
+    public function addPhotosToProduct($fileIds, $product_id)
     {
-        $fileIds = $this->fileService->addDropBoxPhotos($photos, $user_id);
         foreach($fileIds as $file_id) {
             $photo = new Photo;
             $photo->file_id = $file_id;
@@ -143,31 +148,24 @@ class PhotoService
         $dropBoxPhotos = [];
         $files = Storage::disk('dropbox')->files('web');
         $entries = [];
-        // dd($files);
-        // $dropBoxPhotos = collect($files)->map(function($file) {
-        //     //return $f;
-        // });
         $start = ($page-1) * 24;
         $end = $start + 24;
         $max = (count($files) > $end) ? $end : count($files);
         for($i=$start; $i<$max; $i++) {
-            // $f = new stdClass();
             $e = new stdClass();
-            // $f->file = $files[$i];
-            //$f->url = Storage::disk('dropbox')->url($files[$i]);
 
             $e->format = "jpeg";
             $e->mode = "strict";
             $e->path = "/".$files[$i];
             $e->size = env("DROPBOX_THUMBNAIL_SIZE", "w640h480");
-            // $dropBoxPhotos[] = $f;
             $entries[] = $e;
         } 
         $thumbs = [];
         if(count($entries) > 0) {
-            $thumbs = $this->getThumbnails($entries);
+            $thumbs = $this->_handle_getting_thumbnails($entries);
             //dd($thumbs);
             if($thumbs != null) {
+                $paths = [];
                 //dd('success');
                 if(count($thumbs['entries']) > 0) {
                     $th = $thumbs['entries'];
@@ -178,10 +176,13 @@ class PhotoService
                         $arr = explode('/', $thumb['metadata']['path_lower']);
                         array_shift($arr);
                         $path = implode('/', $arr);
+                        $paths[] = $path;
                         $f->file = $path;
                         $f->url = Storage::disk('dropbox')->url($path);
+                        $f->size = Storage::disk('dropbox')->size($path);
                         $dropBoxPhotos[] = $f;
                     }
+                    $dropBoxPhotos = $this->filter_dropbox_photos($paths, $dropBoxPhotos);
                 }
             }else{
                 //dd('fail');
@@ -190,7 +191,46 @@ class PhotoService
                 throw new \Exception("Error attempting to get thumbnails, verify request payload");
             }
         }
-       
+        $dropBoxPhotosArr = [];
+        if(count($dropBoxPhotos) > 0) {
+            foreach($dropBoxPhotos as $photo) $dropBoxPhotosArr[] = $photo;
+        }
+        //dd($dropBoxPhotos);
+        session(['dropBoxPhotos' => $dropBoxPhotos]);
+        
+        return $dropBoxPhotosArr;
+    }
+
+    private function _handle_getting_thumbnails($entries)
+    {
+        return $this->getThumbnails($entries);
+    }
+    /*
+        Filter photos from dropbox to remove those that has been attached to a product, collection or slide
+    */
+    public function filter_dropbox_photos($paths, $photos)
+    {
+        $attachedPhotos = $this->attachedPhotos();
+        if($attachedPhotos->count() > 0) {
+            foreach($attachedPhotos as $attachedPhoto) {
+                if(in_array($attachedPhoto->file->path, $paths)) {
+                    //dd($attachedPhoto->file->path);
+                    $photos = $this->remove_from_dropbox_photos($attachedPhoto->file->path, $photos);
+                    //dd($photos);
+                }
+            }
+        }
+        //dd($photos);
+        return $photos;
+    }
+
+    private function remove_from_dropbox_photos($path, $dropBoxPhotos)
+    {
+        foreach($dropBoxPhotos as $key=>$photo) {
+            if($photo->file == $path) {
+                unset($dropBoxPhotos[$key]);
+            }
+        }
         return $dropBoxPhotos;
     }
 

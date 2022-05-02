@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 
 use Auth;
@@ -30,6 +31,7 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->middleware('adminAuth');
+        new BaseController;
         $this->orderService = new OrderService;
         $this->paymentService = new PaymentService;
         $this->productService = new ProductService;

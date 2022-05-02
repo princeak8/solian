@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -18,56 +20,37 @@ use App\Http\Requests\AddPhotosToProductRequest;
 
 use App\Services\Product\ProductService;
 use App\Services\Product\PhotoService;
+use App\Services\Product\FileService;
 use App\Services\DropboxService;
 
 class PhotoController extends Controller
 {
     private $productService;
     private $photoService;
+    private $fileService;
 
     public function __construct()
     {
         $this->middleware('adminAuth');
+        new BaseController;
         $this->productService = new ProductService;
         $this->photoService = new PhotoService;
+        $this->fileService = new FileService;
     }
 
     
 
     public function photos()
     {
-        //dd(env('as'));
+        //dd(session('dropBoxPhotos'));
         //$this->_handleDropboxPhotos();
         $photos = [];
         $email = auth::user()->email;
         try{
-            $photos = $this->photoService->unattachedPhotos();
+            //$photos = $this->photoService->unattachedPhotos();
+            $products = $this->productService->products();
             $dropBoxPhotos = [];
             $dropBoxPhotos = collect($dropBoxPhotos);
-            // $files = Storage::disk('dropbox')->files('web');
-            // // dd($files);
-            // $dropBoxPhotos = collect($files)->map(function($file) {
-            //     $f = new stdClass();
-            //     $f->file = $file;
-            //     $f->url = Storage::disk('dropbox')->url($file);
-            //     return $f;
-            // });
-                //$img = new ImageManager(); 
-                // $img = ImageManager::make(Storage::disk('dropbox')->url($file)); //instance of the Image manager Class
-                // $thumb = $img->resize(300, 200);
-                
-                // $f->url = Storage::disk('dropbox')->url($file);
-                
-                // $f->filename = File::basename($f->url);
-                //$photosDetails[] = $f;
-                //return Storage::disk('dropbox')->size($file);
-            // foreach($files as $file) {
-            //     $f = new stdClass();
-            //     $f->file = $file;
-            //     $f->url = Storage::disk('dropbox')->url($file);
-            //     $dropBoxPhotos[] = $f;
-            // }
-            // dd($dropBoxPhotos);
         } catch (\Throwable $th) {
             //dd($th->getResponse()->getReasonPhrase());
             if($th->getResponse()->getStatusCode() == 401) {
@@ -77,7 +60,7 @@ class PhotoController extends Controller
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
             dd($th->getMessage());
         }
-        return view('admin/photos', compact('photos', 'dropBoxPhotos', 'email'));
+        return view('admin/photos', compact('products', 'dropBoxPhotos', 'email'));
     }
     /*
         Returns Json
@@ -105,19 +88,31 @@ class PhotoController extends Controller
 
     private function _handleDropboxPhotos($page=1, $retries=0)
     {
+        // dd(session('dropBoxPhotos'));
         try{
             $photos = $this->photoService->getDropboxPhotos($page);
+            //dd($photos);
+            //dd(session('dropBoxPhotos'));
             return response()->json([
                 'statusCode' => 200,
                 'photos' => $photos
             ], 200);
         }catch (\Throwable $th) {
-            // if($th->getResponse()->getStatusCode() == 401) {
-            //     DropboxService::refreshToken();
-            //     $retries++;
-            //     if($retries <= 5) $this->_handleDropboxPhotos($page, $retries);
-            // }
+            //dd($th->getCode());
+            //if(is_callable($th->getResponse) && $th->getCode() == 401) {
+            if($th->getCode() == 401) {
+                DropboxService::refreshToken();
+                //dd('here');
+                $retries++;
+                if($retries <= 5) $this->_handleDropboxPhotos($page, $retries);
+            }
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+            if(session('dropBoxPhotos') != null) {
+                return response()->json([
+                    'statusCode' => 200,
+                    'photos' => session('dropBoxPhotos')
+                ], 200);
+            }
             return response()->json([
                 'statusCode' => 401,
                 'message' => 'An error occured '.$th->getMessage()
@@ -129,11 +124,11 @@ class PhotoController extends Controller
     {
         $photos = [];
         try{
-            $photos = $this->photoService->productPhotos();
+            $products = $this->productService->products();
         } catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
         }
-        return view('admin/product_photos', compact('photos'));
+        return view('admin/product_photos', compact('products'));
     }
 
     public function collection_photos()
@@ -198,7 +193,8 @@ class PhotoController extends Controller
         try{
             $post = $request->all();
             if($this->productService->product($post['product_id'])) {
-                $this->photoService->addPhotosToProduct($post['photos'], $post['product_id'], auth::user()->id);
+                $fileIds = $this->addPhotosToFile($post['photos'], auth::user()->id);
+                $this->photoService->addPhotosToProduct($fileIds, $post['product_id']);
                 return response()->json([
                     'statusCode' => 200,
                     'message' => 'Photo added to product successfully'
@@ -211,7 +207,15 @@ class PhotoController extends Controller
             }
         }catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
-            return back()->with('error', 'An error occured, please contact the Administrator');
+            return response()->json([
+                'statusCode' => 500,
+                'message' => 'An error occured, please contact the Administrator'
+            ], 500);
         }
+    }
+
+    private function addPhotosToFile($photos, $user_id) 
+    {
+        return $this->fileService->addDropBoxPhotos($photos, $user_id);
     }
 }

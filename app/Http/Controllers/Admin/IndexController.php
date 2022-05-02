@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Storage;
@@ -24,6 +25,7 @@ class IndexController extends Controller
     public function __construct()
     {
         $this->middleware('adminAuth');
+        new BaseController;
         $this->orderService = new OrderService;
         $this->paymentService = new PaymentService;
     }
