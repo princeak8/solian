@@ -133,7 +133,7 @@
         <div class="card-body">
             @include('inc.message')
             <div class="row">
-                <p id="loading" class="d-none mb-3" style="height: 4em; border: 1px blue solid;"><img src="{{asset('/assets/img/loading-spinner.gif') }}" style="position:absolute; transform: scale(0.5); height:14em; left:40%; top:8.5em; border-radius: 50%;" alt="image"></p>
+                <p id="loading" class="d-none mb-3" style="height: 4em;"><img src="{{asset('/assets/img/loading-spinner.gif') }}" style="position:absolute; transform: scale(0.5); height:14em; left:40%; top:8.5em; border-radius: 50%;" alt="image"></p>
                 <div id="errors" class="d-none">
                     <span class="alert alert-danger"></span>
                         </div>
@@ -182,11 +182,7 @@
                     let url = "{{url('admin/photo/add_to_product')}}";
                     var token = $('meta[name="csrf-token"]').attr('content');
                     let formData =  {photos: checkedPhotosArr, product_id: productId, _token: token};
-                    //console.log(`email: ${email} token: ${token}`);
-                    // formData.photos = formData.photos.map(str => {
-                    //     const [file, thumb, url] = str.split(',');
-                    //     return { file, thumb, url };
-                    // })
+                    
                     console.log('formdata: ',formData);
                     
                     axios.post(url, formData)
@@ -198,6 +194,11 @@
                                 $('#'+file).remove();
                             })
                         }
+                    })
+                    .catch((e) => {
+                        console.log('error: '. e);
+                        $('#errors span').html('An error occured while attempting to add photos to product');
+                        $('#errors').removeClass('d-none');
                     })
 
                 }else{
