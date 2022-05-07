@@ -56,30 +56,9 @@
                 </a>
             </h6>
                 @include('layouts/admin/photos_header')
-                <div class="top-link">
-                    <div class="top-link-inner" style="display: flex; flex-direction: row;">
-                        <span style="display: flex; flex-direction: column;">
-                            <a href="#" class="top-text activv" onclick="switchCategory('product')">Add Photo(s) to Product</a>
-                         </span>
-                        <a href="#" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slides</a>
-                    </div>
-                    
-                    <a href="#" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
-                </div>
-                <select name="product-id">
-                    <option value="">Select Product</option>
-                    @if($products->count() > 0)
-                        @foreach($products as $product) <option value="{{$product->id}}">{{$product->name}}</option> @endforeach
-                    @endif
-                </select>
-
         <div class="card-body">
             @include('inc.message')
             <div class="row">
-                <p id="loading" class="d-none mb-3" style="height: 4em;"><img src="{{asset('/assets/img/loading-spinner.gif') }}" style="position:absolute; transform: scale(0.5); height:14em; left:40%; top:8.5em; border-radius: 50%;" alt="image"></p>
-                <div id="errors" class="d-none">
-                    <span class="alert alert-danger"></span>
-                </div>
                 <div class="mt-5">
                     <h4>Bimpe African Print Dress</h4>
                     <div id="productPhotos" class="row mt-2">
