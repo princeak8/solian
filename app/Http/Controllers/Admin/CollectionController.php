@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 
+use App\Http\Requests\CollectionRequest;
+
 use App\Services\Product\ProductService;
 use App\Services\Product\PhotoService;
 use App\Services\Product\CollectionService;
@@ -48,7 +50,7 @@ class CollectionController extends Controller
 
         try{
             if ($id == null) {
-                $collection = new Collection;
+                $collection = $this->collectionService->collection();
                 $title = 'Add a new Collection';
             }else{
                 $title = 'Edit Collection';
@@ -74,48 +76,10 @@ class CollectionController extends Controller
     public function save(CollectionRequest $request)
     {
         $post = $request->all();
-        $id = $request->get('id');
+        $post['id'] = $request->get('id');
         try{
-            if($id==null) {
-                //Add action
-                $collection = new Collection;
-            }else{
-                //edit action
-                $collection = Collection::findOrFail($id);
-            }
-            $collection->name = $post['name'];
-            $collection->description = $post['description'];
-            if($id==null) {
-                //$photo = new Photo;
-                $uploadedPhoto = Utility::UploadFile($post['photo'], 'collections', Auth::user()->id);
-                if($uploadedPhoto && $uploadedPhoto != null) {
-                    $collection->photo = $uploadedPhoto->url;
-                }
-                $collection->save();
-            }else{
-                $collection->update();
-            }
-            $existingProducts = [];
-            if($collection->product_collections->count() > 0) {
-                foreach($collection->product_collections as $productCollection) {
-                    if(!in_array($productCollection->product->id, $post['products'])) {
-                        $productCollection->delete();
-                    }else{
-                        $existingCollections[] = $productCollection->product->id;
-                    }
-                }
-            }
-            if(isset($post['products'])) {
-                foreach($post['products'] as $product_id) {
-                    if(!in_array($product_id, $existingProducts)) {
-                        $product_collection = new Product_collection;
-                        $product_collection->product_id = $product_id;
-                        $product_collection->collection_id = $collection->id;
-                        $product_collection->save();
-                    }
-                }
-            }
-            if($id==null) {
+            $this->collectionService->save($post);
+            if($post['id']==null) {
                 return redirect('admin/collections');
             }
             return back()->with("msg", "Collection edited successfully");
@@ -125,40 +89,40 @@ class CollectionController extends Controller
         }
     }
 
-    public function change_photo(Request $request)
-    {
-        $post = $request->all();
-        $collection_id = $request->get('id');
-        try{
-            $collection = Collection::findOrFail($collection_id);
-            $uploadedPhoto = Utility::UploadFile($post['photo'], 'collections', Auth::user()->id);
-            if($uploadedPhoto && $uploadedPhoto != null) {
-                if(!empty($collection->photo)) {
-                    unlink('uploads/collections/'.$collection->photo);
-                }
-                $collection->photo = $uploadedPhoto->url;
-                $collection->update();
-            }
-            return back();
-        } catch (\Throwable $th) {
-            echo $th->getMessage();
-            return back()->with('error', $th->getMessage());
-        }
-    }
+    // public function change_photo(Request $request)
+    // {
+    //     $post = $request->all();
+    //     $collection_id = $request->get('id');
+    //     try{
+    //         $collection = Collection::findOrFail($collection_id);
+    //         $uploadedPhoto = Utility::UploadFile($post['photo'], 'collections', Auth::user()->id);
+    //         if($uploadedPhoto && $uploadedPhoto != null) {
+    //             if(!empty($collection->photo)) {
+    //                 unlink('uploads/collections/'.$collection->photo);
+    //             }
+    //             $collection->photo = $uploadedPhoto->url;
+    //             $collection->update();
+    //         }
+    //         return back();
+    //     } catch (\Throwable $th) {
+    //         echo $th->getMessage();
+    //         return back()->with('error', $th->getMessage());
+    //     }
+    // }
 
-    public function delete($id)
-    {
-        $collection = Collection::findOrFail($id);
-        if($collection) {
-            $collection->deleted = 1;
-            if($collection->save()) {
-                if($collection->product_collections->count() > 0) {
-                    foreach($collection->product_collections as $productCollection) {
-                        $productCollection->delete();
-                    }
-                }
-            }
-        }
-        return back();
-    }
+    // public function delete($id)
+    // {
+    //     $collection = Collection::findOrFail($id);
+    //     if($collection) {
+    //         $collection->deleted = 1;
+    //         if($collection->save()) {
+    //             if($collection->product_collections->count() > 0) {
+    //                 foreach($collection->product_collections as $productCollection) {
+    //                     $productCollection->delete();
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return back();
+    // }
 }

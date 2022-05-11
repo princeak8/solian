@@ -17,8 +17,10 @@ use Intervention\Image\ImageManager;
 
 use App\Http\Requests\AddPhotosRequest;
 use App\Http\Requests\AddPhotosToProductRequest;
+use App\Http\Requests\AddPhotosToCategoryRequest;
 
 use App\Services\Product\ProductService;
+use App\Services\Product\CollectionService;
 use App\Services\Product\PhotoService;
 use App\Services\Product\FileService;
 use App\Services\DropboxService;
@@ -26,6 +28,7 @@ use App\Services\DropboxService;
 class PhotoController extends Controller
 {
     private $productService;
+    private $collectionService;
     private $photoService;
     private $fileService;
 
@@ -34,6 +37,7 @@ class PhotoController extends Controller
         $this->middleware('adminAuth');
         new BaseController;
         $this->productService = new ProductService;
+        $this->collectionService = new CollectionService;
         $this->photoService = new PhotoService;
         $this->fileService = new FileService;
     }
@@ -188,21 +192,21 @@ class PhotoController extends Controller
         }
     }
 
-    public function add_to_product(AddPhotosToProductRequest $request)
+    public function add_to_category(AddPhotosToCategoryRequest $request)
     {
         try{
             $post = $request->all();
-            if($this->productService->product($post['product_id'])) {
+            if(($post['category'] != 'slide') && $this->validate_category_id($post['id'], $post['category'])) {
                 $fileIds = $this->addPhotosToFile($post['photos'], auth::user()->id);
-                $this->photoService->addPhotosToProduct($fileIds, $post['product_id']);
+                $this->photoService->addPhotosToCategory($fileIds, $post['id'], $post['category']);
                 return response()->json([
                     'statusCode' => 200,
-                    'message' => 'Photo added to product successfully'
+                    'message' => 'Photo added successfully'
                 ], 200);
             }else{
                 return response()->json([
                     'statusCode' => 404,
-                    'message' => 'Product does not exist'
+                    'message' => 'Product/Collection does not exist'
                 ], 404);
             }
         }catch (\Throwable $th) {
@@ -211,6 +215,16 @@ class PhotoController extends Controller
                 'statusCode' => 500,
                 'message' => 'An error occured, please contact the Administrator'
             ], 500);
+        }
+    }
+
+    //Validating that the id i.e product_id/collection_id is valid
+    private function validate_category_id($id, $category)
+    {
+        switch($category) {
+            case "product" : return $this->productService->product($id); break;
+            case "collection" : return $this->collectionService->collection($id); break;
+            default : return false;
         }
     }
 

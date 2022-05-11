@@ -49,7 +49,7 @@
                         <div class="form-group">
                             {{Form::textarea("description", old("description"), ["class" => "form-control", "placeholder"=>"Description of collection"]) }}
                         </div>
-                        @if($collection->name!='New Arrivals')
+                        <!-- @if($collection->name!='New Arrivals')
                             @if(!empty($collection->photo))
                                 <div class="col-6">
                                     <img src="{{ asset('uploads/collections/thumbnails/'.$collection->photo) }}" alt="" title="" style="width:80%; height:16em;" />
@@ -65,7 +65,7 @@
                                 <div><img src="" id="collection-image" /></div>
                                 <input type="file" class="form-control input-file" data-id="collection-image" name="photo" accept="image/*" @if($collection->id == null) required @endif />
                             </div>
-                        @endif
+                        @endif -->
                         
                         <div class="form-group">
                             {{ Form::submit(__('Save'), array('class'=>'form-control  mt-4 btn btn-primary'))}}

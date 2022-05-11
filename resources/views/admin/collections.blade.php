@@ -6,6 +6,7 @@
     <h6 class="m-0 font-weight-bold text-primary">Collections <a href="{{url('admin/collection/create')}}" class="btn btn-sm btn-primary ml-3">Add New Collection</a></h6>
   </div>
   <div class="card-body">
+  @include('inc.message')
         @if($collections->count() > 0)
           <div id="collections" class="row">
             @foreach($collections as $collection)

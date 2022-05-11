@@ -174,38 +174,37 @@
             //console.log('adding photos');
             //console.log(checkedPhotosArr);
             let category = $('input[name=category]').val();
-            if(category=='product') {
-                let productId = $('select[name=product-id]').val();
-                if(productId != '') {
-                    //console.log(productId);
-                    //Add photos
-                    let url = "{{url('admin/photo/add_to_product')}}";
-                    var token = $('meta[name="csrf-token"]').attr('content');
-                    let formData =  {photos: checkedPhotosArr, product_id: productId, _token: token};
-                    //console.log(`email: ${email} token: ${token}`);
-                    // formData.photos = formData.photos.map(str => {
-                    //     const [file, thumb, url] = str.split(',');
-                    //     return { file, thumb, url };
-                    // })
-                    console.log('formdata: ',formData);
-                    
-                    axios.post(url, formData)
-                    .then((res) => {
-                        console.log('response: ',res);
-                        if(res.status == 200) {
-                            checkedPhotosArr.forEach(({ file }) => {
-                                file = getFilenumber(file);
-                                $('#'+file).remove();
-                            })
-                        }
-                    })
-
-                }else{
-                    console.log('please choose a product to add photos to');
-                    $('#errors span').html('please choose a product to add photos to');
-                    $('#errors').removeClass('d-none');
-                }
+            //if(category=='product') {
+            let id = 0;
+            let errorMsg = '';
+            switch(category) {
+                case 'product' : id = $('select[name=product-id]').val(); errorMsg = "please choose a product"; break;
+                case 'collection' : id = $('select[name=collection-id]').val(); errorMsg = "please choose a collection"; break;
             }
+            if(id != '') {
+                //Add photos
+                let url = "{{url('admin/photo/add_to_category')}}";
+                var token = $('meta[name="csrf-token"]').attr('content');
+                let formData =  {photos: checkedPhotosArr, id: id, category: category, _token: token};
+                console.log('formdata: ',formData);
+                    
+                axios.post(url, formData)
+                .then((res) => {
+                    console.log('response: ',res);
+                    if(res.status == 200) {
+                        checkedPhotosArr.forEach(({ file }) => {
+                            file = getFilenumber(file);
+                            $('#'+file).remove();
+                        })
+                    }
+                })
+
+            }else{
+                console.log(errorMsg);
+                $('#errors span').html('Error: '+errorMsg);
+                $('#errors').removeClass('d-none');
+            }
+            //}
         }
 
         function switchCategory(category)

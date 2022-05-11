@@ -114,12 +114,14 @@ class PhotoService
         //dd('here');
     }
 
-    public function addPhotosToProduct($fileIds, $product_id)
+    public function addPhotosToCategory($fileIds, $id, $category)
     {
         foreach($fileIds as $file_id) {
             $photo = new Photo;
             $photo->file_id = $file_id;
-            $photo->product_id = $product_id;
+            if($category=='product') $photo->product_id = $id;
+            if($category=='collection') $photo->collection_id = $id;
+            if($category=='slide') $photo->slide = 10.;
             $photo->save();
         }
     }
