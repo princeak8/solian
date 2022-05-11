@@ -104,6 +104,7 @@ class FileService
             $fileObj->file_type = 'image';
             $fileObj->size = $photo['size'];
             $fileObj->formatted_size = $this->convertSize($fileObj->size);
+            //dd($fileObj);
             $fileObj->save();
             $fileIds[] = $fileObj->id;
         }

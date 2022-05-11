@@ -2,6 +2,12 @@
 
 @section('css')
     <style type="text/css">
+        /* .addModal{
+            background: rgba(0, 0, 0, 0.2);
+            height: auto;
+            width: 100vw;
+            z-index: 1000;
+        } */
         .dropbox {
 			outline: 2px dashed grey; /* the dash box */
 			outline-offset: -10px;
@@ -56,10 +62,19 @@
         .fa-trash {
             color: red;
         }
+        #adding {
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            width: 98%; 
+            border: solid 2px green;
+            color: blue;
+        }
         #adding img {
             height: 4em;
             width: auto;
             border-radius: 10px;
+            margin-left: 10em;
         }
     </style>
 @stop
@@ -68,9 +83,9 @@
         
  <!-- Begin Page Content -->
  <div class="container-fluid">
-    
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
+    <!-- <div class=" addModal"></div> -->
+        <div class="card-header py-3" style="position: absolute;">
             <h6 class="m-0 font-weight-bold text-primary">Product-Gallery</h6>
             @include('layouts/admin/photos_header')
             <div class="top-link">
@@ -80,13 +95,10 @@
                     </span>
                     <a href="#" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slides</a>
                 </div>
-                <a href="#" class="btn btn-success btn-sm" onclick="addPhotos();isAdding();">Save</a>
+                <a href="#" class="btn btn-success btn-sm" onclick="addPhotos();">Save</a>
             </div>
             <select name="product-id">
                 <option value="">Select Product</option>
-                <option value="1">Bimpe African Print Dress</option>
-                <option value="2">Maxi Dress</option>
-                <option value="3">Select Product3</option>
                 @if($products->count() > 0)
                     @foreach($products as $product) <option value="{{$product->id}}">{{$product->name}}</option> @endforeach
                 @endif
@@ -99,12 +111,10 @@
                     <div id="errors" class="d-none">
                         <span class="alert alert-danger"></span>
                     </div>
-
-                    <p id="adding" class="alert alert-success" style="width: 90%;">Adding photos...
+                    <h5 id="adding" class="alert alert-light">Adding photos...
                         <img src="{{asset('/assets/img/file-transfer.gif') }}" alt="">
-                    </p>
+                    </h5>
                     <div id="dropboxPhotos" class="row mt-5"></div>
-                    
                     <input type="hidden" value="{{$email}}" name="email" />      
                 </div>
             </div>
@@ -136,12 +146,21 @@
         function isAdding(status)
         {
             if(status){ 
-                $('#adding').addClass('d-none');
-                $('.checkbox')
+                $('#adding').addClass('.addModal');
+                $('.addModal')
             }else{
-                $('#adding').removeClass('d-none');
+                $('#adding').removeClass('.addModal');
             }
         } 
+        // {
+        //     if(status){ 
+        //         $('#adding').removeClass('d-none');
+        //         $('.checkbox')
+        //     }else{
+        //         $('#adding').addClass('d-none');
+        //     }
+        // } 
+
 
         function addPhotos()
         {
@@ -280,10 +299,10 @@
                                 </span>
                                 <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                     <span class="icons">
-                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}" >
+                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
                                     </span>
                                     <span class="icons">
-                                        <a href="#"><i class="fa fa-trash delete" aria-hidden="true" ></i></a>
+                                        <a href="#"><i class="fa fa-trash delete" aria-hidden="true"></i></a>
                                     </span>
                                 </div>
                             </div>
