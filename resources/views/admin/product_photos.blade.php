@@ -50,11 +50,6 @@
  <div class="container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Products-Gallery 
-                <a href="{{url('admin/product/create_photo')}}" class="btn btn-sm btn-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Add Photo
-                </a>
-            </h6>
                 @include('layouts/admin/photos_header')
         <div class="card-body">
             @include('inc.message')

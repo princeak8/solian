@@ -21,6 +21,7 @@
                 <a href="{{url('admin/collection/delete/'.$collection->id)}}" class="btn btn-danger" onclick="return confirm('Are You Sure You want to Delete this collection?')">Delete</a>
               </div>
             @endforeach
+                            
           </div>
         @else
           <p>No Collection has been added at this point</p>

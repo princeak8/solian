@@ -1,32 +1,37 @@
 <style type="text/css">
     .head-bg {
-    	background: #0066bd;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+    	background: #87CEEB;
         padding: 0 2em;
         margin: 0.5em 0;
         border-radius: 5px;
     }
-   
+    .head-bg ul {
+        display: flex;
+        justify-content: space-around;
+    }
+    .head-bg ul li {
+        list-style-type: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
     .photoHeader {
-        color: white;
+        color: #0066bd;
         text-decoration: none;
+        font-weight: 600;
         padding: 1em;
     }
     .photoHeader:hover {
         background: white;
         color: #0066bd;
-        /* border: 0.5px solid gray; */
         border-radius: 15px;
-        margin: 0.5em 0;
         text-decoration: none;
-
     }
-    .activ {
+   
+    .head-bg .active {
         background: white;
-        color: #0066bd;
-        /* border: 0.5px solid gray; */
+        color: #0066bd !important;
         border-radius: 15px;
         margin: 0.5em 0;
     }
@@ -35,9 +40,19 @@
 
 <div>
     <div class="head-bg">
-            <a class="activ photoHeader" href="{{url('admin/photos')}}"><span>Unattached Photos</span></a>
-            <a class="photoHeader"  href="{{url('admin/product_photos')}}"><span>Product Photos</span></a>
-            <a class="photoHeader"  href="{{url('admin/collection_photos')}}"><span>Collection Photos</span></a>
-            <a class="photoHeader"  href="{{url('admin/slide_photos')}}"><span>Slides</span></a>
+        <ul>
+            <li class="{{ (request()->is('admin/photos')) ? 'active' : '' }}">
+                <a class="photoHeader" href="{{url('admin/photos')}}"><span>Unattached Photos</span></a>
+            </li>
+            <li class="{{ (request()->is('admin/product_photos')) ? 'active' : '' }}">
+                <a class="photoHeader"  href="{{url('admin/product_photos')}}"><span>Product Photos</span></a>
+            </li>
+            <li class="{{ (request()->is('admin/collection_photos')) ? 'active' : '' }}">
+                <a class="photoHeader"  href="{{url('admin/collection_photos')}}"><span>Collection Photos</span></a>
+            </li>
+            <li class="{{ (request()->is('admin/slide_photos')) ? 'active' : '' }}">
+                <a class="photoHeader"  href="{{url('admin/slide_photos')}}"><span>Slides</span></a>
+            </li>
+        </ul>
     </div>
 </div>

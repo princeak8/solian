@@ -55,5 +55,9 @@
         }
         $(this).data('open', !open);
     })
+
+    $(function() {
+        $('nav a[href^="/' + location.pathname.split("/")[1] + '"]').addClass('active');
+    });
 </script>
 @yield('js')
