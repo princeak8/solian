@@ -18,7 +18,7 @@ class Collection extends Model
 
     public function product_collections()
     {
-        $productCollections = $this->hasMany('App\Models\Product_collection', 'collection_id', 'id')->where('deleted', 0);
+        $productCollections = $this->hasMany('App\Models\Product_collection', 'collection_id', 'id');
         //dd($productCollections);
         foreach($productCollections as $key=>$productCollection) {
             //dd($productCollection->product);
