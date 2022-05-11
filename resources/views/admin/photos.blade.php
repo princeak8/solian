@@ -42,106 +42,72 @@
 			text-align: center;
 			padding: 50px 0;
 		}
+        #loading img {
+            position:absolute;
+            transform: scale(0.5);
+            height:14em;
+            left:40%;
+            top:8.5em;
+            border-radius: 50%;
+        }
         .icons {
             transform: scale(1.5);
         }
         .fa-trash {
             color: red;
         }
+        #adding img {
+            height: 4em;
+            width: auto;
+            border-radius: 10px;
+        }
     </style>
 @stop
 
 @section('content')
-
+        
  <!-- Begin Page Content -->
  <div class="container-fluid">
+    
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Products-Gallery 
-                <a href="{{url('admin/product/create_photo')}}" class="btn btn-sm btn-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Add Photo
-                </a>
-            </h6>
-                @include('layouts/admin/photos_header')
-                <div class="top-link">
-                    <div class="top-link-inner" style="display: flex; flex-direction: row;">
-                        <span style="display: flex; flex-direction: column;">
-                            <a href="#" class="top-text activv" onclick="switchCategory('product')">Add Photo(s) to Product</a>
-                         </span>
-                        <a href="#" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slides</a>
-                    </div>
-                    
-                    <a href="#" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
+            <h6 class="m-0 font-weight-bold text-primary">Product-Gallery</h6>
+            @include('layouts/admin/photos_header')
+            <div class="top-link">
+                <div class="top-link-inner" style="display: flex; flex-direction: row;">
+                    <span style="display: flex; flex-direction: column;">
+                        <a href="#" class="top-text activv" onclick="switchCategory('product')">Add Photo(s) to Product</a>
+                    </span>
+                    <a href="#" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slides</a>
                 </div>
-                <select name="product-id">
-                    <option value="">Select Product</option>
-                    @if($products->count() > 0)
-                        @foreach($products as $product) <option value="{{$product->id}}">{{$product->name}}</option> @endforeach
-                    @endif
-                </select>
-
-                 <!-- Modal Begins-->
-
-                 <div class="dropdown col-md-12 row" style="width:100%; margin-left:-4em;">
-                        
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="width:100%;">
-                        {!! Form::open(['url' => "admin/photo/add",'method' => 'post', 'files' => true, 
-                            'class'=>'form-horizontal', 'onsubmit'=>'return save();'])
-                        !!}
-                        @if(empty($product))
-                            <div id="app" class="form-group row">
-                                <p class="col-12">Add Product Photos</p>
-                                
-                                <p v-if="photoError != ''" class="col-12 alert alert-danger">@{{photoError}}</p>
-                                <div class="dropbox col-8">
-                                    <div id="photos">
-                                        <input type="file" multiple name="photos[]" class="input-file" accept="image/*">
-                                    </div>
-                                    
-                                    <p v-if="isInitial">
-                                        Drag your file(s) here to begin<br> or click to browse 
-                                    </p>
-                                    
-                                    <div v-else>
-                                        <img v-for="f in uploadedFiles" width="120" height="100" :src="f.photo" style="margin-right: 1%" /> 
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <p v-if="!isInitial" v-for="f in uploadedFiles" :key="f.name" style="font-size:0.8em; display: flex; flex-direction: row">
-                                        @{{f.name}}
-                                        <a href="javascript:void(0)" class="col-md-2" @click="removePhoto(f.name)" style="color:red">X</a>
-                                    </p>
-                                </div>
-                            </div>
-                            <input type="hidden" name="deleted_photos" />
-                            <input type="hidden" name="edit" value="0" />
-                        @else
-                            <input type="hidden" name="edit" value="1" />    
-                        @endif
-                        <div class="form-group">
-                            {{ Form::submit(__('Save'), array('class'=>'form-control  mt-4 btn btn-primary'))}}
-                        </div>
-                    {!! Form::close() !!}
-                        </div>
-                    </div>
-                    <!-- Modal Ends-->
-            
-       
-                </div>
-                 <!-- Modal Ends-->
-
-        <div class="card-body">
-            @include('inc.message')
-            <div class="row">
-                <p id="loading" class="d-none mb-3" style="height: 4em; border: 1px blue solid;"><img src="{{asset('/assets/img/loading-spinner.gif') }}" style="position:absolute; transform: scale(0.5); height:14em; left:40%; top:8.5em; border-radius: 50%;" alt="image"></p>
-                <div id="errors" class="d-none">
-                    <span class="alert alert-danger"></span>
-                        </div>
-                <div id="dropboxPhotos" class="row mt-5"></div>
-                
-                <input type="hidden" value="{{$email}}" name="email" />      
+                <a href="#" class="btn btn-success btn-sm" onclick="addPhotos();isAdding();">Save</a>
             </div>
-        </div>
+            <select name="product-id">
+                <option value="">Select Product</option>
+                <option value="1">Bimpe African Print Dress</option>
+                <option value="2">Maxi Dress</option>
+                <option value="3">Select Product3</option>
+                @if($products->count() > 0)
+                    @foreach($products as $product) <option value="{{$product->id}}">{{$product->name}}</option> @endforeach
+                @endif
+            </select>
+
+            <div class="card-body">
+                @include('inc.message')
+                <div class="row"> 
+                    <p id="loading" class="d-none mb-3" style="height: 4em;"><img src="{{asset('/assets/img/loading-spinner.gif') }}"></p>
+                    <div id="errors" class="d-none">
+                        <span class="alert alert-danger"></span>
+                    </div>
+
+                    <p id="adding" class="alert alert-success" style="width: 90%;">Adding photos...
+                        <img src="{{asset('/assets/img/file-transfer.gif') }}" alt="">
+                    </p>
+                    <div id="dropboxPhotos" class="row mt-5"></div>
+                    
+                    <input type="hidden" value="{{$email}}" name="email" />      
+                </div>
+            </div>
     </div>
     <input type="text" name="category" value="product"/>
 </div>
@@ -150,7 +116,6 @@
 
 @section('js')
     <script type="application/javascript">
-
         var checkedPhotosArr = [];
         
         $(document).on('click', '.checkbox', function(e){
@@ -168,36 +133,48 @@
             }
         });
 
+        function isAdding(status)
+        {
+            if(status){ 
+                $('#adding').addClass('d-none');
+                $('.checkbox')
+            }else{
+                $('#adding').removeClass('d-none');
+            }
+        } 
+
         function addPhotos()
         {
             //Adding selected photos to their corresponding categories
             //console.log('adding photos');
             //console.log(checkedPhotosArr);
             let category = $('input[name=category]').val();
-            //if(category=='product') {
-            let id = 0;
-            let errorMsg = '';
-            switch(category) {
-                case 'product' : id = $('select[name=product-id]').val(); errorMsg = "please choose a product"; break;
-                case 'collection' : id = $('select[name=collection-id]').val(); errorMsg = "please choose a collection"; break;
-            }
-            if(id != '') {
-                //Add photos
-                let url = "{{url('admin/photo/add_to_category')}}";
-                var token = $('meta[name="csrf-token"]').attr('content');
-                let formData =  {photos: checkedPhotosArr, id: id, category: category, _token: token};
-                console.log('formdata: ',formData);
+            if(category=='product') {
+                let productId = $('select[name=product-id]').val();
+                if(productId != '') {
+                    //console.log(productId);
+                    //Add photos
+                    let url = "{{url('admin/photo/add_to_product')}}";
+                    var token = $('meta[name="csrf-token"]').attr('content');
+                    let formData =  {photos: checkedPhotosArr, product_id: productId, _token: token};
                     
-                axios.post(url, formData)
-                .then((res) => {
-                    console.log('response: ',res);
-                    if(res.status == 200) {
-                        checkedPhotosArr.forEach(({ file }) => {
-                            file = getFilenumber(file);
-                            $('#'+file).remove();
-                        })
-                    }
-                })
+                    console.log('formdata: ',formData);
+                    
+                    axios.post(url, formData)
+                    .then((res) => {
+                        console.log('response: ',res);
+                        if(res.status == 200) {
+                            checkedPhotosArr.forEach(({ file }) => {
+                                file = getFilenumber(file);
+                                $('#'+file).remove();
+                            })
+                        }
+                    })
+                    .catch((e) => {
+                        console.log('error: '. e);
+                        $('#errors span').html('An error occured while attempting to add photos to product');
+                        $('#errors').removeClass('d-none');
+                    })
 
             }else{
                 console.log(errorMsg);
@@ -255,117 +232,10 @@
 				}
 			},
 			data: {
-				photos: [],
-                uploadedFiles: [],
-                uploadError: null,
-                currentStatus: null,
-                uploadFieldName: 'photos',
-                photoError: '',
-                deletedPhotos: [],
+                //
             },
             methods: {
-                removePhoto(pix) {
-                    this.deletedPhotos.push(pix);
-                    console.log('remove Photo');
-                    var n = 0;
-                    this.photos.forEach((photo, k)=>{
-                        if(photo.name==pix) {
-                            console.log('delete ',pix);
-                            this.photos.splice(n, 1);
-                        }
-                        n = n + 1;
-                    })
-                    var n = 0;
-                    this.uploadedFiles.forEach((file, k)=>{
-                        if(file.name==pix) {
-                            this.uploadedFiles.splice(n, 1);
-                        }
-                        n = n + 1;
-                    })
-                    if(this.photos.length < 6) {
-                        this.photoError = "";
-                    }
-                },
-                filesChange(fieldName, fileList) {
-                    this.photoError = "";
-                    // handle file changes
-                    console.log('photos: ',fileList);
-                    if(fileList.length > 0 && this.photos.length < 6) {
-                        var self = this;
-                        var rejectedPhotos = '';
-                        Array.from(fileList).forEach((file, key)=> {
-                            if(file && this.photos.length < 6) {
-                                //check if there are photos that has been deleted
-                                if(this.deletedPhotos.length > 0) {
-                                    //loop through the deleted photos to know if the new photo added is the same as a deleted photos and if so, remove it from the array
-                                    var n = 0;
-                                    this.deletedPhotos.forEach((p, k2)=>{
-                                        if(p==file.name) {
-                                            this.deletedPhotos.splice(n, 1);
-                                        }
-                                        n = n + 1;
-                                    })
-                                }
-                                if(this.photos.length > 0) {
-                                    
-                                    var exists = false;
-                                    this.photos.forEach((f, k) =>{
-                                        if(file.name == f.name) {
-                                            exists = true;
-                                        }
-                                    })
-                                    if(!exists) {
-                                        const reader = new FileReader
-                                        reader.onload = e => {
-                                            var image = new Image();
-                                            image.src = e.target.result;
-                                            image.onload = function() {
-                                                // access image size here 
-                                                if(this.width < 500 || this.height < 400) {
-                                                    self.deletedPhotos.push(file.name);
-                                                    rejectedPhotos = rejectedPhotos+file.name+', ';
-                                                    self.photoError = rejectedPhotos+' Must have width of at least 500pixels and height 400pixels';
-                                                    setInterval(()=>{ self.photoError = ''; }, 7000);
-                                                }else{
-                                                    self.photos.push(file);
-                                                    self.uploadedFiles.push({photo:e.target.result, name:file.name});
-                                                }
-                                            };
-                                        }
-                                        reader.readAsDataURL(file);
-                                    }else{
-                                        console.log('photo exists');
-                                    }
-                                }else{
-                                    const reader = new FileReader;
-                                    reader.onload = e => {
-                                        var image = new Image();
-                                        image.src = e.target.result;
-                                        image.onload = function() {
-                                            // access image size here 
-                                            if(this.width < 500 || this.height < 400) {
-                                                self.deletedPhotos.push(file.name);
-                                                rejectedPhotos = rejectedPhotos+file.name+', ';
-                                                self.photoError = rejectedPhotos+' Must have width of at least 500pixels and height 400pixels';
-                                                setInterval(()=>{ self.photoError = ''; }, 7000);
-                                                console.log('width: '+this.width+' height: '+this.height);
-                                            }else{
-                                                self.photos.push(file);
-                                                self.uploadedFiles.push({photo:e.target.result, name:file.name});
-                                            }
-                                        };
-                                    }
-                                    reader.readAsDataURL(file)
-                                }
-                            }else if(this.photos.length >= 6) {
-                                this.photoError = "Maximum Number of Photos that you can upload at once reached";
-                            }
-                        })
-                        /**/
-                    }else if(this.photos.length >= 6) {
-                        this.photoError = "Maximum Number of Photos that you can upload at once reached";
-                    }
-                }
+                //
             },
 
         });
@@ -412,10 +282,10 @@
                                 </span>
                                 <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                     <span class="icons">
-                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
+                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}" >
                                     </span>
                                     <span class="icons">
-                                        <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                        <a href="#"><i class="fa fa-trash delete" aria-hidden="true" ></i></a>
                                     </span>
                                 </div>
                             </div>
