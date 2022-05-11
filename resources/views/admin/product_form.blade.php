@@ -117,7 +117,7 @@
                         <div class="form-group">
                             {{Form::textarea("description", old("description"), ["class" => "form-control", "placeholder"=>"Description of product"]) }}
                         </div>
-                        @if(empty($product))
+                        <!-- @if(empty($product))
                             <div id="app" class="form-group row">
                                 <p class="col-12">Add Product Photos</p>
                                 
@@ -146,7 +146,7 @@
                             <input type="hidden" name="edit" value="0" />
                         @else
                             <input type="hidden" name="edit" value="1" />    
-                        @endif
+                        @endif -->
                         <div class="form-group">
                             {{ Form::submit(__('Save'), array('class'=>'form-control  mt-4 btn btn-primary'))}}
                         </div>

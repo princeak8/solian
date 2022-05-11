@@ -55,6 +55,7 @@ class Product extends Model
         if(empty($mainPhoto)) {
             $mainPhoto = $firstPhoto;
         }
+        if(empty($mainPhoto)) $mainPhoto = env('APP_URL')."public/images/no_pic.PNG";
         return $mainPhoto;
     }
 

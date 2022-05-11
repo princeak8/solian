@@ -42,6 +42,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = $this->productService->products();
+        //foreach($products as $product) dd($product->mainthumb);
         return view('admin/products', compact('products'));
     }
 
