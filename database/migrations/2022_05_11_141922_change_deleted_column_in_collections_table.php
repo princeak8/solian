@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('collections', function (Blueprint $table) {
-            $table->tinyInteger('deleted')->default('0')->change();
+            $table->boolean('deleted')->default('0')->change();
         });
     }
 
