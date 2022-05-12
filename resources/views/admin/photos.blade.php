@@ -2,12 +2,6 @@
 
 @section('css')
     <style type="text/css">
-        /* .addModal{
-            background: rgba(0, 0, 0, 0.2);
-            height: auto;
-            width: 100vw;
-            z-index: 1000;
-        } */
         .dropbox {
 			outline: 2px dashed grey; /* the dash box */
 			outline-offset: -10px;
@@ -74,7 +68,10 @@
             height: 4em;
             width: auto;
             border-radius: 10px;
-            margin-left: 10em;
+            margin-left: 7em;
+        }
+        .delete {
+            display: none;
         }
     </style>
 @stop
@@ -84,8 +81,7 @@
  <!-- Begin Page Content -->
  <div class="container-fluid">
     <div class="card shadow mb-4">
-    <!-- <div class=" addModal"></div> -->
-        <div class="card-header py-3" style="position: absolute;">
+        <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Product-Gallery</h6>
             @include('layouts/admin/photos_header')
             <div class="top-link">
@@ -95,7 +91,7 @@
                     </span>
                     <a href="#" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slides</a>
                 </div>
-                <a href="#" class="btn btn-success btn-sm" onclick="addPhotos();">Save</a>
+                <a href="#" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
             </div>
             <select name="product-id">
                 <option value="">Select Product</option>
@@ -111,7 +107,7 @@
                     <div id="errors" class="d-none">
                         <span class="alert alert-danger"></span>
                     </div>
-                    <h5 id="adding" class="alert alert-light">Adding photos...
+                    <h5 id="adding" class="alert alert-light d-none">Adding photos...
                         <img src="{{asset('/assets/img/file-transfer.gif') }}" alt="">
                     </h5>
                     <div id="dropboxPhotos" class="row mt-5"></div>
@@ -146,21 +142,15 @@
         function isAdding(status)
         {
             if(status){ 
-                $('#adding').addClass('.addModal');
-                $('.addModal')
+                $('#adding').removeClass('d-none');
+                $('.fa-trash').addClass('delete');
+                $('.checkbox').prop("disabled", false); 
             }else{
-                $('#adding').removeClass('.addModal');
+                $('#adding').addClass('d-none');
+                $('.fa-trash').removeClass('delete');
+                $('.checkbox').prop("disabled", true);
             }
         } 
-        // {
-        //     if(status){ 
-        //         $('#adding').removeClass('d-none');
-        //         $('.checkbox')
-        //     }else{
-        //         $('#adding').addClass('d-none');
-        //     }
-        // } 
-
 
         function addPhotos()
         {
@@ -176,7 +166,9 @@
                 case 'collection' : id = $('select[name=collection-id]').val(); errorMsg = "please choose a collection"; break;
             }
             if(id != '') {
-                //Add photos
+                //When the save button has been clicked
+                isAdding(true);
+                //Make a POST Request using axios to Add photos to products
                 let url = "{{url('admin/photo/add_to_category')}}";
                 var token = $('meta[name="csrf-token"]').attr('content');
                 let formData =  {photos: checkedPhotosArr, id: id, category: category, _token: token};
@@ -186,6 +178,7 @@
                 .then((res) => {
                     console.log('response: ',res);
                     if(res.status == 200) {
+                        isAdding(false);
                         checkedPhotosArr.forEach(({ file }) => {
                             file = getFilenumber(file);
                             $('#'+file).remove();
@@ -195,6 +188,7 @@
 
             }else{
                 console.log(errorMsg);
+                isAdding(false);
                 $('#errors span').html('Error: '+errorMsg);
                 $('#errors').removeClass('d-none');
             }
@@ -302,7 +296,7 @@
                                         <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
                                     </span>
                                     <span class="icons">
-                                        <a href="#"><i class="fa fa-trash delete" aria-hidden="true"></i></a>
+                                        <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                     </span>
                                 </div>
                             </div>
