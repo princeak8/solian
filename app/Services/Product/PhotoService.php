@@ -215,7 +215,7 @@ class PhotoService
         $attachedPhotos = $this->attachedPhotos();
         if($attachedPhotos->count() > 0) {
             foreach($attachedPhotos as $attachedPhoto) {
-                if(in_array($attachedPhoto->file->path, $paths)) {
+                if($attachedPhoto->file && in_array($attachedPhoto->file->path, $paths)) {
                     //dd($attachedPhoto->file->path);
                     $photos = $this->remove_from_dropbox_photos($attachedPhoto->file->path, $photos);
                     //dd($photos);

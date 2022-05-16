@@ -87,11 +87,11 @@
             <div class="top-link">
                 <div class="top-link-inner" style="display: flex; flex-direction: row;">
                     <span style="display: flex; flex-direction: column;">
-                        <a href="#" class="top-text activv" onclick="switchCategory('product')">Add Photo(s) to Product</a>
+                        <a href="javascript:void(0)" class="top-text activv" onclick="switchCategory('product')">Add Photo(s) to Product</a>
                     </span>
-                    <a href="#" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slides</a>
+                    <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slides</a>
                 </div>
-                <a href="#" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
+                <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
             </div>
             <select name="product-id">
                 <option value="">Select Product</option>
@@ -177,18 +177,21 @@
                 axios.post(url, formData)
                 .then((res) => {
                     console.log('response: ',res);
+                    isAdding(false);
                     if(res.status == 200) {
-                        isAdding(false);
                         checkedPhotosArr.forEach(({ file }) => {
                             file = getFilenumber(file);
                             $('#'+file).remove();
                         })
                     }
                 })
+                .catch((error) => {
+                    console.log(error);
+                    isAdding(false);
+                })
 
             }else{
                 console.log(errorMsg);
-                isAdding(false);
                 $('#errors span').html('Error: '+errorMsg);
                 $('#errors').removeClass('d-none');
             }
