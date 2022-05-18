@@ -129,10 +129,11 @@ class PhotoController extends Controller
         $photos = [];
         try{
             $products = $this->productService->products();
+            $collections = $this->collectionService->collections();
         } catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
         }
-        return view('admin/product_photos', compact('products'));
+        return view('admin/product_photos', compact('products', 'collections'));
     }
 
     public function collection_photos()
@@ -140,10 +141,11 @@ class PhotoController extends Controller
         $photos = [];
         try{
             $photos = $this->photoService->collectionPhotos();
+            $products = $this->productService->products();
         } catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
         }
-        return view('admin/collection_photos', compact('photos'));
+        return view('admin/collection_photos', compact('photos', 'products'));
     }
 
     public function slide_photos()
@@ -151,10 +153,12 @@ class PhotoController extends Controller
         $photos = [];
         try{
             $photos = $this->photoService->slidePhotos();
+            $products = $this->productService->products();
+            $collections = $this->collectionService->collections();
         } catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
         }
-        return view('admin/slide_photos', compact('photos'));
+        return view('admin/slide_photos', compact('photos', 'products', 'collections'));
     }
 
     public function add_photos(AddPhotosRequest $request)
