@@ -66,7 +66,7 @@ use App\Models\Currency_rate;
             $oldValue = env($envKey);
             //dd($oldValue);
 
-            $str = str_replace("{$envKey}={$oldValue}", "{$envKey}={$envValue}\n", $str);
+            $str = str_replace("{$envKey}={$oldValue}", "{$envKey}={$envValue}", $str);
             //dd($str);
             $fp = fopen($envFile, 'w');
             fwrite($fp, $str);

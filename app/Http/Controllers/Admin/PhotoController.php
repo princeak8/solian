@@ -111,10 +111,10 @@ class PhotoController extends Controller
                 if($retries <= 5) $this->_handleDropboxPhotos($page, $retries);
             }
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
-            if(session('dropBoxPhotos') != null) {
+            if(session('dropBoxPhotos') != null && isset(session('dropBoxPhotos')[$page-1])) {
                 return response()->json([
                     'statusCode' => 200,
-                    'photos' => session('dropBoxPhotos')
+                    'photos' => session('dropBoxPhotos')[$page-1]
                 ], 200);
             }
             return response()->json([

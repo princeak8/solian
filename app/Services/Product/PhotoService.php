@@ -16,6 +16,8 @@ use App\Models\Collection;
 
 use App\Services\Product\FileService;
 
+use App\Helpers\Helper;
+
 class PhotoService
 {
 
@@ -147,60 +149,72 @@ class PhotoService
 
     public function getDropboxPhotos($page=1)
     {
-        $dropBoxPhotos = [];
-        $files = Storage::disk('dropbox')->files('web');
-        $entries = [];
-        $start = ($page-1) * 24;
-        $end = $start + 24;
-        $max = (count($files) > $end) ? $end : count($files);
-        for($i=$start; $i<$max; $i++) {
-            $e = new stdClass();
+        if(time() < env('FETCH_DROPBOX_PHOTOS_EXPIRY')) {
+            return session('dropBoxPhotos')[$page-1];
+        }else{
+            $dropBoxPhotos = [];
+            $files = Storage::disk('dropbox')->files('web');
+            $entries = [];
+            $start = ($page-1) * 24;
+            $end = $start + 24;
+            $max = (count($files) > $end) ? $end : count($files);
+            for($i=$start; $i<$max; $i++) {
+                $e = new stdClass();
 
-            $e->format = "jpeg";
-            $e->mode = "strict";
-            $e->path = "/".$files[$i];
-            $e->size = env("DROPBOX_THUMBNAIL_SIZE", "w640h480");
-            $entries[] = $e;
-        } 
-        $thumbs = [];
-        if(count($entries) > 0) {
-            $thumbs = $this->_handle_getting_thumbnails($entries);
-            //dd($thumbs);
-            if($thumbs != null) {
-                $paths = [];
-                //dd('success');
-                if(count($thumbs['entries']) > 0) {
-                    $th = $thumbs['entries'];
-                    //dd($dropBoxPhotos);
-                    foreach($thumbs['entries'] as $thumb) {
-                        $f = new stdClass();
-                        $f->thumb = $thumb['thumbnail'];
-                        $arr = explode('/', $thumb['metadata']['path_lower']);
-                        array_shift($arr);
-                        $path = implode('/', $arr);
-                        $paths[] = $path;
-                        $f->file = $path;
-                        $f->url = Storage::disk('dropbox')->url($path);
-                        $f->size = Storage::disk('dropbox')->size($path);
-                        $dropBoxPhotos[] = $f;
+                $e->format = "jpeg";
+                $e->mode = "strict";
+                $e->path = "/".$files[$i];
+                $e->size = env("DROPBOX_THUMBNAIL_SIZE", "w640h480");
+                $entries[] = $e;
+            } 
+            $thumbs = [];
+            if(count($entries) > 0) {
+                $thumbs = $this->_handle_getting_thumbnails($entries);
+                //dd($thumbs);
+                if($thumbs != null) {
+                    $paths = [];
+                    //dd('success');
+                    if(count($thumbs['entries']) > 0) {
+                        $th = $thumbs['entries'];
+                        //dd($dropBoxPhotos);
+                        foreach($thumbs['entries'] as $thumb) {
+                            $f = new stdClass();
+                            $f->thumb = $thumb['thumbnail'];
+                            $arr = explode('/', $thumb['metadata']['path_lower']);
+                            array_shift($arr);
+                            $path = implode('/', $arr);
+                            $paths[] = $path;
+                            $f->file = $path;
+                            $f->url = Storage::disk('dropbox')->url($path);
+                            $f->size = Storage::disk('dropbox')->size($path);
+                            $dropBoxPhotos[] = $f;
+                        }
+                        $dropBoxPhotos = $this->filter_dropbox_photos($paths, $dropBoxPhotos);
                     }
-                    $dropBoxPhotos = $this->filter_dropbox_photos($paths, $dropBoxPhotos);
+                }else{
+                    //dd('fail');
+                    $msg = '';
+                    //foreach($entries as $e)
+                    throw new \Exception("Error attempting to get thumbnails, verify request payload");
                 }
-            }else{
-                //dd('fail');
-                $msg = '';
-                //foreach($entries as $e)
-                throw new \Exception("Error attempting to get thumbnails, verify request payload");
             }
+            $dropBoxPhotosArr = [];
+            if(count($dropBoxPhotos) > 0) {
+                foreach($dropBoxPhotos as $photo) $dropBoxPhotosArr[] = $photo;
+            }
+            //dd($dropBoxPhotos);
+            session(['dropBoxPhotos' => null]);
+            if(session('dropBoxPhotos') == null) session(['dropBoxPhotos' => []]);
+            //session(['dropBoxPhotos' => $dropBoxPhotos]);
+            $sessionDropboxPhotos = session('dropBoxPhotos');
+            $sessionDropboxPhotos[$page-1] = $dropBoxPhotosArr;
+            session(['dropBoxPhotos' => $sessionDropboxPhotos]);
+            //dd(session('dropBoxPhotos'));
+
+            Helper::setEnvironmentValue('FETCH_DROPBOX_PHOTOS_EXPIRY', (time() + (60*30)));
+            
+            return $dropBoxPhotosArr;
         }
-        $dropBoxPhotosArr = [];
-        if(count($dropBoxPhotos) > 0) {
-            foreach($dropBoxPhotos as $photo) $dropBoxPhotosArr[] = $photo;
-        }
-        //dd($dropBoxPhotos);
-        session(['dropBoxPhotos' => $dropBoxPhotos]);
-        
-        return $dropBoxPhotosArr;
     }
 
     private function _handle_getting_thumbnails($entries)
