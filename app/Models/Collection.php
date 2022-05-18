@@ -36,7 +36,7 @@ class Collection extends Model
 
     public function photo()
     {
-        return $this->belongsTo('App\Models\Photo', 'photo_id');
+        return $this->hasMany('App\Models\Photo', 'collection_id', 'id')->first();
     }
 
     public static function boot ()
