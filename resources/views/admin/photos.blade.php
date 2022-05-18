@@ -94,10 +94,17 @@
                 </div>
                 <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
             </div>
-            <select name="product-id">
+            <select name="product-id" id="product-select" class="categorySelect d-none">
                 <option value="">Select Product</option>
                 @if($products->count() > 0)
                     @foreach($products as $product) <option value="{{$product->id}}">{{$product->name}}</option> @endforeach
+                @endif
+            </select>
+
+            <select name="collection-id" id="collection-select" class="categorySelect d-none">
+                <option value="">Select Collection</option>
+                @if($collections->count() > 0)
+                    @foreach($collections as $collection) <option value="{{$collection->id}}">{{$collection->name}}</option> @endforeach
                 @endif
             </select>
 
@@ -196,13 +203,32 @@
                 $('#errors span').html('Error: '+errorMsg);
                 $('#errors').removeClass('d-none');
             }
-            //}
+        }
+
+        function removeSelectCategories()
+        {
+            $('.categorySelect').each(function(e) {
+                $(this).addClass('d-none');
+            })
         }
 
         function switchCategory(category)
         {
             console.log('switch category');
             $('input[name=category]').val(category);
+            switch(category) {
+                case 'product' : 
+                    removeSelectCategories();
+                    $('#product-select').removeClass('d-none');
+                    break;
+                case 'collection' : 
+                    removeSelectCategories();
+                    $('#collection-select').removeClass('d-none');
+                    break;
+                case 'slide' : 
+                    removeSelectCategories();
+                    break;
+            }
         }
 
         $('.dropdown-menu').on('click', function(event){

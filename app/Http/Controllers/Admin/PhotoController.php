@@ -53,6 +53,7 @@ class PhotoController extends Controller
         try{
             //$photos = $this->photoService->unattachedPhotos();
             $products = $this->productService->products();
+            $collections = $this->collectionService->collections();
             $dropBoxPhotos = [];
             $dropBoxPhotos = collect($dropBoxPhotos);
         } catch (\Throwable $th) {
@@ -64,7 +65,7 @@ class PhotoController extends Controller
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
             dd($th->getMessage());
         }
-        return view('admin/photos', compact('products', 'dropBoxPhotos', 'email'));
+        return view('admin/photos', compact('products', 'collections', 'dropBoxPhotos', 'email'));
     }
     /*
         Returns Json

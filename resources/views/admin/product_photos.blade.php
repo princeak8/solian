@@ -67,75 +67,42 @@
                 </div>
                 <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
             </div>
-          
+            <select name="collection-id" id="collection-select" class="categorySelect d-none">
+                <option value="">Select Collection</option>
+                @if($collections->count() > 0)
+                    @foreach($collections as $collection) <option value="{{$collection->id}}">{{$collection->name}}</option> @endforeach
+                @endif
+            </select>
         <div class="card-body">
             @include('inc.message')
             <div class="row">
                 <div class="mt-5">
-                    <h4>Bimpe African Print Dress</h4>
-                    <div id="productPhotos" class="row mt-2">
-                        <div class="col-md-3 productPhotos">
-                            <img src="{{asset('/assets/img/product/product-1.jpg') }}" alt="">
-                            <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
-                                <span class="icons">
-                                    <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
-                                </span>
-                                <span class="icons">
-                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                </span>
+                    @if($products->count() > 0)
+                        @foreach($products as $product)
+                            <h4>{{$product->name}}</h4>
+                            <div id="productPhotos" class="row mt-2">
+                                @if($product->photos->count() > 0)
+                                    @foreach($product->photos as $photo)
+                                        <div class="col-3 productPhotos">
+                                            <img src="data:image/jpg;base64{{$photo->file->thumb}}" height="150" alt="">
+                                            <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
+                                                <span class="icons">
+                                                    <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
+                                                </span>
+                                                <span class="icons">
+                                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <p>No photos for this product yet</p>
+                                @endif
+                                
                             </div>
-                        </div>
-                        <div class="col-md-3 productPhotos">
-                            <img src="{{asset('/assets/img/product/product-2.jpg') }}" alt="">
-                            <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
-                                <span class="icons">
-                                    <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
-                                </span>
-                                <span class="icons">
-                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-3 productPhotos">
-                            <img src="{{asset('/assets/img/product/product-3.jpg') }}" alt="">
-                            <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
-                                <span class="icons">
-                                    <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
-                                </span>
-                                <span class="icons">
-                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-3 productPhotos">
-                            <img src="{{asset('/assets/img/product/product-4.jpg') }}" alt="">
-                            <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
-                                <span class="icons">
-                                    <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
-                                </span>
-                                <span class="icons">
-                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-5">
-                    <h4>Maxi Dress</h4>
-                    <div id="productPhotos" class="row mt-2">
-                        <div class="col-md-3 productPhotos">
-                            <img src="{{asset('/assets/img/product/product-5.jpg') }}" alt="">
-                        </div>
-                        <div class="col-md-3 productPhotos">
-                            <img src="{{asset('/assets/img/product/product-6.jpg') }}" alt="">
-                        </div>
-                        <div class="col-md-3 productPhotos">
-                            <img src="{{asset('/assets/img/product/product-7.jpg') }}" alt="">
-                        </div>
-                        <div class="col-md-3 productPhotos">
-                            <img src="{{asset('/assets/img/product/product-8.jpg') }}" alt="">
-                        </div>
-                    </div>
+                            <hr/>
+                        @endforeach
+                    @endif
                 </div>
                 
             </div>
@@ -148,5 +115,77 @@
 @stop
 
 @section('js')
+    <script type="application/javascript">
+        function addPhotos()
+            {
+                //Adding selected photos to their corresponding categories
+                //console.log('adding photos');
+                //console.log(checkedPhotosArr);
+                let category = $('input[name=category]').val();
+                //if(category=='product') {
+                let id = 0;
+                let errorMsg = '';
+                switch(category) {
+                    case 'product' : id = $('select[name=product-id]').val(); errorMsg = "please choose a product"; break;
+                    case 'collection' : id = $('select[name=collection-id]').val(); errorMsg = "please choose a collection"; break;
+                }
+                if(id != '') {
+                    //When the save button has been clicked
+                    isAdding(true);
+                    //Make a POST Request using axios to Add photos to products
+                    let url = "{{url('admin/photo/add_to_category')}}";
+                    var token = $('meta[name="csrf-token"]').attr('content');
+                    let formData =  {photos: checkedPhotosArr, id: id, category: category, _token: token};
+                    console.log('formdata: ',formData);
+                        
+                    axios.post(url, formData)
+                    .then((res) => {
+                        console.log('response: ',res);
+                        isAdding(false);
+                        if(res.status == 200) {
+                            checkedPhotosArr.forEach(({ file }) => {
+                                file = getFilenumber(file);
+                                $('#'+file).remove();
+                            })
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        isAdding(false);
+                    })
+
+                }else{
+                    console.log(errorMsg);
+                    $('#errors span').html('Error: '+errorMsg);
+                    $('#errors').removeClass('d-none');
+                }
+                
+            }
+        function removeSelectCategories()
+            {
+                $('.categorySelect').each(function(e) {
+                    $(this).addClass('d-none');
+                })
+            }
+        function switchCategory(category)
+            {
+                console.log('switch category');
+                $('input[name=category]').val(category);
+                switch(category) {
+                    case 'product' : 
+                        removeSelectCategories();
+                        $('#product-select').removeClass('d-none');
+                        break;
+                    case 'collection' : 
+                        removeSelectCategories();
+                        $('#collection-select').removeClass('d-none');
+                        break;
+                    case 'slide' : 
+                        removeSelectCategories();
+                        break;
+                }
+            }
+
+    </script>
    
 @stop
