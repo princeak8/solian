@@ -40,6 +40,13 @@
 		.productPhotos img {
             border-radius: 10px;
         }
+        .icons {
+            transform: scale(1.5);
+            margin: 1em;
+        }
+        .fa-trash {
+            color: red;
+        }
         
     </style>
 @stop
@@ -51,6 +58,16 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
                 @include('layouts/admin/photos_header')
+                <div class="top-link">
+                <div class="top-link-inner" style="display: flex; flex-direction: row;">
+                    <span style="display: flex; flex-direction: column;">
+                        <a href="javascript:void(0)" class="top-text activv" onclick="switchCategory('collection')">Add Photo(s) to Collection</a>
+                    </span>
+                    <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slide</a>
+                </div>
+                <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
+            </div>
+          
         <div class="card-body">
             @include('inc.message')
             <div class="row">
@@ -59,15 +76,47 @@
                     <div id="productPhotos" class="row mt-2">
                         <div class="col-md-3 productPhotos">
                             <img src="{{asset('/assets/img/product/product-1.jpg') }}" alt="">
+                            <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
+                                <span class="icons">
+                                    <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
+                                </span>
+                                <span class="icons">
+                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                </span>
+                            </div>
                         </div>
                         <div class="col-md-3 productPhotos">
                             <img src="{{asset('/assets/img/product/product-2.jpg') }}" alt="">
+                            <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
+                                <span class="icons">
+                                    <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
+                                </span>
+                                <span class="icons">
+                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                </span>
+                            </div>
                         </div>
                         <div class="col-md-3 productPhotos">
                             <img src="{{asset('/assets/img/product/product-3.jpg') }}" alt="">
+                            <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
+                                <span class="icons">
+                                    <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
+                                </span>
+                                <span class="icons">
+                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                </span>
+                            </div>
                         </div>
                         <div class="col-md-3 productPhotos">
                             <img src="{{asset('/assets/img/product/product-4.jpg') }}" alt="">
+                            <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
+                                <span class="icons">
+                                    <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
+                                </span>
+                                <span class="icons">
+                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -92,6 +141,8 @@
             </div>
         </div>
     </div>
+    <input type="text" name="category" value="product"/>
+
 </div>
 <!-- /.container-fluid -->
 @stop

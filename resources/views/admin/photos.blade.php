@@ -89,7 +89,8 @@
                     <span style="display: flex; flex-direction: column;">
                         <a href="javascript:void(0)" class="top-text activv" onclick="switchCategory('product')">Add Photo(s) to Product</a>
                     </span>
-                    <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slides</a>
+                    <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('collection')">Add Photo(s) to Collection</a>
+                    <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slide</a>
                 </div>
                 <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
             </div>

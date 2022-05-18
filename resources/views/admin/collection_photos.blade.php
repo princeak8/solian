@@ -43,6 +43,13 @@
         .collectionPhotos img {
             border-radius: 10px;
         }
+        .icons {
+            transform: scale(1.5);
+            margin: 1em;
+        }
+        .fa-trash {
+            color: red;
+        }
         
     </style>
 @stop
@@ -54,6 +61,19 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
                 @include('layouts/admin/photos_header')
+                <div class="top-link">
+                <div class="top-link-inner" style="display: flex; flex-direction: row;">
+                    <span style="display: flex; flex-direction: column;">
+                        <a href="javascript:void(0)" class="top-text activv" onclick="switchCategory('product')">Add Photo(s) to Product</a>
+                    </span>
+                    <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slide</a>
+                </div>
+                <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
+            </div>
+            <select name="product-id">
+                <option value="">Select Product</option>
+              
+            </select>
 
         <div class="card-body">
             @include('inc.message')
@@ -65,7 +85,15 @@
                         <div class="col-md-3 collectionPhotos">
                             <a href="/">
                                 <img src="{{asset('/assets/img/product/product-1.jpg') }}" alt="">
-                                <h6>Amber Line</h6>
+                                <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
+                                    <span class="icons">
+                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
+                                    </span>
+                                    <h6>Amber Line</h6>
+                                    <span class="icons">
+                                        <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                    </span>
+                                </div>
                             </a>
                             
                         </div>
@@ -73,6 +101,14 @@
                             <a href="/">
                                 <img src="{{asset('/assets/img/product/product-2.jpg') }}" alt="">
                                 <h6>Jonny Line</h6>
+                                <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
+                                    <span class="icons">
+                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
+                                    </span>
+                                    <span class="icons">
+                                        <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                    </span>
+                                </div>
                             </a>
                             
                         </div>
@@ -95,10 +131,11 @@
             </div>
         </div>
     </div>
+    <input type="text" name="category" value="product"/>
+
 </div>
 <!-- /.container-fluid -->
 @stop
 
 @section('js')
-   
 @stop
