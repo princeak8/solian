@@ -12,6 +12,7 @@ use App\Models\Currency_rate;
 use App\Helpers\Helper;
 
 use App\Services\DropboxService;
+use App\Services\PhotoService;
 
 class BaseController extends Controller
 {
@@ -23,6 +24,15 @@ class BaseController extends Controller
             try{ 
                 DropboxService::refreshToken();
             }catch(\Throwable $th) {
+                \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+            }
+        }
+
+        if(time() < env('FETCH_DROPBOX_PHOTOS_EXPIRY')) {
+            $photoservice = new PhotoService;
+            try{
+                $photoservice->getDropboxPhotos();
+            }catch(\Exception $e) {
                 \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
             }
         }
