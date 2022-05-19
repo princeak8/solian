@@ -32,7 +32,7 @@ class BaseController extends Controller
             $photoservice = new PhotoService;
             try{
                 $photoservice->getDropboxPhotos();
-            }catch(\Exception $e) {
+            }catch(\Exception $th) {
                 \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
             }
         }
