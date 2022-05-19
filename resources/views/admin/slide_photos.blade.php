@@ -26,6 +26,8 @@
         .activv, .top-text:hover {
             font-size: 20px;
             margin: 0.5em;
+            transition-timing-function: ease-in;
+            transition: 0.8s;
 		}
         .top-link{
             display: flex;
@@ -59,10 +61,8 @@
         <div class="card-header py-3">
                 @include('layouts/admin/photos_header')
                 <div class="top-link">
-                <div class="top-link-inner" style="display: flex; flex-direction: row;">
-                    <span style="display: flex; flex-direction: column;">
-                        <a href="javascript:void(0)" class="top-text activv" onclick="switchCategory('product')">Add Photo(s) to Product</a>
-                    </span>
+                <div class="top-link-inner" id="top-linksId" style="display: flex; flex-direction: row;">
+                    <a href="javascript:void(0)" class="top-text" onclick="switchCategory('product')">Add Photo(s) to Product</a>
                     <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('collection')">Add Photo(s) to Collection</a>
                 </div>
                 <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
@@ -167,6 +167,12 @@
 
 @section('js')
     <script type="application/javascript">
+         $("#top-linksId").on('click', 'a', function () {
+            $("#top-linksId a.activv").removeClass("activv");
+            // adding classname 'activv' to current clicked a 
+            $(this).addClass("activv");
+        });
+
         function addPhotos()
             {
                 //Adding selected photos to their corresponding categories

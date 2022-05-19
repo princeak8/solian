@@ -26,6 +26,8 @@
         .activv, .top-text:hover {
             font-size: 20px;
             margin: 0.5em;
+            transition-timing-function: ease-in;
+            transition: 0.8s;
 		}
         .top-link{
             display: flex;
@@ -85,10 +87,8 @@
             <h6 class="m-0 font-weight-bold text-primary">Product-Gallery</h6>
             @include('layouts/admin/photos_header')
             <div class="top-link">
-                <div class="top-link-inner" style="display: flex; flex-direction: row;">
-                    <span style="display: flex; flex-direction: column;">
-                        <a href="javascript:void(0)" class="top-text activv" onclick="switchCategory('product')">Add Photo(s) to Product</a>
-                    </span>
+                <div class="top-link-inner" id="top-linksId" style="display: flex; flex-direction: row;">
+                    <a href="javascript:void(0)" class="top-text" onclick="switchCategory('product')">Add Photo(s) to Product</a>
                     <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('collection')">Add Photo(s) to Collection</a>
                     <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slide</a>
                 </div>
@@ -145,6 +145,12 @@
                     // REMOVE VALUE FROM ARRAY WHEN IT IS UNCHECKED
                 checkedPhotosArr = checkedPhotosArr.filter(e => e !== this.value);
             }
+        });
+
+        $("#top-linksId").on('click', 'a', function () {
+            $("#top-linksId a.activv").removeClass("activv");
+            // adding classname 'activv' to current clicked a 
+            $(this).addClass("activv");
         });
 
         function isAdding(status)

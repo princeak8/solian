@@ -27,6 +27,8 @@
         color: #0066bd;
         border-radius: 15px;
         text-decoration: none;
+        transition-timing-function: ease-in;
+        transition: 0.8s;
     }
    
     .head-bg .active {

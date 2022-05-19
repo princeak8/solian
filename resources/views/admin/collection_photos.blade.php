@@ -26,6 +26,8 @@
         .activv, .top-text:hover {
             font-size: 20px;
             margin: 0.5em;
+            transition-timing-function: ease-in;
+            transition: 0.8s;
 		}
         .top-link{
             display: flex;
@@ -62,10 +64,8 @@
         <div class="card-header py-3">
                 @include('layouts/admin/photos_header')
                 <div class="top-link">
-                <div class="top-link-inner" style="display: flex; flex-direction: row;">
-                    <span style="display: flex; flex-direction: column;">
-                        <a href="javascript:void(0)" class="top-text activv" onclick="switchCategory('product')">Add Photo(s) to Product</a>
-                    </span>
+                <div class="top-link-inner" id="top-linksId" style="display: flex; flex-direction: row;">
+                    <a href="javascript:void(0)" class="top-text" onclick="switchCategory('product')">Add Photo(s) to Product</a>
                     <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slide</a>
                 </div>
                 <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
@@ -86,12 +86,12 @@
                     <div id="collectionPhotos" class="row mt-2">
                         <div class="col-md-3 collectionPhotos">
                             <a href="/">
+                                <h6>Amber Line</h6>
                                 <img src="{{asset('/assets/img/product/product-1.jpg') }}" alt="">
                                 <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                     <span class="icons">
                                         <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
                                     </span>
-                                    <h6>Amber Line</h6>
                                     <span class="icons">
                                         <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                     </span>
@@ -101,8 +101,8 @@
                         </div>
                         <div class="col-md-3 collectionPhotos">
                             <a href="/">
-                                <img src="{{asset('/assets/img/product/product-2.jpg') }}" alt="">
                                 <h6>Jonny Line</h6>
+                                <img src="{{asset('/assets/img/product/product-2.jpg') }}" alt="">
                                 <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                     <span class="icons">
                                         <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
@@ -116,14 +116,14 @@
                         </div>
                         <div class="col-md-3 collectionPhotos">
                             <a href="/">
-                                <img src="{{asset('/assets/img/product/product-3.jpg') }}" alt="">
                                 <h6>Heard Line</h6>
+                                <img src="{{asset('/assets/img/product/product-3.jpg') }}" alt="">
                             </a>
                         </div>
                         <div class="col-md-3 collectionPhotos">
                             <a href="/">
-                                <img src="{{asset('/assets/img/product/product-4.jpg') }}" alt="">
                                 <h6>Depp Line</h6>
+                                <img src="{{asset('/assets/img/product/product-4.jpg') }}" alt="">
                             </a>
                         </div>
                     </div>
@@ -141,6 +141,11 @@
 
 @section('js')
     <script type="application/javascript">
+          $("#top-linksId").on('click', 'a', function () {
+            $("#top-linksId a.activv").removeClass("activv");
+            // adding classname 'activv' to current clicked a 
+            $(this).addClass("activv");
+        });
         function addPhotos()
             {
                 //Adding selected photos to their corresponding categories

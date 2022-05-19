@@ -26,6 +26,8 @@
         .activv, .top-text:hover {
             font-size: 20px;
             margin: 0.5em;
+            transition-timing-function: ease-in;
+            transition: 0.8s;
 		}
         .top-link{
             display: flex;
@@ -40,8 +42,17 @@
 		.productPhotos img {
             border-radius: 10px;
         }
+        #productPhotos p {
+            font-size: 15px;
+        }
+        #productPhotos {
+            display: flex;
+            text-align: center;
+            justify-content:center;
+            width: 100%;
+        }
         .icons {
-            transform: scale(1.5);
+            transform: scale(1.2);
             margin: 1em;
         }
         .fa-trash {
@@ -59,10 +70,8 @@
         <div class="card-header py-3">
                 @include('layouts/admin/photos_header')
                 <div class="top-link">
-                <div class="top-link-inner" style="display: flex; flex-direction: row;">
-                    <span style="display: flex; flex-direction: column;">
-                        <a href="javascript:void(0)" class="top-text activv" onclick="switchCategory('collection')">Add Photo(s) to Collection</a>
-                    </span>
+                <div class="top-link-inner" id="top-linksId" style="display: flex; flex-direction: row;">
+                    <a href="javascript:void(0)" class="top-text" onclick="switchCategory('collection')">Add Photo(s) to Collection</a>
                     <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slide</a>
                 </div>
                 <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
@@ -76,14 +85,14 @@
         <div class="card-body">
             @include('inc.message')
             <div class="row">
-                <div class="mt-5">
+                <div class="col-md-12 mt-5">
                     @if($products->count() > 0)
                         @foreach($products as $product)
                             <h4>{{$product->name}}</h4>
                             <div id="productPhotos" class="row mt-2">
                                 @if($product->photos->count() > 0)
                                     @foreach($product->photos as $photo)
-                                        <div class="col-3 productPhotos">
+                                        <div class="col-md-3 productPhotos">
                                             <img src="data:image/jpg;base64{{$photo->file->thumb}}" height="150" alt="">
                                             <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                                 <span class="icons">
@@ -116,6 +125,13 @@
 
 @section('js')
     <script type="application/javascript">
+
+         $("#top-linksId").on('click', 'a', function () {
+            $("#top-linksId a.activv").removeClass("activv");
+            // adding classname 'activv' to current clicked a 
+            $(this).addClass("activv");
+        });
+
         function addPhotos()
             {
                 //Adding selected photos to their corresponding categories
