@@ -12,7 +12,7 @@ use App\Models\Currency_rate;
 use App\Helpers\Helper;
 
 use App\Services\DropboxService;
-use App\Services\PhotoService;
+use App\Services\Product\PhotoService;
 
 class BaseController extends Controller
 {
