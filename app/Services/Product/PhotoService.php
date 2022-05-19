@@ -149,7 +149,7 @@ class PhotoService
 
     public function getDropboxPhotos($page=1)
     {
-        if(time() < env('FETCH_DROPBOX_PHOTOS_EXPIRY')) {
+        if(time() < env('FETCH_DROPBOX_PHOTOS_EXPIRY') && session('dropBoxPhotos') != null) {
             return session('dropBoxPhotos')[$page-1];
         }else{
             $dropBoxPhotos = [];

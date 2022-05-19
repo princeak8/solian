@@ -28,7 +28,7 @@ class BaseController extends Controller
             }
         }
 
-        if(time() < env('FETCH_DROPBOX_PHOTOS_EXPIRY')) {
+        if(time() > env('FETCH_DROPBOX_PHOTOS_EXPIRY')) {
             $photoservice = new PhotoService;
             try{
                 $photoservice->getDropboxPhotos();
