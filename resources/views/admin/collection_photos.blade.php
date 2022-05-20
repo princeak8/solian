@@ -80,57 +80,37 @@
         <div class="card-body">
             @include('inc.message')
             <div class="row">
-                <p id="loading" class="d-none mb-3" style="height: 4em;"><img src="{{asset('/assets/img/loading-spinner.gif') }}" style="position:absolute; transform: scale(0.5); height:14em; left:40%; top:8.5em; border-radius: 50%;" alt="image"></p>
-               
-                <div class="mt-5">
-                    <div id="collectionPhotos" class="row mt-2">
-                        <div class="col-md-3 collectionPhotos">
-                            <a href="/">
-                                <h6>Amber Line</h6>
-                                <img src="{{asset('/assets/img/product/product-1.jpg') }}" alt="">
-                                <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
-                                    <span class="icons">
-                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
-                                    </span>
-                                    <span class="icons">
-                                        <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                    </span>
-                                </div>
-                            </a>
-                            
-                        </div>
-                        <div class="col-md-3 collectionPhotos">
-                            <a href="/">
-                                <h6>Jonny Line</h6>
-                                <img src="{{asset('/assets/img/product/product-2.jpg') }}" alt="">
-                                <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
-                                    <span class="icons">
-                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
-                                    </span>
-                                    <span class="icons">
-                                        <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                    </span>
-                                </div>
-                            </a>
-                            
-                        </div>
-                        <div class="col-md-3 collectionPhotos">
-                            <a href="/">
-                                <h6>Heard Line</h6>
-                                <img src="{{asset('/assets/img/product/product-3.jpg') }}" alt="">
-                            </a>
-                        </div>
-                        <div class="col-md-3 collectionPhotos">
-                            <a href="/">
-                                <h6>Depp Line</h6>
-                                <img src="{{asset('/assets/img/product/product-4.jpg') }}" alt="">
-                            </a>
-                        </div>
-                    </div>
+                <div class="col-md-12 mt-5">
+                    @if($collections->count() > 0)
+                        @foreach($collections as $collection)
+                            <h4>{{$collection->name}}</h4>
+                            <div id="collectionPhotos" class="row mt-2">
+                                @if($collection->photo)
+                                    <div class="col-md-3 productPhotos">
+                                        <img src="{{$collection->photo->file->thumb}}" height="150" alt="">
+                                        <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
+                                            <span class="icons">
+                                            <input type="checkbox" id="" class="checkbox" name="" value="{{$collection->photo->file->path}}" data-thumb="{{$collection->photo->file->thumb}}" data-url="{{$collection->photo->file->url}}" data-size="{{$collection->photo->file->size}}">
+                                            </span>
+                                            <span class="icons">
+                                                <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div>
+                                        <img src="{{asset('/assets/img/product/product-2.jpg') }}" alt="">
+                                    </div>
+                                @endif
+                                
+                            </div>
+                            <hr/>
+                        @endforeach
+                    @endif
                 </div>
                 
-                
             </div>
+           
         </div>
     </div>
     <input type="text" name="category" value="product"/>

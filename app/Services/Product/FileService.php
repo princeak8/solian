@@ -107,6 +107,21 @@ class FileService
             //dd($fileObj);
             $fileObj->save();
             $fileIds[] = $fileObj->id;
+
+            if(session('dropBoxPhotos') != null && count(session('dropBoxPhotos')) > 0) {
+                $sessionDropboxPhotos = [];
+                foreach(session('dropBoxPhotos') as $sessionPhotos) {
+                    foreach($sessionPhotos as $key=>$sessionPhoto) {
+                        //dd($sessionPhoto->file);
+                        if($sessionPhoto->file == $photo['file']) {
+                            //dd($sessionPhotos[$key]);
+                            unset($sessionPhotos[$key]);
+                        }
+                    }
+                    $sessionDropboxPhotos[] = $sessionPhotos;
+                }
+                session(['dropBoxPhotos' => $sessionDropboxPhotos]);
+            }
         }
         return $fileIds;
     }

@@ -118,14 +118,16 @@ class PhotoService
 
     public function addPhotosToCategory($fileIds, $id, $category)
     {
+
         foreach($fileIds as $file_id) {
             $photo = new Photo;
             $photo->file_id = $file_id;
             if($category=='product') $photo->product_id = $id;
             if($category=='collection') $photo->collection_id = $id;
-            if($category=='slide') $photo->slide = 10.;
+            if($category=='slide') $photo->slide = 1;
             $photo->save();
         }
+        
     }
 
     public function changeProductMainPhoto($product, $photo)
@@ -150,7 +152,9 @@ class PhotoService
     public function getDropboxPhotos($page=1)
     {
         if(time() < env('FETCH_DROPBOX_PHOTOS_EXPIRY') && session('dropBoxPhotos') != null) {
-            return session('dropBoxPhotos')[$page-1];
+            $dropBoxPhotosArr = [];
+            foreach(session('dropBoxPhotos')[$page-1] as $photo) $dropBoxPhotosArr[] = $photo;
+            return $dropBoxPhotosArr;
         }else{
             $dropBoxPhotos = [];
             $files = Storage::disk('dropbox')->files('web');
