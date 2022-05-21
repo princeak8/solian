@@ -28,14 +28,14 @@ class BaseController extends Controller
             }
         }
 
-        if(time() > env('FETCH_DROPBOX_PHOTOS_EXPIRY')) {
-            $photoservice = new PhotoService;
-            try{
-                $photoservice->getDropboxPhotos();
-            }catch(\Exception $th) {
-                \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
-            }
-        }
+        // if(time() > env('FETCH_DROPBOX_PHOTOS_EXPIRY')) {
+        //     $photoservice = new PhotoService;
+        //     try{
+        //         $photoservice->getDropboxPhotos();
+        //     }catch(\Exception $th) {
+        //         \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+        //     }
+        // }
 
 
         if(!session('currency')) {

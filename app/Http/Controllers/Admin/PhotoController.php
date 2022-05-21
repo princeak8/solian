@@ -139,14 +139,19 @@ class PhotoController extends Controller
 
     public function collection_photos()
     {
+        
         $photos = [];
         try{
-            $photos = $this->photoService->collectionPhotos();
             $products = $this->productService->products();
+            $collections = $this->collectionService->collections();
         } catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
         }
-        return view('admin/collection_photos', compact('photos', 'products'));
+        //dd($collections);
+        // $collectionPhotos = [];
+        // foreach($collections as $collection) $collectionPhotos[] = $collection->photo;
+        // dd($collectionPhotos);
+        return view('admin/collection_photos', compact('products', 'collections'));
     }
 
     public function slide_photos()

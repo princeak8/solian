@@ -93,10 +93,10 @@
                                 @if($product->photos->count() > 0)
                                     @foreach($product->photos as $photo)
                                         <div class="col-md-3 productPhotos">
-                                            <img src="data:image/jpg;base64{{$photo->file->thumb}}" height="150" alt="">
+                                            <img src="{{$photo->file->thumb}}" height="150" alt="">
                                             <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                                 <span class="icons">
-                                                    <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
+                                                    <input type="checkbox" id="" class="checkbox" name="" value="{{$photo->file->path}}" data-thumb="{{$photo->file->thumb}}" data-url="{{$photo->file->url}}" data-size="{{$photo->file->size}}">
                                                 </span>
                                                 <span class="icons">
                                                     <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>

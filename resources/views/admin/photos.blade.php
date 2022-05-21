@@ -334,7 +334,7 @@
                                 </span>
                                 <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                     <span class="icons">
-                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb=",${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
+                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb="${imgBinaryPrefix+photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
                                     </span>
                                     <span class="icons">
                                         <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
