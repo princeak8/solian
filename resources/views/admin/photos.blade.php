@@ -158,11 +158,11 @@
             if(status){ 
                 $('#adding').removeClass('d-none');
                 $('.fa-trash').addClass('delete');
-                $('.checkbox').prop("disabled", false); 
+                $('.checkbox').prop("disabled", true); 
             }else{
                 $('#adding').addClass('d-none');
                 $('.fa-trash').removeClass('delete');
-                $('.checkbox').prop("disabled", true);
+                $('.checkbox').prop("disabled", false);
             }
         } 
 
