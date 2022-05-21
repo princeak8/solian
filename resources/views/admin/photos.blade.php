@@ -130,6 +130,7 @@
 
 @section('js')
     <script type="application/javascript">
+        
         var checkedPhotosArr = [];
         
         $(document).on('click', '.checkbox', function(e){
@@ -158,11 +159,15 @@
             if(status){ 
                 $('#adding').removeClass('d-none');
                 $('.fa-trash').addClass('delete');
-                $('.checkbox').prop("disabled", false); 
+                $('.checkbox').each(function() { 
+                    $(this).prop("disabled", true);
+                }); 
             }else{
                 $('#adding').addClass('d-none');
                 $('.fa-trash').removeClass('delete');
-                $('.checkbox').prop("disabled", true);
+                $('.checkbox').each(function() { 
+                    $(this).prop("disabled", false);
+                });
             }
         } 
 
@@ -338,6 +343,7 @@
                             </div>
                             `;
                         })
+                        
                         $('#dropboxPhotos').html(photoContent);
                     }else{
                         //The photos is empty
