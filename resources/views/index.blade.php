@@ -148,12 +148,12 @@
         <div class="container-fluid row mb-5">
             @foreach($collections as $collection)
                     <div class="col-6">
-                        <div class="content-wrapper">
-                            <img class="lazyload" data-src="{{$collection->image}}" alt="" style="height: 28em; margin-top:5em;">
-                            <div class="text-wrapper">
-                                <h2>hello{{$collection->name}}</h2>
-                                <a href="{{url('collection/'.$collection->name)}}" class="btn btn-warning">Shop now</a>
-                            </div>
+                        <div class="content-wrapper" style=" display: flex; justify-content: center;">
+                            <img class="lazyload" data-src="{{$collection->image}}" alt="" style="border: solid 1px red; height: 28em; margin: 3em 0;">     
+                        </div>
+                        <div class="text-wrapper" style="justify-content: flex-start;">
+                            <h2 style="color: blue;">{{$collection->name}}</h2>
+                            <a href="{{url('collection/'.$collection->name)}}" class="btn btn-warning">Shop now</a>
                         </div>
                     </div> 
             @endforeach

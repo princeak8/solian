@@ -14,7 +14,7 @@
                 @if($collection->photo)
                     <img src="{{ $collection->photo->file->thumbnail }}" alt="" title="" style="width:100%; height:15em;" />
                 @else
-                    <img src="{{ asset('uploads/collections/thumbnails/no_pic.PNG') }}" alt="" title="" style="width:100%; height:15em;" />
+                    <img src="{{ asset('uploads/collections/thumbnails/no_pic.png') }}" alt="" title="" style="width:100%; height:15em;" />
                 @endif
                 <span>{{$collection->name}}</span><br/>
                 <a href="{{url('admin/collection/'.$collection->id)}}" class="btn btn-primary">View</a>
