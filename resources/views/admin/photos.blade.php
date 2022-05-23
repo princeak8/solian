@@ -87,24 +87,12 @@
             <h6 class="m-0 font-weight-bold text-primary">Product-Gallery</h6>
             @include('layouts/admin/photos_header')
             <div class="top-link">
-                <div class="top-link-inner" id="top-linksId" style="display: flex; flex-direction: row;">
-                    <a href="javascript:void(0)" class="top-text" onclick="switchCategory('product')">Add Photo(s) to Product</a>
-                    <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('collection')">Add Photo(s) to Collection</a>
-                    <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slide</a>
-                </div>
                 <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
             </div>
-            <select name="product-id" id="product-select" class="categorySelect d-none">
+            <select name="product-id" id="product-select" class="categorySelect">
                 <option value="">Select Product</option>
                 @if($products->count() > 0)
                     @foreach($products as $product) <option value="{{$product->id}}">{{$product->name}}</option> @endforeach
-                @endif
-            </select>
-
-            <select name="collection-id" id="collection-select" class="categorySelect d-none">
-                <option value="">Select Collection</option>
-                @if($collections->count() > 0)
-                    @foreach($collections as $collection) <option value="{{$collection->id}}">{{$collection->name}}</option> @endforeach
                 @endif
             </select>
 
@@ -123,7 +111,6 @@
                 </div>
             </div>
     </div>
-    <input type="text" name="category" value="product"/>
 </div>
 <!-- /.container-fluid -->
 @stop
@@ -177,14 +164,11 @@
             //Adding selected photos to their corresponding categories
             //console.log('adding photos');
             //console.log(checkedPhotosArr);
-            let category = $('input[name=category]').val();
+            let category = 'product';
             //if(category=='product') {
             let id = 0;
-            let errorMsg = '';
-            switch(category) {
-                case 'product' : id = $('select[name=product-id]').val(); errorMsg = "please choose a product"; break;
-                case 'collection' : id = $('select[name=collection-id]').val(); errorMsg = "please choose a collection"; break;
-            }
+            let errorMsg = "please choose a product";
+            id = $('select[name=product-id]').val(); 
             if(id != '') {
                 //When the save button has been clicked
                 isAdding(true);
@@ -203,6 +187,7 @@
                             file = getFilenumber(file);
                             $('#'+file).remove();
                         })
+                        checkedPhotosArr = [];
                     }
                 })
                 .catch((error) => {
@@ -222,25 +207,6 @@
             $('.categorySelect').each(function(e) {
                 $(this).addClass('d-none');
             })
-        }
-
-        function switchCategory(category)
-        {
-            console.log('switch category');
-            $('input[name=category]').val(category);
-            switch(category) {
-                case 'product' : 
-                    removeSelectCategories();
-                    $('#product-select').removeClass('d-none');
-                    break;
-                case 'collection' : 
-                    removeSelectCategories();
-                    $('#collection-select').removeClass('d-none');
-                    break;
-                case 'slide' : 
-                    removeSelectCategories();
-                    break;
-            }
         }
 
         $('.dropdown-menu').on('click', function(event){
@@ -331,7 +297,7 @@
                             photoContent += `
                             <div class="col-3" id="${file}">
                                 <span>
-                                    <img alt="" style="width:100%; height:24em; border-radius:10px; transform: scale(0.7); object-fit: cover;" class="lazyload img-back" src="${imgBinaryPrefix+photo.thumb}" />
+                                    <img alt="" style="width:100%; height:24em; border-radius:10px; transform: scale(0.7); object-fit: cover;" class="lazyload img-back" src="${photo.thumb}" />
                                 </span>
                                 <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                     <span class="icons">

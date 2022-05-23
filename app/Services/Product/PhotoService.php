@@ -228,6 +228,7 @@ class PhotoService
         } 
         $thumbs = [];
         if(count($entries) > 0) {
+            //dd($entries);
             $thumbs = $this->_handle_getting_thumbnails($entries);
                 //dd($thumbs);
             if($thumbs != null) {

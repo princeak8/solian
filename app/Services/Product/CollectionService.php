@@ -22,9 +22,17 @@ class CollectionService
         return Collection::all();
     }
 
-    public function collections()
+    public function newArrivals()
     {
-        return Collection::where('deleted', '0')->orderBy('created_at', 'desc')->get();
+        return Collection::where('name', 'new arrivals')->first();
+    }
+
+    public function collections($include_new_arrivals=true)
+    {
+        $newArrivals = $this->newArrivals();
+        return Collection::where('deleted', '0')->when(!$include_new_arrivals, function($query) use($newArrivals) {
+            $query->where('id', '!=', $newArrivals->id);
+        })->orderBy('created_at', 'desc')->get();
     }
 
     public function collection($id=null)

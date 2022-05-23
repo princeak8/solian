@@ -44,12 +44,14 @@ class IndexController extends BaseController
         }
         $products = $this->productService->products();
         $collections = $this->collectionService->collections();
+        $newArrivals = $this->collectionService->newArrivals();
+        //dd($newArrivals);
         $slides = $this->photoService->slidePhotos();
         /*foreach($products as $product) {
             foreach($product->product_sizes as $productSize) {
                 dd($productSize->size->size);
             }
         }*/
-        return view('index', compact('company', 'products', 'collections', 'slides'));
+        return view('index', compact('company', 'products', 'collections', 'slides', 'newArrivals'));
     }
 }
