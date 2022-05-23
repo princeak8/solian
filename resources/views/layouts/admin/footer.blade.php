@@ -59,5 +59,27 @@
     $(function() {
         $('nav a[href^="/' + location.pathname.split("/")[1] + '"]').addClass('active');
     });
+
+    setInterval(function () {
+        axios.get("{{url('admin/refresh_dropbox_token')}}")
+        .then((res) => {
+            console.log('refreshed token')
+        })
+        .catch((error) => {
+            console.log("An error occured while trying to Refresh token "+error.message);
+        });
+    }, 60000);
+
+    setInterval(function () {
+        axios.get("{{url('admin/fetch_dropbox_photos')}}")
+        .then((res) => {
+            console.log('fetched photos token')
+        })
+        .catch((error) => {
+            console.log("An error occured while trying to fetch photos "+error.message);
+        });
+    }, 300000);
+    
+
 </script>
 @yield('js')

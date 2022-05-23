@@ -37,6 +37,7 @@ class Product extends Model
         if(empty($mainPhoto)) {
             $mainPhoto = $firstPhoto;
         }
+        if(empty($mainPhoto)) $mainPhoto = env('APP_URL')."public/images/no_pic.PNG";
         return $mainPhoto;
     }
 
@@ -46,10 +47,10 @@ class Product extends Model
         $firstPhoto = '';
         foreach($this->photos as $photo) {
             if(empty($firstPhoto)) {
-                $firstPhoto = $photo->file->thumbnail;
+                $firstPhoto = $photo->file->thumb;
             }
             if($photo->main == 1) {
-                $mainPhoto = $photo->file->thumbnail;
+                $mainPhoto = $photo->file->thumb;
             }
         }
         if(empty($mainPhoto)) {

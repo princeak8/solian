@@ -16,6 +16,12 @@ class Collection extends Model
      */
     protected $fillable = [];
 
+    public function getImageAttribute()
+    {
+        $photo = ($this->photo && $this->photo->file) ? $this->photo->file->secure_url : env('APP_URL')."public/images/no_pic.PNG";
+        return $photo;
+    }
+
     public function product_collections()
     {
         $productCollections = $this->hasMany('App\Models\Product_collection', 'collection_id', 'id');

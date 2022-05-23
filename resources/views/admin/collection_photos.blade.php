@@ -61,59 +61,49 @@
  <!-- Begin Page Content -->
  <div class="container-fluid">
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-                @include('layouts/admin/photos_header')
-                <div class="top-link">
-                <div class="top-link-inner" id="top-linksId" style="display: flex; flex-direction: row;">
-                    <a href="javascript:void(0)" class="top-text" onclick="switchCategory('product')">Add Photo(s) to Product</a>
-                    <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slide</a>
-                </div>
-                <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
-            </div>
-            <select name="product-id" id="product-select" class="categorySelect d-none">
-                <option value="">Select Product</option>
-                @if($products->count() > 0)
-                    @foreach($products as $product) <option value="{{$product->id}}">{{$product->name}}</option> @endforeach
+        <div class="card-header py-3" style="border: solid #000 thin">
+            @include('layouts/admin/photos_header')
+                
+            <select name="collection-id" id="collection-select">
+                <option value="">Select Collection</option>
+                @if($collections->count() > 0)
+                    @foreach($collections as $collection) <option value="{{$collection->id}}">{{$collection->name}}</option> @endforeach
                 @endif
             </select>
+            <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
+
+            <a href="{{url('admin/refresh_collection_photos')}}" class="btn btn-primary" style="float:right; color:#fff">Refresh</a> 
+        </div>
 
         <div class="card-body">
             @include('inc.message')
-            <div class="row">
-                <div class="col-md-12 mt-5">
-                    @if($collections->count() > 0)
-                        @foreach($collections as $collection)
-                            <h4>{{$collection->name}}</h4>
-                            <div id="collectionPhotos" class="row mt-2">
-                                @if($collection->photo)
-                                    <div class="col-md-3 productPhotos">
-                                        <img src="{{$collection->photo->file->thumb}}" height="150" alt="">
-                                        <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
-                                            <span class="icons">
-                                            <input type="checkbox" id="" class="checkbox" name="" value="{{$collection->photo->file->path}}" data-thumb="{{$collection->photo->file->thumb}}" data-url="{{$collection->photo->file->url}}" data-size="{{$collection->photo->file->size}}">
-                                            </span>
-                                            <span class="icons">
-                                                <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                @else
-                                    <div>
-                                        <img src="{{asset('/assets/img/product/product-2.jpg') }}" alt="">
-                                    </div>
-                                @endif
-                                
+            <div id="collectionPhotos" class="row mt-5">
+                @if(count($photos) > 0)
+                    @foreach($photos as $photo)
+                        <div class="col-md-3 productPhotos">
+                            <img src="{{$photo->thumb}}" height="150" alt="">
+                            @if($photo->name != null) <p>{{$photo->name}}</p> @endif
+                            <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
+                                <span class="icons">
+                                    <input 
+                                        type="radio" name="collectionPhoto" class="collection-box" value="{{$photo->file}}" data-id="{{$photo->collection_id}}" 
+                                        data-thumb="{{$photo->thumb}}" data-url="{{$photo->url}}" data-size="{{$photo->size}}"
+                                    />
+                                </span>
+                                <span class="icons">
+                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                </span>
                             </div>
-                            <hr/>
-                        @endforeach
-                    @endif
-                </div>
+                        </div>
+                    @endforeach
+                @else
+                    <p>No Collection Photos found</p>
+                @endif
                 
             </div>
            
         </div>
     </div>
-    <input type="text" name="category" value="product"/>
 
 </div>
 <!-- /.container-fluid -->

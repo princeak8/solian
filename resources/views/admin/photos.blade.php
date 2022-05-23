@@ -140,7 +140,8 @@
                 let thumb = $(this).data("thumb");
                 let url = $(this).data("url");
                 let size = $(this).data("size");
-                checkedPhotosArr.push({file, thumb, url, size});
+                let dimension = $(this).data("dimension");
+                checkedPhotosArr.push({file, thumb, url, size, dimension});
                 console.log(checkedPhotosArr);
             } else {
                     // REMOVE VALUE FROM ARRAY WHEN IT IS UNCHECKED
@@ -310,7 +311,7 @@
             let url = "{{url('admin/photo/get_dropbox_photos')}}";
             var token = $('meta[name="csrf-token"]').attr('content');
             let email = $('input[name=email]').val();
-            let formData =  {email: email, _token: token};
+            let formData =  {email: email, category: 'product', _token: token};
             //console.log(`email: ${email} token: ${token}`);
             axios.post(url, formData)
             .then((res) => {
@@ -323,10 +324,10 @@
 
                         //loop through the photos
                         let photoContent = '';
-                        let imgBinaryPrefix = 'data:image/jpg;base64,';
+                        //let imgBinaryPrefix = 'data:image/jpg;base64,';
                         res.data.photos.forEach((photo) => {
                             let file = getFilenumber(photo.file);
-                            console.log('file: ', file);
+                            console.log('file: ', photo.file);
                             photoContent += `
                             <div class="col-3" id="${file}">
                                 <span>
@@ -334,7 +335,7 @@
                                 </span>
                                 <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                     <span class="icons">
-                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb="${imgBinaryPrefix+photo.thumb}" data-url="${photo.url}" data-size="${photo.size}">
+                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb="${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}" data-dimension="${photo.dimension}">
                                     </span>
                                     <span class="icons">
                                         <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>

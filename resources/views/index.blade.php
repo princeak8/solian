@@ -6,22 +6,26 @@
 <section style="position: relative!important; z-index: 1!important;">
     <div id="carouselExampleFade" class="carousel slide carousel-fade mt-4 pt-5" data-ride="carousel">
         <div class="carousel-inner">
-            @foreach($slides as $slide)
-                <div class="carousel-item @if($slide->active==1) active @endif">
-                    <img class="d-block w-100" src="{{$slide->file->secure_url}}" alt="First slide">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-6 col-md-offset-3 col-md-push-3 col-sm-12 col-xs-12">	
-                                    <div class="carousel-caption one" style="opacity:0.7;">
-                                        <h4>Awesome Outfits:</h4>
-                                        <h5>For your memorable occasions</h5>
-                                        <!--<p><a  href="#" class="btn btn-sm btn-primary btn-learn">SHOP NOW <i class="icon-arrow-right3"></i> </a></p>-->
-                                    </div>
+            @if($slides->count() > 0) {
+                @foreach($slides as $slide)
+                    <div class="carousel-item @if($slide->active==1) active @endif">
+                        <img class="d-block w-100" src="{{$slide->file->secure_url}}" alt="First slide">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-6 col-md-offset-3 col-md-push-3 col-sm-12 col-xs-12">	
+                                        <div class="carousel-caption one" style="opacity:0.7;">
+                                            <h4>Awesome Outfits:</h4>
+                                            <h5>For your memorable occasions</h5>
+                                            <!--<p><a  href="#" class="btn btn-sm btn-primary btn-learn">SHOP NOW <i class="icon-arrow-right3"></i> </a></p>-->
+                                        </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach          
+                @endforeach 
+            @else
+                <img class="d-block w-100" src="{{asset('images/slides/timely-group-photos-2-1400x800-1400x800-c-default-20210308154209.jpg')}}" />
+            @endif 
         </div>
 
         <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
@@ -72,14 +76,18 @@
                     <div class="col-lg-3 col-md-4 col-6 mix women men kid accessories cosmetic">
                         <div class="product__item">
                             <div class="box"><?php $i = 0; ?>
-                                @foreach($product->photos as $productPhoto) <?php $i++; ?>
-                                    <a href="{{url('product/'.$product->name)}}">
-                                        <img @if($i==1) class="lazyload img-back" @else class="lazyload img-front" @endif data-src="{{$productPhoto->file->secure_url}}" 
-                                            alt=""
-                                        >
-                                    </a>
-                                    @if($i==2) @break @endif
-                                @endforeach
+                                @if($product->photos->count() > 0)
+                                    @foreach($product->photos as $productPhoto) <?php $i++; ?>
+                                        <a href="{{url('product/'.$product->name)}}">
+                                            <img @if($i==1) class="lazyload img-back" @else class="lazyload img-front" @endif data-src="{{$productPhoto->file->thumb}}" 
+                                                alt=""
+                                            >
+                                        </a>
+                                        @if($i==2) @break @endif
+                                    @endforeach
+                                @else
+                                    <img class="lazyload img-back" data-src="{{$product->mainThumb}}" />
+                                @endif
                                 <ul class="product__hover">
                                     <li><a href="{{$product->main}}" class="image-popup"><span class="arrow_expand"></span></a></li>
                                     <!--<li><a href="#"><span class="icon_heart_alt"></span></a></li>-->
@@ -131,7 +139,7 @@
             @foreach($collections as $collection)
                     <div class="col-6">
                         <div class="content-wrapper">
-                            <img class="lazyload" data-src="{{$collection->photo->file->secure_url}}" alt="" style="height: 28em; margin-top:5em;">
+                            <img class="lazyload" data-src="{{$collection->image}}" alt="" style="height: 28em; margin-top:5em;">
                             <div class="text-wrapper">
                                 <h2>{{$collection->name}}</h2>
                                 <a href="{{url('collection/'.$collection->name)}}" class="btn btn-warning">Shop now</a>
@@ -451,7 +459,7 @@
         <div class="row home-blog pb-5 mt-5">
 
             <div class="container-fluid col-6 col-xs-12">
-                <img src="{{asset('uploads/company/1010-banner7_1080x.webp')}}" alt="">    
+                <img src="{{asset('uploads/company/fashion-photographer-reading-berkshire-large-1400x800-20210308154131.jpg')}}" alt="">    
             </div>
             
             <div class="container-fluid col-6 col-xs-12">

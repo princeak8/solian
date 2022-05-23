@@ -83,34 +83,45 @@ class FileService
         return (isset($fileObj)) ? $fileObj : null;
     }
 
-    public function addDropBoxPhotos($photos, $user_id) 
+    public function addDropBoxPhotos($photos, $user_id, $category) 
     {
         $fileIds = [];
         foreach($photos as $photo) {
-            $fileObj = new File;
-            $fileObj->url = $photo['url'];
-            $fileObj->thumb = $photo['thumb'];
-            $fileObj->path = $photo['file'];
-            $fileObj->user_id = $user_id;
-            $fileObj->secure_url = $fileObj->url;
-            $fileObj->file_type = 'image';
-            $filePathParts = pathinfo($photo['file']);
-            $dimension = getimagesize($fileObj->url);
-            $fileObj->extension = $filePathParts['extension'];
-            $fileObj->filename = $filePathParts['basename'];
-            $fileObj->width = $dimension[0];
-            $fileObj->height = $dimension[1];
-            $fileObj->mime_type = $dimension['mime'];
-            $fileObj->file_type = 'image';
-            $fileObj->size = $photo['size'];
-            $fileObj->formatted_size = $this->convertSize($fileObj->size);
-            //dd($fileObj);
-            $fileObj->save();
-            $fileIds[] = $fileObj->id;
+            $fileIds[] = $this->addDropBoxPhoto($photo, $user_id, $category);
+        }
+        return $fileIds;
+    }
 
-            if(session('dropBoxPhotos') != null && count(session('dropBoxPhotos')) > 0) {
-                $sessionDropboxPhotos = [];
-                foreach(session('dropBoxPhotos') as $sessionPhotos) {
+    public function addDropBoxPhoto($photo, $user_id, $category)
+    {
+        $fileObj = new File;
+        if($category == 'collection' && !empty($photo->collection_id)) {
+            $collection = $this->collectionService->collection($photo->collection_id);
+            if($collection->photo->file) $fileObj = $collection->photo->file;
+        }
+        
+        $fileObj->url = $photo['url'];
+        $fileObj->thumb = $photo['thumb'];
+        $fileObj->path = $photo['file'];
+        $fileObj->user_id = $user_id;
+        $fileObj->secure_url = $fileObj->url;
+        $fileObj->file_type = 'image';
+        $filePathParts = pathinfo($photo['file']);
+        // $dimension = getimagesize($fileObj->url);
+        $fileObj->extension = $filePathParts['extension'];
+        $fileObj->filename = $filePathParts['basename'];
+        // $fileObj->width = $dimension[0];
+        // $fileObj->height = $dimension[1];
+        // $fileObj->mime_type = $dimension['mime'];
+        $fileObj->file_type = 'image';
+        $fileObj->size = $photo['size'];
+        $fileObj->formatted_size = $this->convertSize($fileObj->size);
+        //dd($fileObj);
+        $fileObj->save();
+        if($category == 'product') {
+            if(session('dropBoxProductPhotos') != null && count(session('dropBoxProductPhotos')) > 0) {
+                $sessiondropBoxProductPhotos = [];
+                foreach(session('dropBoxProductPhotos') as $sessionPhotos) {
                     foreach($sessionPhotos as $key=>$sessionPhoto) {
                         //dd($sessionPhoto->file);
                         if($sessionPhoto->file == $photo['file']) {
@@ -118,12 +129,12 @@ class FileService
                             unset($sessionPhotos[$key]);
                         }
                     }
-                    $sessionDropboxPhotos[] = $sessionPhotos;
+                    $sessiondropBoxProductPhotos[] = $sessionPhotos;
                 }
-                session(['dropBoxPhotos' => $sessionDropboxPhotos]);
+                session(['dropBoxProductPhotos' => $sessiondropBoxProductPhotos]);
             }
         }
-        return $fileIds;
+        return $fileObj->id;
     }
 
     private function convertSize($size)

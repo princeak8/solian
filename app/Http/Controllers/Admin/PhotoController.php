@@ -46,7 +46,7 @@ class PhotoController extends Controller
 
     public function photos()
     {
-        //dd(session('dropBoxPhotos'));
+        //dd(time());
         //$this->_handleDropboxPhotos();
         $photos = [];
         $email = auth::user()->email;
@@ -67,6 +67,9 @@ class PhotoController extends Controller
         }
         return view('admin/photos', compact('products', 'collections', 'dropBoxPhotos', 'email'));
     }
+
+
+
     /*
         Returns Json
     */
@@ -75,13 +78,20 @@ class PhotoController extends Controller
         $post = $request->all();
         $page = (isset($post['page'])) ? $post['page'] : 1;
         if(isset($post['email']) && !empty($post['email'])) {
-            if($post['email'] == auth::user()->email) {
-                return $this->_handleDropboxPhotos($page);
+            if(isset($post['category']) && !empty($post['category'])) {
+                if($post['email'] == auth::user()->email) {
+                    return $this->_handleDropboxPhotos($post['category'], $page);
+                }else{
+                    return response()->json([
+                        'statusCode' => 401,
+                        'message' => 'Wrong Email'
+                    ], 401);
+                }
             }else{
                 return response()->json([
-                    'statusCode' => 401,
-                    'message' => 'Wrong Email'
-                ], 401);
+                    'statusCode' => 404,
+                    'message' => 'Category missing'
+                ], 404);
             }
         }else{
             return response()->json([
@@ -91,11 +101,18 @@ class PhotoController extends Controller
         }
     }
 
-    private function _handleDropboxPhotos($page=1, $retries=0)
+    private function _handleDropboxPhotos($category, $page=1, $retries=0)
     {
         // dd(session('dropBoxPhotos'));
         try{
-            $photos = $this->photoService->getDropboxPhotos($page);
+            $photos = [];
+            $session = '';
+            switch($category) {
+                case 'product' : $session = 'dropBoxProductPhotos'; $photos = $this->photoService->getDropboxProductPhotos($page); break;
+                case 'collection' : $session = 'dropBoxCollectionPhotos'; $photos = $this->photoService->getDropboxCollectionPhotos(); break;
+                case 'slide' : $session = 'dropBoxSlidePhotos'; $photos = $this->photoService->getDropboxSlidePhotos(); break;
+            }
+            
             //dd($photos);
             //dd(session('dropBoxPhotos'));
             return response()->json([
@@ -112,10 +129,10 @@ class PhotoController extends Controller
                 if($retries <= 5) $this->_handleDropboxPhotos($page, $retries);
             }
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
-            if(session('dropBoxPhotos') != null && isset(session('dropBoxPhotos')[$page-1])) {
+            if(session($session) != null && isset(session($session)[$page-1])) {
                 return response()->json([
                     'statusCode' => 200,
-                    'photos' => session('dropBoxPhotos')[$page-1]
+                    'photos' => session($session)[$page-1]
                 ], 200);
             }
             return response()->json([
@@ -137,21 +154,38 @@ class PhotoController extends Controller
         return view('admin/product_photos', compact('products', 'collections'));
     }
 
-    public function collection_photos()
+    public function refresh_collection_photos()
     {
-        
+        return $this->collection_photos(true);
+    }
+
+    public function collection_photos($force=false)
+    {
         $photos = [];
         try{
-            $products = $this->productService->products();
             $collections = $this->collectionService->collections();
+            $photos = $this->photoService->getDropboxCollectionPhotos($force);
+            $collectionPhotoFiles = $this->collectionService->getCollectionsPhotosAsFile();
+            $filesArr = [];
+            if(count($collectionPhotoFiles) > 0) {
+                $filesArr = array_keys($collectionPhotoFiles); //generate an array of the paths of the collection photo files
+            }
+            if(count($photos) > 0) {
+                foreach($photos as $photo) {
+                    if(in_array($photo->file, $filesArr)) {
+                        $photo->name = $collectionPhotoFiles[$photo->file]->name;
+                        $photo->collection_id = $collectionPhotoFiles[$photo->file]->id;
+                    }else{
+                        $photo->name = null;
+                        $photo->collection_id = '';
+                    }
+                }
+            }
         } catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
         }
-        //dd($collections);
-        // $collectionPhotos = [];
-        // foreach($collections as $collection) $collectionPhotos[] = $collection->photo;
-        // dd($collectionPhotos);
-        return view('admin/collection_photos', compact('products', 'collections'));
+        //dd($photos);
+        return view('admin/collection_photos', compact('photos', 'collections'));
     }
 
     public function slide_photos()
@@ -207,8 +241,10 @@ class PhotoController extends Controller
         try{
             $post = $request->all();
             if(($post['category'] != 'slide') && $this->validate_category_id($post['id'], $post['category'])) {
-                $fileIds = $this->addPhotosToFile($post['photos'], auth::user()->id);
-                $this->photoService->addPhotosToCategory($fileIds, $post['id'], $post['category']);
+                $fileIds = $this->addPhotosToFile($post['photos'], auth::user()->id, $post['category']);
+                if($post['category'] != 'collection' || ($post['category'] == 'collection' && empty($post['photos']->collection_id))) {
+                    ($post['category']=='collection') ? $this->photoService->addPhotoToCategory($fileIds, $post['id'], $post['category']) : $this->photoService->addPhotosToCategory($fileIds, $post['id'], $post['category']);
+                }
                 return response()->json([
                     'statusCode' => 200,
                     'message' => 'Photo added successfully'
@@ -238,8 +274,11 @@ class PhotoController extends Controller
         }
     }
 
-    private function addPhotosToFile($photos, $user_id) 
+    /*
+        Category can either be 'product', 'collection', 'slide'
+    */
+    private function addPhotosToFile($photos, $user_id, $category) 
     {
-        return $this->fileService->addDropBoxPhotos($photos, $user_id);
+        return ($category=='collection') ? $this->fileService->addDropBoxPhoto($photos, $user_id, $category) : $this->fileService->addDropBoxPhotos($photos, $user_id, $category);
     }
 }

@@ -48,6 +48,7 @@ class DropboxServiceProvider extends ServiceProvider
                 $config['token']
             ));
             $config['case_sensitive'] = false;
+            $config['include_media_info'] = true;
             return new FilesystemAdapter(
                 new Filesystem($adapter, ['case_sensitive' => false]), 
                 $adapter,

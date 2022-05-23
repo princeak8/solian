@@ -85,6 +85,23 @@ class CollectionService
         }
     }
 
+    /*
+        Gets collections that has a photo and makes an array where the file path property of the photo is the key and the value is the collection
+        Returns that array
+    */
+    public function getCollectionsPhotosAsFile()
+    {
+        $arr = [];
+        $collections = $this->collections();
+        if($collections->count() > 0) {
+            foreach($collections as $collection) {
+                if($collection->photo && $collection->photo->file) {
+                    $arr[$collection->photo->file->path] = $collection;
+                }
+            }
+        }
+        return $arr;
+    }
     //public function updatePhoto($file, $photo)
 }
 

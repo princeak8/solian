@@ -18,15 +18,15 @@ class BaseController extends Controller
 {
     public function __construct()
     {
-        if(time() > env('DROPBOX_TOKEN_EXPIRY') || ((env('DROPBOX_TOKEN_EXPIRY') - time()) <= 60)) {
-            //dd(time().' < '.env('DROPBOX_TOKEN_EXPIRY'));
-            //If the dropbox token has expired or will expire in less than 1minute
-            try{ 
-                DropboxService::refreshToken();
-            }catch(\Throwable $th) {
-                \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
-            }
-        }
+        // if(time() > env('DROPBOX_TOKEN_EXPIRY') || ((env('DROPBOX_TOKEN_EXPIRY') - time()) <= 60)) {
+        //     //dd(time().' < '.env('DROPBOX_TOKEN_EXPIRY'));
+        //     //If the dropbox token has expired or will expire in less than 1minute
+        //     try{ 
+        //         DropboxService::refreshToken();
+        //     }catch(\Throwable $th) {
+        //         \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+        //     }
+        // }
 
         // if(time() > env('FETCH_DROPBOX_PHOTOS_EXPIRY')) {
         //     $photoservice = new PhotoService;

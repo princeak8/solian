@@ -46,10 +46,14 @@ Route::group([
     Route::get('/photos', 'PhotoController@photos');
     Route::get('/product_photos', 'PhotoController@product_photos');
     Route::get('/collection_photos', 'PhotoController@collection_photos');
+    Route::get('/refresh_collection_photos', 'PhotoController@refresh_collection_photos');
     Route::get('/slide_photos', 'PhotoController@slide_photos');
     Route::post('/photo/add', 'PhotoController@add_photos');
     Route::post('/photo/add_to_category', 'PhotoController@add_to_category');
     Route::get('/photo/delete/{id}', 'PhotoController@delete');
+
+    Route::get('/refresh_dropbox_token', 'DropboxController@refresh_token');
+    Route::get('/fetch_dropbox_photos', 'DropboxController@fetch_photos');
 
     Route::get('/photo/test', function() {
         $str = "/web/Img_234";

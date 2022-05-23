@@ -59,6 +59,7 @@ return [
             'secret' => env('DROPBOX_APP_SECRET'),
             'token' => env('DROPBOX_AUTHORIZATION_TOKEN'),
             'visibility' => 'public',
+            'include_media_info' => true
         ],
 
     ],
