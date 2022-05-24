@@ -28,15 +28,15 @@
                         <div class="product__details__slider__content">
                             <div class="product__details__pic__slider owl-carousel">
                                 @foreach($product->photos as $photo)
-                                    <img data-hash="product-{{$photo->id}}" class="product__big__img" src="{{asset('uploads/products/'.$photo->name)}}" alt="">
+                                    <img data-hash="product-{{$photo->id}}" class="product__big__img" src="{{$photo->file->secure_url}}" alt="">
                                 @endforeach
                             </div>
                         </div>
                     </div>
                     <div class=" container row">
                         @foreach($product->photos as $photo)
-                            <a class="pt mt-2 @if($product->main==$photo->name) active @endif" href="#product-{{$photo->id}}">
-                                <img src="{{asset('uploads/products/thumbnails/'.$photo->name)}}" alt="" style="padding:0">
+                            <a class="pt mt-2 @if($product->main==$photo->file->secure_url) active @endif" href="#product-{{$photo->id}}">
+                                <img src="{{$photo->file->thumb}}" alt="" style="padding:0">
                             </a>
                         @endforeach
                     </div>

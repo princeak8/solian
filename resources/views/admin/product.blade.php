@@ -48,9 +48,16 @@
             <div class="row">
                 <div class="col-8">
                     @foreach($product->photos as $productPhoto)
-                        <img id="photo-{{$productPhoto->id}}" src="{{ $productPhoto->file->secure_url }}" alt="" title="" @if($productPhoto->name==$product->main) class="photos d-block" @else class="photos d-none" @endif style="width:100%; height:30em;" />
+                        <img id="photo-{{$productPhoto->id}}" src="{{ $productPhoto->file->secure_url }}" alt="" title="" 
+                            @if($productPhoto->file->secure_url==$product->main) 
+                                class="photos d-block" 
+                            @else 
+                                class="photos d-none" 
+                            @endif 
+                            style="width:100%; height:30em;" 
+                        />
                     @endforeach
-                    <h3>Product Photos<button type="button" id="add-photo" data-open="0" class="btn btn-sm btn-primary ml-3">Add Photo(s)</a></h3>
+                    <!-- <h3>Product Photos<button type="button" id="add-photo" data-open="0" class="btn btn-sm btn-primary ml-3">Add Photo(s)</a></h3>
                     <div id="app" class="d-none form-group">
                         {!! Form::model($product, ['url' => "admin/product/photo/save?id=$product->id",'method' => 'post', 'files' => true, 
                             'id'=>'photoForm', 'class'=>'form-horizontal', 'onsubmit'=>'return save();'])
@@ -82,20 +89,18 @@
                                 {{ Form::submit('Add', array('class'=>'form-control  mt-4 btn btn-primary'))}}
                             </div>
                         {!! Form::close() !!} 
-                    </div>
+                    </div> -->
                     
                     <div id="thumbnails" class="row">
                         @foreach($product->photos as $productPhoto)
                             <div class="col-3">
                                 
-                                <img data-id="photo-{{$productPhoto->id}}" class="thumb-photo" src="{{ $productPhoto->file->thumbnail }}" alt="" title="" style="width:100%; height:10em;" />
+                                <img data-id="photo-{{$productPhoto->id}}" class="thumb-photo" src="{{ $productPhoto->file->thumb }}" alt="" title="" style="width:100%; height:10em;" />
                                 <p class="alert alert-danger d-none" id="photo-main-error-{{$productPhoto->id}}">this is an error</p>
                                 <div class="row">
                                    <span class="pt-1"> Main</span>
                                    <input type="radio" class="col-4 form-control" name="main" value="{{$productPhoto->id}}" @if($productPhoto->file->secure_url==$product->main) checked @endif />
-                                    @if($product->photos->count() > 1) 
-                                        <a href="{{url('admin/product/photo/delete/'.$productPhoto->id)}}" class="btn btn-danger" onclick="return confirm('Are You Sure You want to Delete this photo?')">Delete</a>
-                                    @endif
+                                    
                                 </div>
                             </div>
                         @endforeach

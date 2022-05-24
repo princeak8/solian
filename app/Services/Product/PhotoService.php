@@ -150,8 +150,7 @@ class PhotoService
 
     public function delete($photo)
     {
-        $photo->deleted = 1;
-        $photo->update();
+        $photo->delete();
     }
 
     public function getDropboxProductPhotos($page=1, $force=false)
@@ -162,7 +161,7 @@ class PhotoService
             foreach(session('dropBoxProductPhotos')[$page-1] as $photo) $dropBoxProductPhotosArr[] = $photo;
         }else{
             // dd('here2');
-            $dropBoxProductPhotosArr = $this->getDropboxPhotos('web/products', $page);
+            $dropBoxProductPhotosArr = $this->getDropboxPhotos('product', $page);
             session(['dropBoxProductPhotos' => null]);
             if(session('dropBoxProductPhotos') == null) session(['dropBoxProductPhotos' => []]);
                 //session(['dropBoxProductPhotos' => $dropBoxProductPhotos]);
@@ -180,7 +179,7 @@ class PhotoService
         if(!$force && (time() < env('FETCH_DROPBOX_COLLECTION_PHOTOS_EXPIRY') && session('dropBoxCollectionPhotos') != null)) {
             foreach(session('dropBoxCollectionPhotos') as $photo) $dropBoxCollectionPhotosArr[] = $photo;
         }else{
-            $dropBoxCollectionPhotosArr = $this->getDropboxPhotos('web/collections');
+            $dropBoxCollectionPhotosArr = $this->getDropboxPhotos('collection');
             session(['dropBoxCollectionPhotos' => null]);
             if(session('dropBoxCollectionPhotos') == null) session(['dropBoxCollectionPhotos' => []]);
                 //session(['dropBoxCollectionPhotos' => $dropBoxCollectionPhotos]);
@@ -198,7 +197,7 @@ class PhotoService
         if(!$force && (time() < env('FETCH_DROPBOX_SLIDE_PHOTOS_EXPIRY') && session('dropBoxSlidePhotos') != null)) {
             foreach(session('dropBoxSlidePhotos') as $photo) $dropBoxSlidePhotosArr[] = $photo;
         }else{
-            $dropBoxSlidePhotosArr = $this->getDropboxPhotos('web/slides');
+            $dropBoxSlidePhotosArr = $this->getDropboxPhotos('slide');
             session(['dropBoxSlidePhotos' => null]);
             if(session('dropBoxSlidePhotos') == null) session(['dropBoxSlidePhotos' => []]);
             $sessionDropBoxSlidePhotos = session('dropBoxSlidePhotos');
@@ -209,8 +208,20 @@ class PhotoService
         return $dropBoxSlidePhotosArr;
     }
 
-    private function getDropboxPhotos($folder, $page=1)
+    private function getCategoryFolder($category)
     {
+        switch($category) {
+            case 'product'      :  $folder = 'web/products'; break;
+            case 'collection'   :  $folder = 'web/collections'; break;
+            case 'slides'       :  $folder = 'web/slides'; break;
+            default: $folder = 'web'; break;
+        }
+        return $folder;
+    }
+
+    private function getDropboxPhotos($category, $page=1)
+    {
+        $folder = $this->getCategoryFolder($category);
         $dropBoxPhotos = [];
         $files = Storage::disk('dropbox')->files($folder);
         //dd($files);
@@ -247,7 +258,7 @@ class PhotoService
                         $f->size = Storage::disk('dropbox')->size($path);
                         $dropBoxPhotos[] = $f;
                     }
-                    $dropBoxPhotos = $this->filter_dropbox_photos($paths, $dropBoxPhotos);
+                    if($category=='product') $dropBoxPhotos = $this->filter_dropbox_photos($paths, $dropBoxPhotos);
                 }
             }else{
                 $msg = '';

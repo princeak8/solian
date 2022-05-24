@@ -40,6 +40,11 @@ class CollectionService
         return ($id==null) ? new Collection : Collection::where('id', $id)->where('deleted', '0')->first();
     }
 
+    public function collectionByName($name=null)
+    {
+        return ($name==null) ? new Collection : Collection::where('name', $name)->where('deleted', '0')->first();
+    }
+
     public function  collectionData($collections)
     {
         $collectionsData = [];
@@ -55,11 +60,12 @@ class CollectionService
         if($id==null) {
             //Add action
             $collection = new Collection;
+            $collection->name = $post['name'];
         }else{
             //edit action
             $collection = Collection::findOrFail($id);
+            if(isset($post['name'])) $collection->name = $post['name'];
         }
-        $collection->name = $post['name'];
         $collection->description = $post['description'];
         if($id==null) {
                 //$photo = new Photo;
@@ -67,20 +73,22 @@ class CollectionService
             // if($uploadedPhoto && $uploadedPhoto != null) {
             //     $collection->photo = $uploadedPhoto->url;
             // }
-            $collection->save();
+            //$collection->save();
         }else{
-            $collection->update();
+            //$collection->update();
         }
         $existingProducts = [];
         if($collection->product_collections->count() > 0 && $id != null) {
             foreach($collection->product_collections as $productCollection) {
-                if(!in_array($productCollection->product->id, $post['products'])) {
+                if(!in_array($productCollection->product_id, $post['products'])) {
                     $productCollection->delete();
                 }else{
-                    $existingCollections[] = $productCollection->product->id;
+                    $existingProducts[] = $productCollection->product_id;
                 }
             }
         }
+        // dd($existingProducts);
+        // dd($post['products']);
         if(isset($post['products']) && !empty($post['products'])) {
             foreach($post['products'] as $product_id) {
                 if(!in_array($product_id, $existingProducts)) {

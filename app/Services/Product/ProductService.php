@@ -48,6 +48,31 @@ class ProductService
         return Product::where('id', $id)->where('deleted', '0')->first();
     }
 
+    public function productByName($name)
+    {
+        return Product::where('name', $name)->where('deleted', '0')->first();
+    }
+
+    public function related($product)
+    {
+        $related = [];
+        if($product->collections->count() > 0) {
+            foreach($product->collections as $collection) {
+                if($collection->products->count() > 1) {
+                    foreach($collection->products as $p) {
+                        if($p->id != $product->id) {
+                            $related[$p->id] = $p;
+                            if(count($related)==4) {
+                                break 2;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $related;
+    }
+
     public function productCollections($product)
     {
         $productCollections = [];

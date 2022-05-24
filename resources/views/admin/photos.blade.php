@@ -123,12 +123,12 @@
         $(document).on('click', '.checkbox', function(e){
             console.log('clicked');
             if(this.checked == true) {
+                let id = this.id;
                 let file = this.value;
                 let thumb = $(this).data("thumb");
                 let url = $(this).data("url");
                 let size = $(this).data("size");
-                let dimension = $(this).data("dimension");
-                checkedPhotosArr.push({file, thumb, url, size, dimension});
+                checkedPhotosArr.push({file, thumb, url, size, id});
                 console.log(checkedPhotosArr);
             } else {
                     // REMOVE VALUE FROM ARRAY WHEN IT IS UNCHECKED
@@ -183,9 +183,9 @@
                     console.log('response: ',res);
                     isAdding(false);
                     if(res.status == 200) {
-                        checkedPhotosArr.forEach(({ file }) => {
-                            file = getFilenumber(file);
-                            $('#'+file).remove();
+                        checkedPhotosArr.forEach(({ id }) => {
+                            //file = getFilenumber(file);
+                            $('#'+id).remove();
                         })
                         checkedPhotosArr = [];
                     }
@@ -291,17 +291,18 @@
                         //loop through the photos
                         let photoContent = '';
                         //let imgBinaryPrefix = 'data:image/jpg;base64,';
-                        res.data.photos.forEach((photo) => {
+                        var i = 0;
+                        res.data.photos.forEach((photo) => { i++;
                             let file = getFilenumber(photo.file);
                             console.log('file: ', photo.file);
                             photoContent += `
-                            <div class="col-3" id="${file}">
+                            <div class="col-3" id="photo${i}">
                                 <span>
                                     <img alt="" style="width:100%; height:24em; border-radius:10px; transform: scale(0.7); object-fit: cover;" class="lazyload img-back" src="${photo.thumb}" />
                                 </span>
                                 <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                     <span class="icons">
-                                        <input type="checkbox" id="" class="checkbox" name="" value="${photo.file}" data-thumb="${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}" data-dimension="${photo.dimension}">
+                                        <input type="checkbox" id="photo${i}" class="checkbox" name="" value="${photo.file}" data-thumb="${photo.thumb}" data-url="${photo.url}" data-size="${photo.size}" data-dimension="${photo.dimension}">
                                     </span>
                                     <span class="icons">
                                         <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>

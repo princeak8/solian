@@ -22,6 +22,12 @@ use App\Services\Product\SizeService;
 
 class FileService
 {
+    private $collectionService;
+
+    public function __construct()
+    {
+        $this->collectionService = new CollectionService;
+    }
 
     public function save($file, $file_type, $user_id)
     {
@@ -95,8 +101,8 @@ class FileService
     public function addDropBoxPhoto($photo, $user_id, $category)
     {
         $fileObj = new File;
-        if($category == 'collection' && !empty($photo->collection_id)) {
-            $collection = $this->collectionService->collection($photo->collection_id);
+        if($category == 'collection' && !empty($photo['collection_id'])) {
+            $collection = $this->collectionService->collection($photo['collection_id']);
             if($collection->photo->file) $fileObj = $collection->photo->file;
         }
         

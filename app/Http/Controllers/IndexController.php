@@ -27,8 +27,8 @@ class IndexController extends BaseController
 
     public function __construct()
     {
-        $this->middleware('adminAuth');
-        new BaseController;
+        //$this->middleware('adminAuth');
+        //new BaseController;
         $this->productService = new ProductService;
         $this->collectionService = new CollectionService;
         $this->photoService = new PhotoService;

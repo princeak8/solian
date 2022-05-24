@@ -23,11 +23,13 @@ class CollectionRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|string',
+        $rules = [
             'description' => 'required|string',
             'products' => 'array',
             'products.*' => 'integer',
         ];
+        
+        $rules['name'] = ($this->request->has('id') && $this->request->get('id')==null) ? 'required|string|min:1|unique:collections' : 'string|min:1|unique:collections,id,'.$this->request->get('id');
+        return $rules;
     }
 }
