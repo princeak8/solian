@@ -84,6 +84,13 @@
             </select>
         <div class="card-body">
             @include('inc.message')
+            <p id="msg" class="text-center alert d-none"></p>
+
+            <!-- Removing Photo -->
+            <h5 id="removing" class="alert alert-light d-none">Removing photo...
+                <img src="{{asset('/assets/img/deleting.gif') }}" alt="">
+            </h5>
+
             <div class="row">
                 <div class="col-md-12 mt-5">
                     @if($products->count() > 0)
@@ -96,10 +103,7 @@
                                             <img src="{{$photo->file->thumb}}" height="150" alt="">
                                             <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                                 <span class="icons">
-                                                    <input type="checkbox" id="" class="checkbox" name="" value="{{$photo->file->path}}" data-thumb="{{$photo->file->thumb}}" data-url="{{$photo->file->url}}" data-size="{{$photo->file->size}}">
-                                                </span>
-                                                <span class="icons">
-                                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                    <a href="javascript:void(0)"><i class="fa fa-trash remove" aria-hidden="true" data-id="{{$photo->id}}" onclick="confirm('Are you Sure you want to remove this photo?')"></i></a>
                                                 </span>
                                             </div>
                                         </div>
@@ -126,81 +130,55 @@
 @section('js')
     <script type="application/javascript">
 
-         $("#top-linksId").on('click', 'a', function () {
-            $("#top-linksId a.activv").removeClass("activv");
-            // adding classname 'activv' to current clicked a 
-            $(this).addClass("activv");
-        });
-
-        function addPhotos()
-            {
-                //Adding selected photos to their corresponding categories
-                //console.log('adding photos');
-                //console.log(checkedPhotosArr);
-                let category = $('input[name=category]').val();
-                //if(category=='product') {
-                let id = 0;
-                let errorMsg = '';
-                switch(category) {
-                    case 'product' : id = $('select[name=product-id]').val(); errorMsg = "please choose a product"; break;
-                    case 'collection' : id = $('select[name=collection-id]').val(); errorMsg = "please choose a collection"; break;
+        $('.remove').click(function() {
+            const id = $(this).data('id');
+            console.log('id:',id);
+            isDeleting(true);
+            let url = "{{url('admin/photo/remove/')}}/"+id;
+            axios.get(url)
+            .then((res) => {
+                console.log('response: ',res);
+                isDeleting(false);
+                if(res.status == 200) {
+                    let ele = $(this).parent().parent().parent().parent();
+                    ele.remove();
                 }
-                if(id != '') {
-                    //When the save button has been clicked
-                    isAdding(true);
-                    //Make a POST Request using axios to Add photos to products
-                    let url = "{{url('admin/photo/add_to_category')}}";
-                    var token = $('meta[name="csrf-token"]').attr('content');
-                    let formData =  {photos: checkedPhotosArr, id: id, category: category, _token: token};
-                    console.log('formdata: ',formData);
-                        
-                    axios.post(url, formData)
-                    .then((res) => {
-                        console.log('response: ',res);
-                        isAdding(false);
-                        if(res.status == 200) {
-                            checkedPhotosArr.forEach(({ file }) => {
-                                file = getFilenumber(file);
-                                $('#'+file).remove();
-                            })
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        isAdding(false);
-                    })
+            })
+            .catch((error) => {
+                console.log(error);
+                isDeleting(false);
+            })
+        })
 
-                }else{
-                    console.log(errorMsg);
-                    $('#errors span').html('Error: '+errorMsg);
-                    $('#errors').removeClass('d-none');
-                }
-                
-            }
-        function removeSelectCategories()
-            {
-                $('.categorySelect').each(function(e) {
+        function isDeleting(status)
+        {
+            if(status){ 
+                $('#removing').removeClass('d-none');
+                $('.fa-trash').each(function() {
                     $(this).addClass('d-none');
                 })
+            }else{
+                $('#removing').addClass('d-none');
+                $('.fa-trash').each(function() {
+                    $(this).removeClass('d-none');
+                })
             }
-        function switchCategory(category)
-            {
-                console.log('switch category');
-                $('input[name=category]').val(category);
-                switch(category) {
-                    case 'product' : 
-                        removeSelectCategories();
-                        $('#product-select').removeClass('d-none');
-                        break;
-                    case 'collection' : 
-                        removeSelectCategories();
-                        $('#collection-select').removeClass('d-none');
-                        break;
-                    case 'slide' : 
-                        removeSelectCategories();
-                        break;
-                }
-            }
+        }
+
+        function addMsg(msg, success=true)
+        {
+            $('#msg').html(msg);
+            (success) ? $('#msg').addClass('alert-success') : $('#msg').addClass('alert-danger');
+            $('#msg').removeClass('d-none');
+        }
+
+        function removeMsg()
+        {
+            $('#msg').html('');
+            $('#msg').removeClass('alert-danger');
+            $('#msg').removeClass('alert-success');
+            $('#msg').addClass('d-none');
+        }
 
     </script>
    

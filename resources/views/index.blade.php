@@ -71,7 +71,9 @@
 
            
         <div>
-            @include('inc.new_arrivals')
+            @if($newArrivals->$products && $newArrivals->$products->count() > 0)
+                @include('inc.new_arrivals')
+            @endif
             
             @foreach($collections as $collection)
                 @if($collection->products->count() > 0)

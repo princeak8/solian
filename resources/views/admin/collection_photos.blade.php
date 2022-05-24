@@ -77,17 +77,30 @@
 
         <div class="card-body">
             @include('inc.message')
+            <p id="msg" class="text-center alert d-none"></p>
+            
+            <!-- Adding Photo to Collection -->
+            <h5 id="adding" class="alert alert-light d-none">Adding photos...
+                <img src="{{asset('/assets/img/file-transfer.gif') }}" alt="">
+            </h5>
+
+            <!-- Removing Photo -->
+            <h5 id="removing" class="alert alert-light d-none">Removing photo...
+                <img src="{{asset('/assets/img/deleting.gif') }}" alt="">
+            </h5>
+            
             <div id="collectionPhotos" class="row mt-5">
-                @if(count($photos) > 0)
+                @if(count($photos) > 0) <?php $i = 0; ?>
                     @foreach($photos as $photo)
-                        <div class="col-md-3 productPhotos">
+                        <?php $i++; ?>
+                        <div class="col-md-3 productPhotos mt-4 text-center">
                             <img src="{{$photo->thumb}}" height="150" alt="">
-                            @if($photo->name != null) <p>{{$photo->name}}</p> @endif
+                            @if($photo->name != null) <p style='margin:0px; padding: 0px;'>{{$photo->name}}</p> @endif
                             <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                 <span class="icons">
                                     <input 
-                                        type="radio" name="collectionPhoto" class="collection-box" value="{{$photo->file}}" data-id="{{$photo->collection_id}}" 
-                                        data-thumb="{{$photo->thumb}}" data-url="{{$photo->url}}" data-size="{{$photo->size}}"
+                                        type="radio" id="photo{{$i}}" name="collectionPhoto" class="collection-box" value="{{$photo->file}}" data-selected="photo{{$i}}"
+                                        data-id="{{$photo->collection_id}}" data-thumb="{{$photo->thumb}}" data-url="{{$photo->url}}" data-size="{{$photo->size}}"
                                     />
                                 </span>
                                 <span class="icons">
@@ -111,80 +124,114 @@
 
 @section('js')
     <script type="application/javascript">
-          $("#top-linksId").on('click', 'a', function () {
-            $("#top-linksId a.activv").removeClass("activv");
-            // adding classname 'activv' to current clicked a 
-            $(this).addClass("activv");
+        var checkedPhoto = {};
+        $(document).on('click', '.collection-box', function(e){
+            console.log('clicked');
+            // let ele = $(this).parent().parent();
+            // console.log(ele);
+            // $("<p style='margin:0px; padding: 0px;'>My name</p>").insertBefore(ele);
+            if(this.checked == true) {
+                let file = this.value;
+                let thumb = $(this).data("thumb");
+                let url = $(this).data("url");
+                let size = $(this).data("size");
+                let collection_id = $(this).data("id");
+                let selected = $(this).data("selected");
+                checkedPhoto = {file, thumb, url, size, collection_id, selected};
+                (collection_id != '') ? $('select[name=collection-id').val(collection_id).change() : $('select[name=collection-id').val('').change();
+                console.log(checkedPhoto);
+            }
         });
-        function addPhotos()
-            {
-                //Adding selected photos to their corresponding categories
-                //console.log('adding photos');
-                //console.log(checkedPhotosArr);
-                let category = $('input[name=category]').val();
-                //if(category=='product') {
-                let id = 0;
-                let errorMsg = '';
-                switch(category) {
-                    case 'product' : id = $('select[name=product-id]').val(); errorMsg = "please choose a product"; break;
-                    case 'collection' : id = $('select[name=collection-id]').val(); errorMsg = "please choose a collection"; break;
-                }
-                if(id != '') {
-                    //When the save button has been clicked
-                    isAdding(true);
-                    //Make a POST Request using axios to Add photos to products
-                    let url = "{{url('admin/photo/add_to_category')}}";
-                    var token = $('meta[name="csrf-token"]').attr('content');
-                    let formData =  {photos: checkedPhotosArr, id: id, category: category, _token: token};
-                    console.log('formdata: ',formData);
-                        
-                    axios.post(url, formData)
-                    .then((res) => {
-                        console.log('response: ',res);
-                        isAdding(false);
-                        if(res.status == 200) {
-                            checkedPhotosArr.forEach(({ file }) => {
-                                file = getFilenumber(file);
-                                $('#'+file).remove();
-                            })
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        isAdding(false);
-                    })
 
-                }else{
-                    console.log(errorMsg);
-                    $('#errors span').html('Error: '+errorMsg);
-                    $('#errors').removeClass('d-none');
-                }
-                
-            }
-        function removeSelectCategories()
-            {
-                $('.categorySelect').each(function(e) {
-                    $(this).addClass('d-none');
+        //Get the radiobox that is attached to a particular collection if it exists
+        function getAttached(collectionId)
+        {
+            var radiobox = '';
+            $('.collection-box').each(function() {
+                if($(this).data('id') == collectionId) radiobox = $(this);
+            })
+            return radiobox;
+        }
+
+        function addPhotos()
+        {
+            //Adding selected photo to the collection
+            let category = 'collection';
+            let id = 0;
+            let errorMsg = "please choose a Collection";
+            id = $('select[name=collection-id]').val();
+            var attachedRadiobox = getAttached(id);
+            if(attachedRadiobox != '') checkedPhoto.collection_id = attachedRadiobox.data('id');
+            if(id != '') {
+                //When the save button has been clicked
+                isAdding(true);
+                //Make a POST Request using axios to Add photo to collection
+                let url = "{{url('admin/photo/add_to_category')}}";
+                var token = $('meta[name="csrf-token"]').attr('content');
+                let formData =  {photos: checkedPhoto, id: id, category: category, _token: token};
+                console.log('formdata: ',formData);
+                        
+                axios.post(url, formData)
+                .then((res) => {
+                    console.log('response: ',res);
+                    isAdding(false);
+                    if(res.status == 200) {
+                        //console.log(attachedRadiobox);
+                        if(attachedRadiobox != '') {
+                            attachedRadiobox.data('id', '');
+                            attachedRadiobox.parent().parent().siblings('p').remove();
+                        }
+                        let ele = $('#'+checkedPhoto.selected).parent().parent();
+                        //console.log(ele);
+                        $(`<p style='margin:0px; padding: 0px;'>${res.data.name}</p>`).insertBefore(ele);
+                    }
                 })
+                .catch((error) => {
+                    console.log(error);
+                    isAdding(false);
+                })
+
+            }else{
+                console.log(errorMsg);
+                addMsg(errorMsg, false);
+                setInterval(()=>{  
+                    removeMsg();
+                }, 5000);
             }
-        function switchCategory(category)
-            {
-                console.log('switch category');
-                $('input[name=category]').val(category);
-                switch(category) {
-                    case 'product' : 
-                        removeSelectCategories();
-                        $('#product-select').removeClass('d-none');
-                        break;
-                    case 'collection' : 
-                        removeSelectCategories();
-                        $('#collection-select').removeClass('d-none');
-                        break;
-                    case 'slide' : 
-                        removeSelectCategories();
-                        break;    
-                }
+                
+        }
+
+        function isAdding(status)
+        {
+            if(status){ 
+                $('#adding').removeClass('d-none');
+                $('.fa-trash').addClass('delete');
+                $('.collection-box').each(function() { 
+                    $(this).prop("disabled", true);
+                }); 
+            }else{
+                $('#adding').addClass('d-none');
+                $('.fa-trash').removeClass('delete');
+                $('.collection-box').each(function() { 
+                    $(this).prop("disabled", false);
+                });
             }
+        }
+
+        function addMsg(msg, success=true)
+        {
+            $('#msg').html(msg);
+            (success) ? $('#msg').addClass('alert-success') : $('#msg').addClass('alert-danger');
+            $('#msg').removeClass('d-none');
+        }
+
+        function removeMsg()
+        {
+            $('#msg').html('');
+            $('#msg').removeClass('alert-danger');
+            $('#msg').removeClass('alert-success');
+            $('#msg').addClass('d-none');
+        }
 
     </script>
 

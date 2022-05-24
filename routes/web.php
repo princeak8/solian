@@ -18,8 +18,10 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', 'IndexController@index');
+Route::get('/collection/{name}', 'CollectionController@show');
+Route::get('/product/{name}', 'ProductController@show');
 
-Route::post('/upload', 'IndexController@upload');
+//Route::post('/upload', 'IndexController@upload');
 
 //Admin routes
 Route::group([
@@ -51,6 +53,7 @@ Route::group([
     Route::post('/photo/add', 'PhotoController@add_photos');
     Route::post('/photo/add_to_category', 'PhotoController@add_to_category');
     Route::get('/photo/delete/{id}', 'PhotoController@delete');
+    Route::get('/photo/remove/{id}', 'PhotoController@remove');
 
     Route::get('/refresh_dropbox_token', 'DropboxController@refresh_token');
     Route::get('/fetch_dropbox_photos', 'DropboxController@fetch_photos');
@@ -69,24 +72,32 @@ Route::group([
 
     //Products routes
     Route::get('/products', 'ProductController@index');
-    Route::get('/product/create', 'ProductController@product_form');
-    Route::get('/product/edit/{id}', 'ProductController@product_form');
-    Route::post('/product/save', 'ProductController@save');
-    Route::post('/product/update', 'ProductController@update');
-    Route::get('/product/delete/{id}', 'ProductController@delete');
-    Route::post('/product/change_main', 'ProductController@change_main');
-    Route::post('/product/photo/save', 'ProductController@add_photo');
-    Route::get('/product/photo/delete/{id}', 'PhotoController@delete');
-    Route::get('/product/{id}', 'ProductController@show');
+    Route::group([
+        'prefix'        => '/product',
+    ],function(){
+        Route::get('/create', 'ProductController@product_form');
+        Route::get('/edit/{id}', 'ProductController@product_form');
+        Route::post('/save', 'ProductController@save');
+        Route::post('/update', 'ProductController@update');
+        Route::get('/delete/{id}', 'ProductController@delete');
+        Route::post('/change_main', 'ProductController@change_main');
+        Route::post('/photo/save', 'ProductController@add_photo');
+        Route::get('/photo/delete/{id}', 'PhotoController@delete');
+        Route::get('/{id}', 'ProductController@show');
+    });
 
     //collection routes
     Route::get('/collections', 'CollectionController@index');
-    Route::get('/collection/create', 'CollectionController@collection_form');
-    Route::get('/collection/edit/{id}', 'CollectionController@collection_form');
-    Route::post('/collection/save', 'CollectionController@save');
-    Route::post('/collection/photo/save', 'CollectionController@change_photo');
-    Route::get('/collection/delete/{id}', 'CollectionController@delete');
-    Route::get('/collection/{id}', 'CollectionController@show');
+    Route::group([
+        'prefix'        => '/collection',
+    ],function(){
+        Route::get('/create', 'CollectionController@collection_form');
+        Route::get('/edit/{id}', 'CollectionController@collection_form');
+        Route::post('/save', 'CollectionController@save');
+        Route::post('/photo/save', 'CollectionController@change_photo');
+        Route::get('/delete/{id}', 'CollectionController@delete');
+        Route::get('/{id}', 'CollectionController@show');
+    });
 
     //slide routes
     Route::get('/slides', 'PhotoController@slides');

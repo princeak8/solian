@@ -240,13 +240,16 @@ class PhotoController extends Controller
     {
         try{
             $post = $request->all();
-            if(($post['category'] != 'slide') && $this->validate_category_id($post['id'], $post['category'])) {
+            $categoryObj = $this->validate_category_id($post['id'], $post['category']);
+            if(($post['category'] != 'slide') && $categoryObj) {
                 $fileIds = $this->addPhotosToFile($post['photos'], auth::user()->id, $post['category']);
-                if($post['category'] != 'collection' || ($post['category'] == 'collection' && empty($post['photos']->collection_id))) {
+                if($post['category'] != 'collection' || ($post['category'] == 'collection' && empty($post['photos']['collection_id']))) {
+                    dd('dont!');
                     ($post['category']=='collection') ? $this->photoService->addPhotoToCategory($fileIds, $post['id'], $post['category']) : $this->photoService->addPhotosToCategory($fileIds, $post['id'], $post['category']);
                 }
                 return response()->json([
                     'statusCode' => 200,
+                    'name' => $categoryObj->name,
                     'message' => 'Photo added successfully'
                 ], 200);
             }else{
@@ -264,6 +267,41 @@ class PhotoController extends Controller
         }
     }
 
+    public function remove($id)
+    {
+        try{
+            $photo = $this->photoService->photo($id);
+            if($photo) {
+                $photo->delete();
+                $this->refresh_photos('product');
+                return response()->json([
+                    'statusCode' => 200,
+                    'message' => 'Photo deleted successfully'
+                ], 200);
+            }else{
+                return response()->json([
+                    'statusCode' => 404,
+                    'message' => 'Photo not found'
+                ], 404);
+            }
+        }catch(\Exception $th) {
+            \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+            return response()->json([
+                'statusCode' => 500,
+                'message' => 'An error occured, please contact the Administrator'
+            ], 500);
+        }
+    }
+
+    private function refresh_photos($category)
+    {
+        switch($category) {
+            case 'product' : $this->photoService->getDropboxProductPhotos(1, true); break;
+            case 'collection' : $this->photoService->getDropboxCollectionPhotos(true); break;
+            case 'slide' : $this->photoService->getDropboxSlidePhotos(true); break;
+        }
+    } 
+
     //Validating that the id i.e product_id/collection_id is valid
     private function validate_category_id($id, $category)
     {
@@ -279,6 +317,9 @@ class PhotoController extends Controller
     */
     private function addPhotosToFile($photos, $user_id, $category) 
     {
+        //dd($photos);
         return ($category=='collection') ? $this->fileService->addDropBoxPhoto($photos, $user_id, $category) : $this->fileService->addDropBoxPhotos($photos, $user_id, $category);
     }
+
+    
 }

@@ -66,7 +66,7 @@
                                 <input type="file" class="form-control input-file" data-id="collection-image" name="photo" accept="image/*" @if($collection->id == null) required @endif />
                             </div>
                         @endif -->
-                        
+                        <input type="hidden" name="id" value="{{$collection->id}}" />
                         <div class="form-group">
                             {{ Form::submit(__('Save'), array('class'=>'form-control  mt-4 btn btn-primary'))}}
                         </div>

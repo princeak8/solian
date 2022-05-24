@@ -42,4 +42,15 @@ class Photo extends Model
         }
         return $slides;
     }
+
+    public static function boot ()
+    {
+        parent::boot();
+
+        self::deleting(function (Photo $photo) {
+
+            if($photo->file) $photo->file->delete();
+            
+        });
+    }
 }
