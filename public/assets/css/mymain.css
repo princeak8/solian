@@ -51,20 +51,59 @@
 .content-wrapper img{
     object-fit: cover!important;
 }
+/* ....................... */
+/* .section-title {
+	margin-bottom: 45px;
+}
+
+.section-title h4 {
+
+}
+
+.section-title h4:after {
+	position: absolute;
+	left: 0;
+	bottom: -4px;
+	height: 2px;
+	width: 70px;
+	background: #ca1515;
+	content: "";
+} */
+
+/* ............................. */
 
 .text-wrapper{
-width: 100%;
-position:relative;
-margin-top: -25%;
+  margin-top: -25%;
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
 }
 .text-wrapper h2{
     text-align: center;
     color: seashell;
 }
-.text-wrapper .btn{
+.text-wrapper h4{
+  color: #111111;
+	font-weight: 600;
+	text-transform: uppercase;
+	position: relative;
+	display: inline-block;
+  /* text-align: center; */
+
+}
+.text-wrapper h4:after {
+	position: absolute;
+	left: 0;
+	bottom: -1px;
+	height: 2px;
+	width: 70px;
+	background: #ca1515;
+	content: "";
+}
+/* .text-wrapper .btn{
     margin-left: 42%;
      
-}
+} */
 .home-blog{
     height: 50em;
 }
