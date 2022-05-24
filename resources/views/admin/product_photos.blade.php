@@ -143,6 +143,7 @@
                     let ele = $(this).parent().parent().parent().parent();
                     ele.remove();
                 }
+                refreshPhotos();
             })
             .catch((error) => {
                 console.log(error);
@@ -163,6 +164,18 @@
                     $(this).removeClass('d-none');
                 })
             }
+        }
+
+        function refreshPhotos() 
+        {
+            let url = "{{url('admin/photo/refresh/product')}}";
+            axios.get(url)
+            .then((res) => {
+                console.log('response: ',res);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
         }
 
         function addMsg(msg, success=true)

@@ -43,9 +43,8 @@ class IndexController extends BaseController
             $company = new Company;
         }
         $products = $this->productService->products();
-        $collections = $this->collectionService->collections();
+        $collections = $this->collectionService->collections(false);
         $newArrivals = $this->collectionService->newArrivals();
-        //dd($newArrivals);
         $slides = $this->photoService->slidePhotos();
         /*foreach($products as $product) {
             foreach($product->product_sizes as $productSize) {

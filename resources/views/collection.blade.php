@@ -8,7 +8,7 @@
 
 <section class="product spad">
     <div class="container-fluid">
-        <div class="row">
+        <div class="row mt-5">
             <div class="justify-content-center">
                 <div class="section-title ml-5">
                     <h4>{{$collection->name}}</h4>
@@ -52,7 +52,7 @@
                                 </ul>
                             </div>
                             <div class="product__item__text">
-                                <h6><a href="{{url('product/'.$product->name)}}">{{$product->name}}11</a></h6>
+                                <h6><a href="{{url('product/'.$product->name)}}">{{$product->name}}</a></h6>
                                 <!--
                                 <div class="rating">
                                     <i class="fa fa-star"></i>

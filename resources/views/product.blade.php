@@ -27,15 +27,16 @@
                     <div class="product__details__pic">
                         <div class="product__details__slider__content">
                             <div class="product__details__pic__slider owl-carousel">
-                                @foreach($product->photos as $photo)
-                                    <img data-hash="product-{{$photo->id}}" class="product__big__img" src="{{$photo->file->secure_url}}" alt="">
+                                @foreach($product->photos as $photo) 
+                                    <img data-hash="product-{{$photo->id}}" class="product__big__img" src="{{$photo->file->url}}" alt="">
                                 @endforeach
                             </div>
                         </div>
                     </div>
                     <div class=" container row">
                         @foreach($product->photos as $photo)
-                            <a class="pt mt-2 @if($product->main==$photo->file->secure_url) active @endif" href="#product-{{$photo->id}}">
+                            <p>{{$photo->id}}</p>
+                            <a class="pt mt-2 @if($product->mainId==$photo->id) active @endif" href="#product-{{$photo->id}}">
                                 <img src="{{$photo->file->thumb}}" alt="" style="padding:0">
                             </a>
                         @endforeach

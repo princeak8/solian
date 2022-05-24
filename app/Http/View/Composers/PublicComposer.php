@@ -4,19 +4,16 @@ namespace App\Http\View\Composers;
 
 use Illuminate\View\View;
 
-use App\Models\Currency;
-use App\Models\Currency_rate;
-use App\Models\Collection;
+use App\Services\Product\CollectionService;
 
 class PublicComposer
 {
-    protected $currencies;
-    protected $collections;
+    private $collectionService;
 
     public function __construct()
     {
         //$this->currencies = Currency::all();
-        $this->collections = Collection::where('deleted', '0')->orderBy('created_at', 'desc')->get();
+        $this->collectionService = new CollectionService;
     }
 
     /**
@@ -27,7 +24,7 @@ class PublicComposer
      */
     public function compose(View $view)
     {
-        $view->with('collections', $this->collections);
+        $view->with('collections', $this->collectionService->collections())->with('newArrivals', $this->collectionService->newArrivals());
     }
 }
 

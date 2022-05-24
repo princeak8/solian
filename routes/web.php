@@ -55,6 +55,8 @@ Route::group([
     Route::get('/photo/delete/{id}', 'PhotoController@delete');
     Route::get('/photo/remove/{id}', 'PhotoController@remove');
 
+    Route::get('/photo/refresh/{category}', 'PhotoController@refresh_photos');
+
     Route::get('/refresh_dropbox_token', 'DropboxController@refresh_token');
     Route::get('/fetch_dropbox_photos', 'DropboxController@fetch_photos');
 

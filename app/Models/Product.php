@@ -28,10 +28,10 @@ class Product extends Model
         $firstPhoto = '';
         foreach($this->photos as $photo) {
             if(empty($firstPhoto)) {
-                $firstPhoto = $photo->file->secure_url;
+                $firstPhoto = $photo->file->url;
             }
             if($photo->main == 1) {
-                $mainPhoto = $photo->file->secure_url;
+                $mainPhoto = $photo->file->url;
             }
         }
         if(empty($mainPhoto)) {
@@ -39,6 +39,24 @@ class Product extends Model
         }
         if(empty($mainPhoto)) $mainPhoto = env('APP_URL')."public/images/no_pic.png";
         return $mainPhoto;
+    }
+
+    public function getMainIdAttribute()
+    {
+        $mainPhoto = '';
+        $firstPhoto = '';
+        foreach($this->photos as $photo) {
+            if(empty($firstPhoto)) {
+                $firstPhoto = $photo;
+            }
+            if($photo->main == 1) {
+                $mainPhoto = $photo;
+            }
+        }
+        if(empty($mainPhoto)) {
+            $mainPhoto = $firstPhoto;
+        }
+        return (empty($mainPhoto)) ? '' : $mainPhoto->id;
     }
 
     public function getMainthumbAttribute()

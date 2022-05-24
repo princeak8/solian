@@ -273,7 +273,7 @@ class PhotoController extends Controller
             $photo = $this->photoService->photo($id);
             if($photo) {
                 $photo->delete();
-                $this->refresh_photos('product');
+                //$this->refresh_photos('product');
                 return response()->json([
                     'statusCode' => 200,
                     'message' => 'Photo deleted successfully'
@@ -293,12 +293,24 @@ class PhotoController extends Controller
         }
     }
 
-    private function refresh_photos($category)
+    public function refresh_photos($category)
     {
-        switch($category) {
-            case 'product' : $this->photoService->getDropboxProductPhotos(1, true); break;
-            case 'collection' : $this->photoService->getDropboxCollectionPhotos(true); break;
-            case 'slide' : $this->photoService->getDropboxSlidePhotos(true); break;
+        try{
+            switch($category) {
+                case 'product' : $this->photoService->getDropboxProductPhotos(1, true); break;
+                case 'collection' : $this->photoService->getDropboxCollectionPhotos(true); break;
+                case 'slide' : $this->photoService->getDropboxSlidePhotos(true); break;
+            }
+            return response()->json([
+                'statusCode' => 200,
+                'message' => 'Photos refreshed successfully'
+            ], 200);
+        }catch(\Exception $th) {
+            \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+            return response()->json([
+                'statusCode' => 500,
+                'message' => 'An error occured, please contact the Administrator'
+            ], 500);
         }
     } 
 

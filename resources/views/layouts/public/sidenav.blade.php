@@ -150,7 +150,7 @@
                     <nav class="header__menu">
                         <ul>
                             <li class="active"><a href="{{url('/')}}">Home</a></li>
-                            <li><a href="#">New Arrivals</a></li>
+                            <li><a href="{{url('collection/'.$newArrivals->name)}}">New Arrivals</a></li>
                             <li><a href="#">Collections<span class="fas fa-caret-down down"></span></a>
                                 <ul class="dropdown">
                                     @foreach($collections as $collection)

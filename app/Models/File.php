@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Storage;
+
 class File extends Model
 {
     use HasFactory;
@@ -35,5 +37,10 @@ class File extends Model
             $full = $this->secure_url;
         }
         return $thumbnail;
+    }
+
+    public function getUrlAttribute()
+    {
+        return Storage::disk('dropbox')->url($this->path);
     }
 }

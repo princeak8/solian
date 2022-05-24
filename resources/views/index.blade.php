@@ -9,7 +9,7 @@
             @if($slides->count() > 0) {
                 @foreach($slides as $slide)
                     <div class="carousel-item @if($slide->active==1) active @endif">
-                        <img class="d-block w-100" src="{{$slide->file->secure_url}}" alt="First slide">
+                        <img class="d-block w-100" src="{{$slide->file->url}}" alt="First slide">
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-6 col-md-offset-3 col-md-push-3 col-sm-12 col-xs-12">	
@@ -71,7 +71,7 @@
 
            
         <div>
-            @if($newArrivals->$products && $newArrivals->$products->count() > 0)
+            @if($newArrivals->products && $newArrivals->products->count() > 0)
                 @include('inc.new_arrivals')
             @endif
             
