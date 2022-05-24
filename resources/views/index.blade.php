@@ -80,7 +80,7 @@
                     <div class="section-title ml-5">
                         <h4>{{strtoupper($collection->name)}} Collection</h4>
                     </div>
-                    <div class="row col-11 ml-3 offset-1 property__gallery space">
+                    <div class="row col-11 ml-3 offset-1 property__gallery space"  style="display: flex; justify-content: center;">
                     
                         @foreach($collection->products as $product)
                             <div class="col-lg-3 col-md-4 col-6 mix women men kid accessories cosmetic">
@@ -154,7 +154,7 @@
                             <img class="lazyload" data-src="{{$collection->image}}" alt="" style="border: solid 1px red; height: 28em; margin: 3em 3em;">     
                         </div>
                         <div class="text-wrapper">
-                            <h4>{{$collection->name}}</h4>
+                            <span class="text-underline"><h5>{{$collection->name}}</h5></span>
                             <a href="{{url('collection/'.$collection->name)}}" class="btn btn-warning">Shop now</a>
                         </div>
                     </div> 

@@ -6,7 +6,7 @@
             <div class="col-lg-4 col-md-6 col-sm-7">
                 <div class="footer__about">
                     <div class="footer__logo">
-                        <a href="./index.html"><img src="{{asset('assets/img/logo.png')}}" alt=""></a>
+                        <a href="{{url('/')}}"><img src="{{asset('assets/img/solian logo.png')}}" alt=""></a>
                     </div>
                     <div class="footer__payment">
                         <a href="#"><img src="{{asset('assets/img/payment/payment-1.png')}}" alt=""></a>

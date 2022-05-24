@@ -36,7 +36,7 @@
                     <div class=" container row">
                         @foreach($product->photos as $photo)
                             <a class="pt mt-2 @if($product->main==$photo->file->secure_url) active @endif" href="#product-{{$photo->id}}">
-                                <img src="{{$photo->file->thumb}}" alt="" style="padding:0">
+                                <img src="{{$photo->file->thumb}}" alt="" style="height: 10em; margin-left: 1em; padding:0">
                             </a>
                         @endforeach
                     </div>
