@@ -244,7 +244,6 @@ class PhotoController extends Controller
             if(($post['category'] != 'slide') && $categoryObj) {
                 $fileIds = $this->addPhotosToFile($post['photos'], auth::user()->id, $post['category']);
                 if($post['category'] != 'collection' || ($post['category'] == 'collection' && empty($post['photos']['collection_id']))) {
-                    dd('dont!');
                     ($post['category']=='collection') ? $this->photoService->addPhotoToCategory($fileIds, $post['id'], $post['category']) : $this->photoService->addPhotosToCategory($fileIds, $post['id'], $post['category']);
                 }
                 return response()->json([

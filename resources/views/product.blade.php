@@ -35,9 +35,8 @@
                     </div>
                     <div class=" container row">
                         @foreach($product->photos as $photo)
-                            <p>{{$photo->id}}</p>
                             <a class="pt mt-2 @if($product->mainId==$photo->id) active @endif" href="#product-{{$photo->id}}">
-                                <img src="{{$photo->file->thumb}}" alt="" style="padding:0">
+                                <img src="{{$photo->file->thumb}}" alt="" style="height: 10em; margin-left: 1em; padding:0">
                             </a>
                         @endforeach
                     </div>

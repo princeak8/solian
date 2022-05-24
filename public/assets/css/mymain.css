@@ -51,19 +51,54 @@
 .content-wrapper img{
     object-fit: cover!important;
 }
+/* ....................... */
+/* .section-title {
+	margin-bottom: 45px;
+}
+
+.section-title h4 {
+
+}
+
+.section-title h4:after {
+	position: absolute;
+	left: 0;
+	bottom: -4px;
+	height: 2px;
+	width: 70px;
+	background: #ca1515;
+	content: "";
+} */
+
+/* ............................. */
 
 .text-wrapper{
-width: 100%;
-position:relative;
-margin-top: -25%;
+  margin-top: -25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .text-wrapper h2{
     text-align: center;
     color: seashell;
 }
+.text-wrapper .text-underline{
+  display: flex;
+  justify-content: center;
+  margin: 1em  0;
+}
+.text-underline h5{
+  color: #111111;
+	font-weight: 500;
+	text-transform: uppercase;
+	/* position: relative; */
+	display: inline-block;
+  text-align: center;
+  border-bottom: 2px solid #ca1515;
+}
 .text-wrapper .btn{
-    margin-left: 42%;
-     
+  display: flex;
+  align-self: center;     
 }
 .home-blog{
     height: 50em;
