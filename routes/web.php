@@ -50,6 +50,7 @@ Route::group([
     Route::get('/collection_photos', 'PhotoController@collection_photos');
     Route::get('/refresh_collection_photos', 'PhotoController@refresh_collection_photos');
     Route::get('/slide_photos', 'PhotoController@slide_photos');
+    Route::get('/refresh_slide_photos', 'PhotoController@refresh_slide_photos');
     Route::post('/photo/add', 'PhotoController@add_photos');
     Route::post('/photo/add_to_category', 'PhotoController@add_to_category');
     Route::get('/photo/delete/{id}', 'PhotoController@delete');

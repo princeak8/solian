@@ -108,7 +108,7 @@
                     <span class="fas fa-caret-down down"></span>
                 </a>
                 <ul class="dropdown">
-                    @foreach(Session::get('all_currencies') as $currency)
+                    @foreach($currencies as $currency)
                         <li id="m-{{$currency->name}}" @if($currency->active==1) class="d-none" @endif>
                             <a href="javascript::void(0)" onclick="switch_currency('{{$currency->name}}')">{{$currency->name}}</a>
                         </li>
@@ -178,7 +178,7 @@
                                     <span class="fas fa-caret-down down"></span>
                                 </a>
                                 <ul id="currency-select" class="dropdown">
-                                    @foreach(Session::get('all_currencies') as $currency)
+                                    @foreach($currencies as $currency)
                                         <li id="d-{{$currency->name}}" @if($currency->active==1) class="d-none" @endif>
                                             <a href="javascript::void(0)" onclick="switch_currency('{{$currency->name}}')">{{$currency->name}}</a>
                                         </li>

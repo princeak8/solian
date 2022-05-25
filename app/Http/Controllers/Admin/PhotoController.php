@@ -188,17 +188,34 @@ class PhotoController extends Controller
         return view('admin/collection_photos', compact('photos', 'collections'));
     }
 
-    public function slide_photos()
+    public function refresh_slide_photos()
+    {
+        return $this->slide_photos(true);
+    }
+
+    public function slide_photos($force=false)
     {
         $photos = [];
         try{
-            $photos = $this->photoService->slidePhotos();
-            $products = $this->productService->products();
-            $collections = $this->collectionService->collections();
+            $photos = $this->photoService->getDropboxSlidePhotos($force);
+            $slideFiles = $this->photoService->slidesAsFiles();
+            $filesArr = [];
+            if(count($slideFiles) > 0) {
+                $filesArr = array_keys($slideFiles); //generate an array of the paths of the slide photo files
+            }
+            if(count($photos) > 0) {
+                foreach($photos as $photo) {
+                    if(in_array($photo->file, $filesArr)) {
+                        $photo->active = true;
+                    }else{
+                        $photo->active = false;
+                    }
+                }
+            }
         } catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
         }
-        return view('admin/slide_photos', compact('photos', 'products', 'collections'));
+        return view('admin/slide_photos', compact('photos'));
     }
 
     public function add_photos(AddPhotosRequest $request)
@@ -240,23 +257,34 @@ class PhotoController extends Controller
     {
         try{
             $post = $request->all();
-            $categoryObj = $this->validate_category_id($post['id'], $post['category']);
-            if(($post['category'] != 'slide') && $categoryObj) {
-                $fileIds = $this->addPhotosToFile($post['photos'], auth::user()->id, $post['category']);
-                if($post['category'] != 'collection' || ($post['category'] == 'collection' && empty($post['photos']['collection_id']))) {
-                    ($post['category']=='collection') ? $this->photoService->addPhotoToCategory($fileIds, $post['id'], $post['category']) : $this->photoService->addPhotosToCategory($fileIds, $post['id'], $post['category']);
+            $photos = $post['photos'];
+            $categoryObj = false;
+            if(($post['category'] != 'slide')) {
+                $categoryObj = $this->validate_category_id($post['id'], $post['category']);
+                if(!$categoryObj) {
+                    return response()->json([
+                        'statusCode' => 404,
+                        'message' => 'Product/Collection does not exist'
+                    ], 404);
                 }
-                return response()->json([
-                    'statusCode' => 200,
-                    'name' => $categoryObj->name,
-                    'message' => 'Photo added successfully'
-                ], 200);
-            }else{
-                return response()->json([
-                    'statusCode' => 404,
-                    'message' => 'Product/Collection does not exist'
-                ], 404);
             }
+            if($post['category'] == 'slide') $photos = $this->photoService->filter_slide_photos($photos);
+
+            if(count($photos) > 0) {
+                $fileIds = $this->addPhotosToFile($photos, auth::user()->id, $post['category']);
+                if($post['category'] != 'collection' || ($post['category'] == 'collection' && empty($photos['collection_id']))) {
+                    switch($post['category']) {
+                        case 'product' : $this->photoService->addPhotosToCategory($fileIds, $post['category'], $post['id']); break;
+                        case 'collection' : $this->photoService->addPhotoToCategory($fileIds, $post['category'], $post['id']); break;
+                        case 'slide' : $this->photoService->addPhotosToCategory($fileIds, $post['category']); break;
+                    } 
+                }
+            }
+            return response()->json([
+                'statusCode' => 200,
+                'name' => ($categoryObj) ? $categoryObj->name : '',
+                'message' => 'Photo added successfully'
+            ], 200);
         }catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
             return response()->json([

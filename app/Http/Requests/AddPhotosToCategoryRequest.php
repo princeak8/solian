@@ -25,11 +25,13 @@ class AddPhotosToCategoryRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'photos' => 'required|array',
-            'category' => 'required|string',
-            'id' => 'required|integer',
+            'category' => 'required|string'
         ];
+        if($this->request->has('category') && $this->request->get('category') != 'slide') $rules['id'] = 'required|integer';
+
+        return $rules;
     }
 
     /**

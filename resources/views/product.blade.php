@@ -28,7 +28,7 @@
                         <div class="product__details__slider__content">
                             <div class="product__details__pic__slider owl-carousel">
                                 @foreach($product->photos as $photo) 
-                                    <img data-hash="product-{{$photo->id}}" class="product__big__img" src="{{$photo->file->url}}" alt="">
+                                    <img data-hash="product-{{$photo->id}}" class="product__big__img" src="{{$photo->file->url}}" alt="" style="height: 40em">
                                 @endforeach
                             </div>
                         </div>

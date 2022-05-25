@@ -46,6 +46,14 @@ class IndexController extends BaseController
         $collections = $this->collectionService->collections(false);
         $newArrivals = $this->collectionService->newArrivals();
         $slides = $this->photoService->slidePhotos();
+        if($slides->count() > 0) {
+            $active = 0;
+            foreach($slides as $slide) {
+                if($active == 0) $slide->active = 1;
+                $active = 1;
+            }
+        }
+        //dd($slides);
         /*foreach($products as $product) {
             foreach($product->product_sizes as $productSize) {
                 dd($productSize->size->size);

@@ -78,6 +78,18 @@ class PhotoService
         return Photo::where('slide', 1)->where('deleted', '0')->get();
     }
 
+    public function slidesAsFiles()
+    {
+        $arr = [];
+        $slides = $this->slides();
+        if($slides->count() > 0) {
+            foreach($slides as $slide) {
+                if($slide->file) $arr[$slide->file->path] = $slide;
+            }
+        }
+        return $arr;
+    }
+
     public function collections()
     {
         return Photo::whereNotNull('collection_id')->where('deleted', '0')->get();
@@ -116,15 +128,15 @@ class PhotoService
         //dd('here');
     }
 
-    public function addPhotosToCategory($fileIds, $id, $category)
+    public function addPhotosToCategory($fileIds, $category, $id=null)
     {
         foreach($fileIds as $file_id) {
-            $this->addPhotoToCategory($file_id, $id, $category);
+            $this->addPhotoToCategory($file_id, $category, $id);
         }
         
     }
 
-    public function addPhotoToCategory($file_id, $id, $category)
+    public function addPhotoToCategory($file_id, $category, $id=null)
     {
         $photo = new Photo;
         $photo->file_id = $file_id;
@@ -213,7 +225,7 @@ class PhotoService
         switch($category) {
             case 'product'      :  $folder = 'web/products'; break;
             case 'collection'   :  $folder = 'web/collections'; break;
-            case 'slides'       :  $folder = 'web/slides'; break;
+            case 'slide'       :  $folder = 'web/slides'; break;
             default: $folder = 'web'; break;
         }
         return $folder;
@@ -292,6 +304,44 @@ class PhotoService
             }
         }
         //dd($photos);
+        return $photos;
+    }
+
+    /*
+        filter photos into new ones that needs to be added and ones that needs to be deleted
+        $photos = The photos array sent via the post request
+        $currSlides = the current slides in the database
+        $paths = an array where the file path of the slide photos that are in the database will be stored
+        $pathPhotos = an array of key value pairs where the file path of the slide photos that are in the database will be stored with the file path as key and the photo obj as value
+
+    */
+    public function filter_slide_photos($photos)
+    {
+        //Get slide photos from the database
+        $currSlides = $this->slidePhotos();
+        $paths = [];
+        $pathPhotos = [];
+        if($currSlides->count() > 0) {
+            foreach($currSlides as $slide) {
+                if($slide->file) {
+                    $paths[] = $slide->file->path;
+                    $pathPhotos[$slide->file->path] = $slide;
+                }
+            }
+        }
+        foreach($photos as $key=>$photo) {
+            if(in_array($photo['file'], $paths)) {
+                //The photo exists in the database, so no need to add it again
+                unset($photos[$key]);
+                $key2 = array_search($photo['file'], $paths);
+                unset($paths[$key2]);
+            }
+        }
+
+        //delete any deactivated slides
+        if(count($paths) > 0) {
+            foreach($paths as $path) $pathPhotos[$path]->delete();
+        }
         return $photos;
     }
 
