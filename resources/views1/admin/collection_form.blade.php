@@ -25,7 +25,7 @@
                         'id'=>'collectionForm', 'class'=>'form-horizontal', ])
                     !!}
                     @include('inc.message')
-                        @if($collection->name!='New Arrivals')
+                        @if(strtolower($collection->name) != strtolower('New Arrivals'))
                             <div class="form-group">
                                 {{Form::text("name", old("name"), ["class" => "form-control","placeholder"=>"Collecction Name","required"=>"required"]) }}
                             </div>
