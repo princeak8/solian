@@ -8,7 +8,7 @@
         <div class="carousel-inner">
             @if($slides->count() > 0) {
                 @foreach($slides as $slide)
-                    <div class="carousel-item @if($slide->active==1) active @endif">
+                    <div class="carousel-item zoom @if($slide->active==1) active @endif">
                         <img class="d-block w-100" src="{{$slide->file->url}}" alt="First slide">
                         <div class="container-fluid">
                             <div class="row">
@@ -80,7 +80,7 @@
                     <div class="section-title ml-5">
                         <h4>{{strtoupper($collection->name)}} Collection</h4>
                     </div>
-                    <div class="row col-11 ml-3 offset-1 property__gallery space"  style="display: flex; justify-content: center;">
+                    <div class="row property__gallery space"  style="display: flex; justify-content: center;">
                     
                         @foreach($collection->products as $product)
                             <div class="col-lg-3 col-md-4 col-6 mix women men kid accessories cosmetic">
@@ -149,7 +149,7 @@
     <section class="categories">
         <div class="container-fluid row mb-5">
             @foreach($collections as $collection)
-                    <div class="col-6">
+                    <div class="col-md-6 col-12">
                         <div class="content-wrapper" style=" display: flex; justify-content: center;">
                             <img class="lazyload" data-src="{{$collection->image}}" alt="" style="border: solid 1px red; height: 28em; margin: 3em 3em;">     
                         </div>

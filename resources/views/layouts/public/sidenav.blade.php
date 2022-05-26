@@ -130,8 +130,7 @@
         <div class="container-fluid">
             <div class="row">
                 
-  
-            <div class="col-xl-3 col-lg-2">
+            <div class="col-lg-3">
                     <div class="header__logo row">
                         <a href="{{url('/')}}"><img src="{{asset('assets/img/solian logo.png')}}" alt=""></a>
                         @if(!isset($page) || (isset($page) && $page != 'order payment'))
@@ -146,9 +145,9 @@
                     </div> 
                 </div>
                 
-                <div class="col-xl-5 col-lg-6">
+                <div class="col-lg-6">
                     <nav class="header__menu">
-                        <ul>
+                        <ul style="display: flex; justify-content: space-around;">
                             <li class="active"><a href="{{url('/')}}">Home</a></li>
                             <li><a href="{{url('collection/'.$newArrivals->name)}}">New Arrivals</a></li>
                             <li><a href="#">Collections<span class="fas fa-caret-down down"></span></a>
@@ -165,14 +164,14 @@
                     </nav>
                 </div>
                 @if(!isset($page) || (isset($page) && $page != 'order payment'))
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <div class="header__right">
                         <!-- <div class="header__right__auth">
                             <a href="#">Login</a>
                             <a href="#">Register</a>
                         </div> -->
                         <ul class="header__right__widget" style="min-width:250px; margin-right:20px;">
-                            <li class="pull-left">
+                            <li>
                                 <a href="javascript::void(0)">
                                     <span id="d-current-currency" data-currency="{{ Session::get('currency')}}">{{ Session::get('currency')}}</span>
                                     <span class="fas fa-caret-down down"></span>
@@ -185,7 +184,7 @@
                                     @endforeach
                                 </ul>
                             </li>
-                            <li class="pull-left">
+                            <li>
                                 <a href="javascript:void(0)"><span class="fas fa-shopping-cart" onclick="open_cart('d-cart')"></span>
                                     <div class="tip cart-no">0</div>
                                 </a>

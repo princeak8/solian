@@ -31,7 +31,7 @@
                             </div>
                         @endif
                        
-                        <p>Add Product(s) to Collection</p>
+                        <p>Add Product(s) to Collecti</p>
                         <div class="form-group row">
                             <div class="col-6">
                             {{Form::select("products[]", $productsData, $productCollections,
