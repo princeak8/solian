@@ -160,7 +160,7 @@
                                     @endforeach
                                 </ul>
                             </li>
-                            <li class="mr-4"><a href="./contact.html">Contact</a></li>
+                            <li class="mr-4"><a href="{{url('contact')}}">Contact</a></li>
                         </ul>
                     </nav>
                 </div>

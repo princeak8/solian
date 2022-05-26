@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'IndexController@index');
 Route::get('/collection/{name}', 'CollectionController@show');
 Route::get('/product/{name}', 'ProductController@show');
+Route::get('/contact', 'ContactController@index');
 
 //Route::post('/upload', 'IndexController@upload');
 
