@@ -6136,12 +6136,34 @@ a.close.disabled {
 .carousel-item {
   position: relative;
   display: none;
-  float: left;
+  /* float: left; */
   width: 100%;
   margin-right: -100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   transition: transform 0.6s ease-in-out;
+}
+@-webkit-keyframes zoom {
+  from {
+    -webkit-transform: scale(1, 1);
+  }
+  to {
+    -webkit-transform: scale(1.5, 1.5);
+  }
+}
+
+@keyframes zoom {
+  from {
+    transform: scale(1, 1);
+  }
+  to {
+    transform: scale(1.5, 1.5);
+  }
+}
+
+.carousel-inner .carousel-item  img {
+  -webkit-animation: zoom 20s;
+  animation: zoom 20s;
 }
 
 @media (prefers-reduced-motion: reduce) {

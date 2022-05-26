@@ -1,7 +1,7 @@
 <div class="section-title ml-5">
     <h4>{{strtoupper($newArrivals->name)}}</h4>
 </div>
-<div class="row col-11 ml-3 offset-1 property__gallery slider-hero space">
+<div class="row mx-5 property__gallery slider-hero space">
     @foreach($newArrivals->products as $product)
         <div class="col-lg-3 col-md-4 col-6 mix women men kid accessories cosmetic">
             <div class="product__item">

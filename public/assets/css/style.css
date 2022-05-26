@@ -1802,6 +1802,7 @@ ol {
 	float: left;
 	margin-right: 10px;
 	margin-bottom: 10px;
+
 }
 
 .quantity>span {
@@ -1811,6 +1812,7 @@ ol {
 	float: left;
 	margin-top: 14px;
 	margin-right: 15px;
+
 }
 
 .pro-qty {
@@ -1819,6 +1821,7 @@ ol {
 	border: 1px solid #ebebeb;
 	border-radius: 50px;
 	padding: 0 15px;
+	margin-top: 13px;
 	overflow: hidden;
 	display: inline-block;
 }
