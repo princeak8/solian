@@ -40,22 +40,34 @@
 <!-- Search End -->
 
 <!-- Js Plugins -->
-<script src="{{asset('assets/js/jquery-3.3.1.min.js')}}"></script>
+<!-- <script src="{{asset('assets/js/jquery-3.3.1.min.js')}}"></script> -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="{{asset('assets/js/bootstrap.min.js')}}"></script>
-<script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
-<script src="{{asset('assets/js/jquery-ui.min.js')}}"></script>
-<script src="{{asset('assets/js/mixitup.min.js')}}"></script>
-<script src="{{asset('assets/js/jquery.countdown.min.js')}}"></script>
+<!-- <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js" integrity="sha512-IsNh5E3eYy3tr/JiX2Yx4vsCujtkhwl7SLqgnwLNgf04Hrt9BT9SXlLlZlWx+OK4ndzAoALhsMNcCmkggjZB1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script src="{{asset('assets/js/jquery-ui.min.js')}}"></script> -->
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
+<!-- <script src="{{asset('assets/js/mixitup.min.js')}}"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script src="{{asset('assets/js/jquery.countdown.min.js')}}"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/countdown/2.6.0/countdown.min.js" integrity="sha512-FkM4ZGExuYz4rILLbNzw8f3HxTN9EKdXrQYcYfdluxJBjRLthYPxxZixV/787qjN3JLs2607yN5XknR/cQMU8w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="{{asset('assets/js/jquery.slicknav.js')}}"></script>
-<script src="{{asset('assets/slick-1.8.1/slick/slick.min.js')}}"></script>
-<script src="{{asset('assets/js/owl.carousel.min.js')}}"></script>
-<script src="{{asset('assets/js/jquery.nicescroll.min.js')}}"></script>
+<!-- <script src="{{asset('assets/slick-1.8.1/slick/slick.min.js')}}"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/SlickNav/1.0.10/jquery.slicknav.min.js" integrity="sha512-FmCXNJaXWw1fc3G8zO3WdwR2N23YTWDFDTM3uretxVIbZ7lvnjHkciW4zy6JGvnrgjkcNEk8UNtdGTLs2GExAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script src="{{asset('assets/js/owl.carousel.min.js')}}"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script src="{{asset('assets/js/jquery.nicescroll.min.js')}}"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js" integrity="sha512-zMfrMAZYAlNClPKjN+JMuslK/B6sPM09BGvrWlW+cymmPmsUT1xJF3P4kxI3lOh9zypakSgWaTpY6vDJY/3Dig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="{{asset('assets/js/main.js')}}"></script>
 <script src="{{asset('assets/js/slider-main.js')}}"></script>
-<script src="{{asset('assets/js/vue.js')}}"></script>  
-<script src="{{asset('assets/js/axios.min.js')}}"></script>
-<script src="{{asset('assets/js/lodash.js')}}"></script>
+<!-- <script src="{{asset('assets/js/vue.js')}}"></script>   -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.36/vue.cjs.js" integrity="sha512-2e2aXOh4/FgkCAUyurkjk0Uw4m1gPcExFwb1Ai4Ajjg97se/FEWfrLG1na4mq8cgOzouc8qLIqsh0EGksPGdqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script src="{{asset('assets/js/axios.min.js')}}"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script src="{{asset('assets/js/lodash.js')}}"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="{{asset('assets/js/lazyload.js')}}"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js" integrity="sha512-jNDtFf7qgU0eH/+Z42FG4fw3w7DM/9zbgNPe3wfJlCylVDTT3IgKW5r92Vy9IHa6U50vyMz5gRByIu4YIXFtaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 <script type="application/javascript">
     lazyload();
 </script>
