@@ -173,7 +173,7 @@
                         <ul class="header__right__widget" style="min-width:250px; margin-right:20px;">
                             <li>
                                 <a href="javascript::void(0)">
-                                    <span id="d-current-currency" data-currency="{{ Session::get('currency')}}">{{ Session::get('currency')}}</span>
+                                    <span id="d-current-currency" data-currency="{{ $baseCurrency->name }}">{{ $baseCurrency->name }}</span>
                                     <span class="fas fa-caret-down down"></span>
                                 </a>
                                 <ul id="currency-select" class="dropdown">

@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input type="submit" class="btn btn-primary" />
+                <input type="submit" class="btn btn-primary" value="Login" />
             </div>
             {!! Form::close() !!}
         </div>
@@ -33,9 +33,8 @@
 
 @section('content')
     <!-- Checkout Section Begin -->
-    <div class="container">
+    <div class="row" style="padding-left: 4%">
         <section class="checkout spad" style="padding-top:100px;">
-            @include('inc.message')
             <div class="row my-4">
                 @if(!Auth::user()) 
                     <div class="row">
@@ -50,57 +49,67 @@
                     </div>
                 @endif
                 
-                {!! Form::open(['url' => "place_order",'method' => 'post', 'class'=>'row col-12 checkout__form', ]) !!}
-                <div class="row col-11 offset-1">
+                
+                <div class="row col-12">
                     <div class="col-lg-8 col-md-8 col-sm-11 row">
                         <h4 class="mb-4">Customer Information @if(!Auth::user()) | Create Account @endif</h4>
-
+                        @include('inc.message');
                         <div class="row col-12  checkout__order">
-                            <div class="col-6 mb-4">
-                                <p>Name <span>*</span></p>
-                                @if(Auth::user()) {{Auth::user()->name}}
-                                @else
-                                    <input type="text" name="name" class="form-control" value="{{old('name')}}" required>
-                                @endif
-                            </div>
-                            <div class="col-6 mb-4">
-                                <p>Phone <span>*</span></p>
-                                @if(Auth::user()) {{Auth::user()->phone_number}}
-                                @else
-                                    <input type="text" name="phone_number" class="form-control"  value="{{old('phone_number')}}" required>
-                                @endif
-                            </div>
-                            <div class="col-6">
-                                <p>Email <span>*</span></p>
-                                @if(Auth::user()) {{Auth::user()->email}}
-                                @else
-                                    <input type="text" name="email" class="form-control"  value="{{old('email')}}" required>
-                                @endif
-                            </div>
-                            <div class="col-6">
-                                @if(!Auth::user())
-                                    <p>Password<span>*</span></p>
-                                    <input type="password" name="password" class="form-control"  value="{{old('password')}}" required>
-                                @endif
-                            </div>
+                            {!! Form::open(['url' => "register",'method' => 'post', 'class'=>'row col-12 checkout__form', ]) !!}
+                                <div class="col-6 mb-4">
+                                    <p>Name <span>*</span></p>
+                                    @if(Auth::user()) {{Auth::user()->name}}
+                                    @else
+                                        <input type="text" name="name" class="form-control" value="{{old('name')}}" required>
+                                    @endif
+                                </div>
+                                <div class="col-6 mb-4">
+                                    <p>Phone <span>*</span></p>
+                                    @if(Auth::user()) {{Auth::user()->phone_number}}
+                                    @else
+                                        <input type="text" name="phone_number" class="form-control"  value="{{old('phone_number')}}" required>
+                                    @endif
+                                </div>
+                                <div class="col-6">
+                                    <p>Email <span>*</span></p>
+                                    @if(Auth::user()) {{Auth::user()->email}}
+                                    @else
+                                        <input type="text" name="email" class="form-control"  value="{{old('email')}}" required>
+                                    @endif
+                                </div>
+                                <div class="col-6">
+                                    @if(!Auth::user())
+                                        <p>Password<span>*</span></p>
+                                        <input type="password" name="password" class="form-control"  value="{{old('password')}}" required>
+                                    @endif
+                                </div>
+                                <div class="col-12 mt-4">
+                                    @if(!Auth::user())
+                                        <input type="submit" class="form-control btn-primary"  value="Submit" />
+                                    @endif
+                                </div>
+                            {!! Form::close() !!}
                         </div>
 
                         <div class="row mt-4">
                             <h5 class="col-12 mb-2">Delivery Information</h5>
-                            @if(Auth::user() && Auth::user()->address)
-                                <div id="customer-address" class="col-12 ml-4">
-                                    <p><b>Street Address:</b> {{Auth::user()->address->street_address}}</p>
-                                    <p><b>City:</b> {{Auth::user()->address->city}} </p>
-                                    <p><b>Country:</b> {{Auth::user()->address->country->name}}</p>
+                                @if(Auth::user() && Auth::user()->address)
+                                    <div id="customer-address" class="col-12 ml-4">
+                                        <p><b>Street Address:</b> {{Auth::user()->address->street_address}}</p>
+                                        <p><b>City:</b> {{Auth::user()->address->city}} </p>
+                                        <p><b>Country:</b> {{Auth::user()->address->country->name}}</p>
+                                    </div>
+                                @endif
+                                <div id="customer-address-fields" class="col-12 @if(Auth::user() && Auth::user()->address) d-none @endif" >
+                                    @include('inc.customer_address_fields')
                                 </div>
+                                <div class="col-12 mb-5">
+                                    <p>Oder notes</p>
+                                    <textarea class="form-control" name="notes"></textarea>
+                                </div>
+                            @if(Auth::user())
+                                <button type="submit" class="site-btn" onclick="place_order()">Place oder</button>
                             @endif
-                            <div id="customer-address-fields" class="col-12 @if(Auth::user() && Auth::user()->address) d-none @endif" >
-                                @include('inc.customer_address_fields')
-                            </div>
-                            <div class="col-12 mb-5">
-                                <p>Oder notes</p>
-                                <textarea class="form-control"></textarea>
-                            </div>
                         </div>
                     </div>
 
@@ -114,7 +123,9 @@
                                         <p class="col-3 text-center">Quantity</p>
                                         <p class="col-4 text-center">Total</p>
                                     </li>
-                                    
+                                    <div id="checkout-cart-products-details">
+
+                                    </div>
                                 </ul>
                             </div>
                             <div class="checkout__order__total">
@@ -122,7 +133,9 @@
                                 </ul>
                             </div>
                             <input type="hidden" id="cart-input" name="cart" />
-                            <button type="submit" class="site-btn">Place oder</button>
+                            @if(Auth::user())
+                                <button type="submit" class="site-btn" onclick="place_order()">Place oder</button>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -132,14 +145,16 @@
         </section>
     
     </div>
-   
+   <input type="hidden" name="loggedIn" @if(Auth::user() && Auth::user()->address) value="1" @else value="0" @endif />
         <!-- Checkout Section End -->
 
 @stop
 
 @section('js')
     <script type="application/javascript">
+    
         let myCart = localStorage.cart;
+        
         $('#cart-input').val(myCart);
         load_checkout_cart();
 
@@ -148,11 +163,13 @@
             let cart = JSON.parse(localStorage.cart);
             let content = "<p>Cart is empty</p>";
             if(cart.length > 0) {
+                content = '';
                 let total = 0;
+                console.log('checkout cart',cart);
                 cart.forEach((cartProduct, i) => {
-                    let p = product_details(cartProduct, total);
-                    total = p.total;
-                    content = `<li class="row">
+                    let p = product_details(cartProduct);
+                    total += p.total;
+                    content += `<li class="row">
                                     <p class="col-5 text-center">${cartProduct.name}</p> 
                                     <p class="col-3 d-flex flex-direction-row text-center">
                                         <button type="button" class="py-0 px-2 btn btn-danger btn-sm ${p.display}" onclick="update_checkout_qty('minus', ${cartProduct.id})" style="height:1.5em">-</button>
@@ -166,7 +183,7 @@
                                     </p>
                                 </li>`;
                 })
-                $('#checkout-cart-products').append(content)
+                $('#checkout-cart-products-details').html(content)
                 convertedTotal = cart_total(total);
                 contentTotal = `<li>Subtotal 
                                 <span class="currency" data-value="${total}">${convertedTotal}</span>
@@ -182,8 +199,86 @@
         }
         function update_checkout_qty(type, id)
         {
-            update_qty();
+            update_qty(type, id);
             load_checkout_cart();
+        }
+
+        function place_order()
+        {
+            const loggedIn = $('input[name=loggedIn]').val(); 
+            let validated = true;
+            if(loggedIn==0) {
+                validated = validate();
+            }
+            if(loggedIn==1 || validated) {
+                console.log(loggedIn);
+                const street_address = $('input[name=street_address]').val();
+                const city = $('input[name=city]').val();
+                const postal_code = $('input[name=postal_code]').val();
+                const country_id = $('select[name=country_id]').val();
+                const notes = $('textarea[name=notes]').val();
+                const addressDefault = ($('input[name=make_address_default]').is('checked')) ? 1 : 0; 
+
+                let url = "{{url('place_order')}}";
+                var token = $('meta[name="csrf-token"]').attr('content');
+                let cart = JSON.parse(localStorage.cart);
+                var productQtys = [];
+                var total = 0;
+                cart.forEach((cartProduct, i) => {
+                    let productDetail = product_details(cartProduct);
+                    total += productDetail.total;
+                    productQtys.push([cartProduct.id, cartProduct.quantity]);
+                });
+                var formData =  {cart: productQtys, total, street_address, city, postal_code, country_id, notes, addressDefault, _token: token};
+                console.log('formData: ',formData);
+                return axios.post(url, formData)
+                .then((res) => { 
+                    console.log(res.data.statusCode);
+                    if(res.data.statusCode==200) window.location.href = "{{url('payment')}}";
+                })
+                .catch((error) => {
+                    console.log("An error occured while trying to set rate "+error.message);
+                    throw error;
+                });
+            }
+        }
+
+        function checkEmpty(field)
+        {
+            console.log(field.name);
+            (field.name != 'country_id') ? clearError($(`input[name=${field.name}]`)) : clearError($(`select[name=${field.name}]`));
+            //if(field.value != '') clearError(field); 
+        }
+
+        function validate()
+        {
+            var status = true;
+            const streetAddr = $('input[name=street_address]'); 
+            const city = $('input[name=city]');
+            const postalCode = $('input[name=postal_code]');
+            const countryId = $('select[name=country_id]');
+            let fields = [streetAddr, city, postalCode, countryId];
+            
+            fields.forEach((field) => {
+                if(field.val()=='') {
+                    status = false;
+                    displayError(field) 
+                }
+            })
+             
+            return status;
+        }
+
+        function displayError(field)
+        {
+            field.siblings('span').removeClass('d-none');
+            field.css('border', 'medium solid red');
+        }
+
+        function clearError(field)
+        {
+            field.siblings('span').addClass('d-none');
+            field.css('border', 'thin solid #000');
         }
     </script>
 @stop

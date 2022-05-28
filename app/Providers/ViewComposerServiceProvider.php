@@ -37,6 +37,6 @@ class ViewComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer(['layouts.admin.sidebar', 'layouts.admin.header', 'admin.index'], ProjectComposer::class);
-        View::composer(['layouts.public.sidenav'], PublicComposer::class);
+        View::composer(['layouts.public.sidenav', 'inc.product'], PublicComposer::class);
     }
 }

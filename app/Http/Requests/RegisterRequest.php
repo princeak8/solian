@@ -26,8 +26,7 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'role_id' => 'required',
-            'email' => 'required|email|max:255|unique:users,role_id,'.$this->input('role_id'),
+            'email' => 'required|email|max:255|unique:users',
             'name' => 'required',
             'password' => 'required|string|min:5',
             'phone_number' => 'required'

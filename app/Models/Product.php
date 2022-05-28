@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Currency;
+
 class Product extends Model
 {
     use HasFactory;
@@ -78,25 +80,17 @@ class Product extends Model
         return $mainPhoto;
     }
 
-    public function getNewPriceAttribute()
+    public function getConvertedPriceAttribute()
     {
-        $rate = 1;
-
-        if(session('currency')) { //if current currency is set in the session
-            $currency = session('currency');
-        }else{ //cuurent currency is not set in the session
-            //get the default currency in the env file
-            if(env('currency')){ //if default currency is set in the env file
-                $currency = env('currency');
-                session(['currency' => env('currency')]);
-            }
-        }
-        if(isset( $currency) && session('rates') && session('rates')->{$currency}) { //if currency rates is set in the session
-            $rate = session('rates')->{$currency};
-        }
+        $price = $this->price;
+        $currency = Currency::active();
+        $rate = $currency->rate->rate;
+        // if(isset( $currency) && session('rates') && session('rates')->{$currency}) { //if currency rates is set in the session
+        //     $rate = session('rates')->{$currency};
+        // }
 
         if(isset($rate)) {
-            $price = floatval($this->price) * floatval($rate);
+            $price = floatval($this->price) / floatval($rate);
         }
         return $price;
     }

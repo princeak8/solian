@@ -22,6 +22,22 @@ Route::get('/collection/{name}', 'CollectionController@show');
 Route::get('/product/{name}', 'ProductController@show');
 Route::get('/contact', 'ContactController@index');
 
+Route::get('currency/fetch_rates', 'CurrencyController@get_rates');
+Route::get('currency/fetch_rate', 'CurrencyController@get_rate');
+Route::get('currency/fetch_rate/{id}', 'CurrencyController@get_rate');
+Route::post('currency/switch', 'CurrencyController@set_currency');
+
+Route::get('checkout', 'OrderController@checkout_page');
+Route::post('/place_order', 'OrderController@place_order');
+Route::get('/payment', 'PaymentController@payment');
+
+Route::post('register', 'UserController@create');
+
+Route::get('login', function() {
+    return view('login');
+});
+Route::post('login', 'AuthController@login');
+
 //Route::post('/upload', 'IndexController@upload');
 
 //Admin routes

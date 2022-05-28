@@ -19,29 +19,6 @@ use App\Mail\EmailVerification;
 class AuthService
 {
 
-    /**
-     * Creates the auth user
-     *
-     * @param array data of registration details
-     * 
-     * @return \App\User A user object
-     *
-     */
-    public function createUser($data)
-    {
-        $bcrypt = new Bcrypt();
-        $user = User::create([
-            'email' => $data['email'],
-            'password' => $bcrypt->create($data['password']),
-        ]);
-        $user->name = $data['name'];
-        $user->role_id = $data['role_id'];
-        $user->phone_number = $data['phone_number'];
-        $user->email_token = str_replace("-", "", Utility::GUIDv4());
-        $user->save();
-        return $user;
-    }
-
 
     /**
      * Verifys the token from email.
