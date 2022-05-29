@@ -5,16 +5,16 @@
     <p>This is the payment page</p>
     <div class="container-fluid breadcrumb-option">
         <div class="row">
-            <div class="col-md-6 col-12 mt-5 payment-wrapper" style="display: flex; flex-direction: column;">
-                <div class="link-progress" style="display: block;">
-                    <span>Information</span>
+            <div class="col-md-6 col-12 mt-5 payment-left">
+                <div class="link-progress">
+                    <a href="/">Information</a>
                     <i class='fas fa-greater-than fa-sm'></i>
-                    <span>Shipping</span>
+                    <a href="/">Shipping</a>
                     <i class='fas fa-greater-than fa-sm'></i>
-                    <span>Payment</span>
+                    <a href="/">Payment</a>
                 </div>
+                <h5 style="display:flex; justify-content: center;">Express Checkout</h5>
                 <div class="express-checkout">
-                    <h5>Express Checkout</h5>
                     <div class="payment-links">
                         <a href="#"><img src="{{asset('assets/img/payment/payment-1.png')}}" alt=""></a>
                         <a href="#"><img src="{{asset('assets/img/payment/payment-2.png')}}" alt=""></a>
@@ -24,18 +24,16 @@
                     <h5><span>Or</span></h5>
                 </div>
                 <h4>Contact Information</h4>
-                <div style="display: flex;">
-                    <span>
+                <div class="login-profile">
                         <a href="#"><img src="{{asset('assets/img/product/product-2.jpg')}}" class="thumbnail" style="border-radius: 50%; height: 3em;"alt=""></a>
-                    </span>
-                    <span>
-                        <p> lilian ekwueme (lilian@email.com)</p>
-                        <p> Log out</p>
+                    <span class="profile-details">
+                        <a href="/"> lilian ekwueme (lilian@email.com)</a>
+                        <a href="/"> Log out</a>
                     </span>
                 </div>
                 <h5 class="my-3">Shipping Address</h5>
 
-                <div  class="contact__form">
+                <div class="contact__form">
                     <form action="#">
                         <input type="text" name="savedAddress" placeholder="Saved Address">
                         <input type="number" name="phoneNumber" placeholder="Phone number">
@@ -68,11 +66,12 @@
                         </div>
                         <div class="col-md-3" style="font-weight: bold;">$100</div>
                     </div> <hr>
-                    <div>
-                        <span>
-                            <input type="text" class="w-75" placeholder="Gift Card/ Discount Voucher">
+                    <div class="contact__form">
+                        <form action="#">
+                            
+                            <input type="text" class="w-50" placeholder="Gift Card/ Discount Voucher">
                             <span class="btn btn-secondary">Apply</span>
-                        </span>
+                        </form>
                     </div> <hr>
                     <div>
                         <div style="display: flex; justify-content: space-between">
@@ -88,8 +87,6 @@
                             <span>Total</span>
                             <h5 style="font-weight: bold;">$100.00</h5>
                     </div>
-
-
                 </div>
                
             </div>

@@ -132,17 +132,34 @@ border-radius: 2px;
 /* ..............................
 PAYMENT */	
 /* .............................. */
-.payment-wrapper{
+.link-progress{
+  margin-bottom: 2em;
+}
+.login-profile{
   display: flex;
-  /* flex-direction: column; */
+  margin-top: 1em;
+}
+.login-profile a{
+  display: flex;
+  flex-direction: column;
+  margin-top: 1em;
+  padding-left: 1em;
+}
+.payment-left{
+  display: flex;
+  padding: 0 4em;
+  flex-direction: column;
 }
 .payment-links{
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  border: 2px solid whitesmoke;
+  border-radius: 10px;
+  padding: 1em 3em;
 }
 .express-checkout {
-  margin-top: 2em;
-  border: 2px solid whitesmoke;
+  display: flex;
+  justify-content: center;
 }
 .contact-checkout h5 {
   width: 100%; 
@@ -158,6 +175,9 @@ PAYMENT */
 }
 .contact-checkout {
   margin-top: 2em;
+}
+.payment-right{
+  padding: 0 5em;
 }
 
 /* .............................. MEDIA QUERY...............................   */
