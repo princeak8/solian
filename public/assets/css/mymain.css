@@ -42,8 +42,8 @@
     }
     
     .zoom img {
-      -webkit-animation: zoom 20s;
-      animation: zoom 20s;
+      -webkit-animation: zoom-in 10s;
+      animation: zoom-in 10s;
     }
   
   .box{
