@@ -16,6 +16,21 @@ class Role extends Model
      */
     protected $fillable = ['role'];
 
+    public static function superAdminRole()
+    {
+        return Self::where('role', 'admin')->orWhere('role', 'super admin')->first();
+    }
+
+    public static function adminRole()
+    {
+        return Self::where('role', 'admin')->orWhere('role', 'admin')->first();
+    }
+
+    public static function customerRole()
+    {
+        return Self::where('role', 'customer')->first();
+    }
+
     public static function role($role)
     {
         return Self::where('role', $role)->first();
@@ -25,4 +40,6 @@ class Role extends Model
     {
         return $this->hasMany('App\Models\User', 'role_id', 'id');
     }
+
+
 }

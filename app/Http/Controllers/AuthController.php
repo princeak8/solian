@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Validator;
+
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Auth;
+
 use JWTAuth;
 use View;
 use App\Http\Controllers\Controller;
 
 use App\Http\Resources\User as UserResource;
-
-use Auth;
 
 use App\Models\User;
 use App\Models\Role;
@@ -44,7 +46,7 @@ class AuthController extends Controller
             $post = $request->all();
             $email = $post['email'];
             $password = $post['password'];
-            if (!Auth::attempt(['email' => $email, 'password' => $password, 'role_id' => Role::role('customer')->id])) {
+            if (!Auth::attempt(['email' => $email, 'password' => $password])) {
                 return back()->with('error', 'Email/Password is Incorrect');
             }
         }

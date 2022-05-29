@@ -77,28 +77,33 @@
     console.log(sessionId);
     //console.log('local storage rates', JSON.parse(localStorage.rates));
     //localStorage.rates = '';
-    if(localStorage.sessionId === undefined || localStorage.sessionId != sessionId || localStorage.rates === undefined || _.isEmpty(localStorage.rates)) {
-        //console.log('no session set', sessionId);
-        localStorage.sessionId = sessionId;
-        set_rates();
-        //console.log(JSON.parse(localStorage.rates));
-    }
-    
+
+    set_rate();
+    //localStorage.setItem('cart', []);
+
+    // if(localStorage.sessionId === undefined || localStorage.sessionId != sessionId || localStorage.rates === undefined || _.isEmpty(localStorage.rates)) {
+    //     //console.log('no session set', sessionId);
+    //     localStorage.sessionId = sessionId;
+    //     set_rates();
+    //     //console.log(JSON.parse(localStorage.rates));
+    // }
+    console.log('cart', localStorage['cart']);
     if (!localStorage['cart'])  {
+        console.log('cart not set');
         localStorage.setItem('cart', []);
     }
 
     //set the current currency_sign, currency and rate in the localstorage
-        let cs = "{{Session::get('currency_sign')}}";
-        let c = "{{Session::get('currency')}}";
-        localStorage.setItem('currencySign', cs);
-        localStorage.setItem('currency', c);
-        let rates = JSON.parse(localStorage.rates);
-        let rate = rates[c];
-        if(c=='NGN' || typeof rates[c]==='undefined'){
-            rate = 1;
-        }
-        localStorage.setItem('conversionRate', rate);
+    //     let cs = "{{Session::get('currency_sign')}}";
+    //     let c = "{{Session::get('currency')}}";
+    //     localStorage.setItem('currencySign', cs);
+    //     localStorage.setItem('currency', c);
+    //     let rates = JSON.parse(localStorage.rates);
+    //     let rate = rates[c];
+    //     if(c=='NGN' || typeof rates[c]==='undefined'){
+    //         rate = 1;
+    //     }
+    //     localStorage.setItem('conversionRate', rate);
         
 
     update_cart_section();
@@ -113,13 +118,13 @@
         $('#'+id).css('display', 'none');
     }
 
-    function product_details(p, total)
+    function product_details(p)
     {
-        let price = localStorage.conversionRate * parseFloat(p.price);
-        //console.log('price:', localStorage.conversionRate);
+        let price = parseFloat(p.price) / localStorage.conversionRate;
+        //console.log('price:', price);
         price = parseFloat(price).toFixed(2);
         price = price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-        total = total + (parseFloat(p.price) * p.quantity);
+        total = price * p.quantity;
         let display = '';
         if(p.quantity <= 1) {
             display = 'd-none';
@@ -129,9 +134,11 @@
 
     function cart_total(total)
     {
-        let convertedTotal = localStorage.conversionRate * total;
-        convertedTotal = parseFloat(convertedTotal).toFixed(2);
-        convertedTotal = convertedTotal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        console.log('total', total);
+        //let convertedTotal = localStorage.conversionRate * total;
+        //convertedTotal = parseFloat(convertedTotal).toFixed(2);
+        convertedTotal = total.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        //console.log('converted total', convertedTotal);
         return convertedTotal;
     }
 
@@ -144,8 +151,10 @@
             content = "<p>Cart is empty</p>";
         }else{
             myCart.forEach((cartProduct, i) => {
-                let p = product_details(cartProduct, total);
-                total = p.total;
+                //console.log('cartProduct', cartProduct);
+                let p = product_details(cartProduct);
+                console.log('product details', p);
+                total += p.total;
                 content += `<div class="card mb-2 mt-2">
                                 <div class="p-2">
                                     <div class="row">
@@ -206,7 +215,7 @@
         if (localStorage['cart'])  {
             console.log('update');
             let myCart = JSON.parse(localStorage.cart);
-            //console.log('items in cart: ',cart.length);
+            //console.log('items in cart: ',myCart);
             $('.cart-no').html(myCart.length);
             load_cart_content(myCart);
         }
@@ -214,7 +223,7 @@
     //localStorage.removeItem('cart');
     function add_to_cart(product, qty=1)
     {
-        console.log('quantity', qty);
+        //console.log('quantity', qty);
         var productObj = {
             id: product.id,
             name: product.name,
@@ -224,10 +233,13 @@
         
         var cart;
         if (!localStorage['cart'])  {
+            console.log('empty');
             cart = [];
             cart.push(productObj);
         }else{ 
+            console.log('not empty');
             cart = JSON.parse(localStorage['cart']);
+            console.log(localStorage['cart']);
             var productExists = false;
             cart.forEach(function(p, i) {
                 if(p.id == productObj.id) {
@@ -241,7 +253,7 @@
                 cart.push(productObj);
             }
         } 
-
+        console.log(cart);
         localStorage.setItem('cart', JSON.stringify(cart));
         update_cart_section();
         //console.log(localStorage.cart);
@@ -250,17 +262,22 @@
     function update_qty(type, id)
     {
         let cart = JSON.parse(localStorage['cart']);
+        console.log('id: ', id);
         cart.forEach(function(p, i) {
             if(p.id == id) {
+                console.log('found');
                 if(type=='minus') {
                     p.quantity = parseInt(p.quantity) - 1;
                 }
                 if(type=='plus') {
                     p.quantity = parseInt(p.quantity) + 1;
                 }
+            }else{
+                console.log('not found');
             }
         })
         localStorage.setItem('cart', JSON.stringify(cart));
+        console.log('update qty');
         update_cart_section();
     }
 
@@ -288,123 +305,23 @@
         return false;
     }
 
-    async function fetch_currencies()
+
+    async function set_rate()
     {
-        let url = "{{url('currency/fetch_currencies')}}";
+        let url = "{{url('currency/fetch_rate')}}";
         return axios.get(url)
         .then((res) => { 
             //console.log(res.data);
-            let currencies = [];
-            res.data.currencies.forEach((currency, i) => {
-                if(currency.active == 0) {
-                    currencies.push(currency.name);
-                }
-            })
-            return currencies;
+            let rate = res.data.data;
+            localStorage.setItem('currencySign', rate.currency.sign);
+            localStorage.setItem('conversionRate', rate.rate);
+            console.log('rate set successfully');
         })
         .catch((error) => {
-            console.log("An error occured while trying to perform the operation "+error.message);
+            console.log("An error occured while trying to set rate "+error.message);
             throw error;
         });
     }
-    
-    async function fetch_rate(curr, n=0)
-    { 
-        var ApiUrl = `https://free.currconv.com/api/v7/convert?q=NGN_${curr}&compact=ultra&apiKey=80d4f3513c5fb7986ef4`;
-        return axios.get(ApiUrl)
-        .then((res) => { 
-            //console.log(curr+ ': '+res.data['NGN_'+curr]);
-            return res.data['NGN_'+curr];
-            //localStorage.rates = JSON.stringify(rates);
-            //console.log(JSON.parse(localStorage.rates).USD);
-        })
-        .catch((error) => {
-            console.log("An error occured while trying to perform the operation "+error.message);
-            if(n<3) { n = n+1;
-                fetch_rate(curr, n);
-                console.log('errorNo: ',n)
-            }
-            throw error;
-        });
-    }
-    async function fetch_dbrate(curr, n=0)
-    { 
-        console.log('db rate function');
-        n = n+1;
-        var ApiUrl = `{{url('currency/fetch_rate')}}/${curr}`;
-        return axios.get(ApiUrl)
-        .then((res) => { 
-            if(res.data.status==200) {
-                console.log(res.data.rate);
-                return res.data.rate;
-            }else{
-                console.log('error: ',res.data.message);
-            }
-        })
-        .catch((error) => {
-            console.log("An error occured while trying to perform the operation "+error.message);
-            if(n<5) {
-                fetch_dbrate(curr, n);
-            }else{
-                throw error;
-            }
-        });
-    }
-    async function get_rates()
-    {
-        var currencies = await fetch_currencies();//['USD', 'EUR', 'GBP'];
-        rates = {};
-        let result;
-        let promises = [];
-        var n = currencies.length; 
-        for(let i = 0; i < currencies.length; i++) {  
-            //promises.push(fetch_rate(currencies[i]));
-            try{
-                rate = await fetch_rate(currencies[i]);
-                console.log('rate from API: ', rate);
-            }catch(e) {
-                rate = await fetch_dbrate(currencies[i]);
-                console.log('rate from db: ', rate);
-            }
-            //console.log(rate);
-            rates[currencies[i]] = rate;
-        }
-        //result = await Promise.all(promises);
-        //console.log('result ',result);
-        /*for(let i = 0; i < currencies.length; i++) { 
-            rates[currencies[i]] = result[i];
-        }*/
-        localStorage.rates = JSON.stringify(rates);
-        return localStorage.rates;
-    }
-    
-    async function set_rates()
-    {
-        let rates = await get_rates();
-        console.log('rates: ',rates);
-        //console.log('rates ',JSON.parse(rates));
-        let url = "{{url('currency/set_rates')}}";
-        let token = $('meta[name="csrf-token"]').attr('content');
-        let storageRates = JSON.parse(localStorage.rates);
-        let formData =  {rates: rates, _token: token};
-        let currency = localStorage.currency;
-        localStorage.setItem('conversionRate', storageRates['USD']);
-        console.log('storage rate: ',storageRates);
-        
-        console.log('rate3',storageRates['USD']);
-        axios.post(url, formData)
-        .then((res) => {
-            console.log('set rate: ', res.data);
-        })
-        .catch((error) => {
-            console.log("An error occured while trying to perform the operation "+error.message);
-            throw error;
-        });
-    }
-    //console.log(localStorage);
-    /*Array.from(localStorage.rates).forEach((rate, i) => {
-        console.log(rate);
-    })*/   
     
     function switch_currency(currency)
     {
@@ -414,7 +331,7 @@
         return axios.post(url, formData)
             .then((res) => {
                 console.log(res.data);
-                localStorage.setItem('currency', res.data.currencySign);
+                localStorage.setItem('currencySign', res.data.currencySign);
                 localStorage.setItem('conversionRate', res.data.conversionRate);
                 console.log('rate2', localStorage.conversionRate);
                 //change all the currency symbols to the new currency symbol
@@ -424,7 +341,7 @@
                 //convert all the prices to the new price
                 $('.currency').each(function() {
                     let val = $(this).data('value');
-                    let newVal = res.data.conversionRate * parseFloat(val);
+                    let newVal = parseFloat(val) / res.data.conversionRate;
                     newVal = parseFloat(newVal).toFixed(2);
                     //$(this).data('value', newVal);
                     newVal = newVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');

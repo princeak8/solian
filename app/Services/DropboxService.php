@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Helpers\Helper;
 use Cloudinary;
 
+use App\Models\Photo;
 
 class DropboxService
 {
@@ -30,6 +31,16 @@ class DropboxService
             Helper::setMultiEnvironmentValue($envVars);
         }else{
             \Log::stack(['project'])->info("Dropbox refresh token error: ".$res['error'].' : '.$res['error_description']);
+        }
+    }
+
+    public static function refreshPhotoUrls()
+    {
+        $photos = Photo::all();
+        if($photos->count() > 0) {
+            foreach($photos as $photo) {
+                
+            }
         }
     }
 }
