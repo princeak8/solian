@@ -120,11 +120,12 @@
 
     function product_details(p)
     {
+        //console.log('conversion rate:',localStorage.conversionRate);
         let price = parseFloat(p.price) / localStorage.conversionRate;
         //console.log('price:', price);
         price = parseFloat(price).toFixed(2);
         price = price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-        total = price * p.quantity;
+        total = p.price * p.quantity;
         let display = '';
         if(p.quantity <= 1) {
             display = 'd-none';
@@ -151,7 +152,7 @@
             content = "<p>Cart is empty</p>";
         }else{
             myCart.forEach((cartProduct, i) => {
-                //console.log('cartProduct', cartProduct);
+                console.log('cartProduct', cartProduct);
                 let p = product_details(cartProduct);
                 console.log('product details', p);
                 total += p.total;
@@ -377,7 +378,7 @@
             console.log("An error occured while trying to set rate "+error.message);
             throw error;
         });
-    }, 300000);
+    }, 100000);
 
     /*
     var cart = new Vue({

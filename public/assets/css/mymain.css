@@ -153,7 +153,7 @@ PAYMENT */
 .payment-links{
   display: flex;
   justify-content: space-between;
-  border: 2px solid whitesmoke;
+  border: 2px solid rgb(214, 209, 209);
   border-radius: 10px;
   padding: 1em 3em;
 }
@@ -164,7 +164,7 @@ PAYMENT */
 .contact-checkout h5 {
   width: 100%; 
   text-align: center; 
-  border-bottom: 1px solid #000; 
+  border-bottom: 1px solid rgb(214, 209, 209); 
   line-height: 0.1em;
   margin: 10px 0 20px; 
 } 

@@ -8,9 +8,9 @@
             <div class="col-md-6 col-12 mt-5 payment-left">
                 <div class="link-progress">
                     <a href="/">Information</a>
-                    <i class='fas fa-greater-than fa-sm'></i>
+                    <i class='fas fa-greater-than fa-xsm'></i>
                     <a href="/">Shipping</a>
-                    <i class='fas fa-greater-than fa-sm'></i>
+                    <i class='fas fa-greater-than fa-xsm'></i>
                     <a href="/">Payment</a>
                 </div>
                 <h5 style="display:flex; justify-content: center;">Express Checkout</h5>
