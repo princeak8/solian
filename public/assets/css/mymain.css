@@ -42,8 +42,8 @@
     }
     
     .zoom img {
-      -webkit-animation: zoom 20s;
-      animation: zoom 20s;
+      -webkit-animation: zoom-in 10s;
+      animation: zoom-in 10s;
     }
   
   .box{
@@ -128,6 +128,39 @@ border-radius: 2px;
   margin-left: 7em;
   margin-top: 1em;
 }
+
+/* ..............................
+PAYMENT */	
+/* .............................. */
+.payment-wrapper{
+  display: flex;
+  /* flex-direction: column; */
+}
+.payment-links{
+  display: flex;
+  justify-content: space-around;
+}
+.express-checkout {
+  margin-top: 2em;
+  border: 2px solid whitesmoke;
+}
+.contact-checkout h5 {
+  width: 100%; 
+  text-align: center; 
+  border-bottom: 1px solid #000; 
+  line-height: 0.1em;
+  margin: 10px 0 20px; 
+} 
+
+.contact-checkout h5 span { 
+  background:#fff; 
+  padding:0 10px; 
+}
+.contact-checkout {
+  margin-top: 2em;
+}
+
+/* .............................. MEDIA QUERY...............................   */
 
 
       @media only screen and (max-width: 768px) {
