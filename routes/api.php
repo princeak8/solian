@@ -18,6 +18,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/get_my_address', 'IndexController@getMyAddresses');
+
 Route::post('/upload', 'IndexController@upload');
 
 Route::post('/admin/update_product_photos', 'Admin\ProductController@update_product_photos');

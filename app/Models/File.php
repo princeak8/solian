@@ -39,8 +39,9 @@ class File extends Model
         return $thumbnail;
     }
 
-    public function getUrlAttribute()
+    public function getFileUrlAttribute()
     {
-        return Storage::disk('dropbox')->url($this->path);
+        return (time() >= env('UPDATE_DROPBOX_PHOTOS__url_EXPIRY')) ? Storage::disk('dropbox')->url($this->path) : $this->url;
+        //return Storage::disk('dropbox')->url($this->path);
     }
 }

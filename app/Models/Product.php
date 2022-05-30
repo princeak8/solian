@@ -30,10 +30,10 @@ class Product extends Model
         $firstPhoto = '';
         foreach($this->photos as $photo) {
             if(empty($firstPhoto)) {
-                $firstPhoto = $photo->file->url;
+                $firstPhoto = $photo->file->file_url;
             }
             if($photo->main == 1) {
-                $mainPhoto = $photo->file->url;
+                $mainPhoto = $photo->file->ufile_url;
             }
         }
         if(empty($mainPhoto)) {

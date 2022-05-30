@@ -38,6 +38,8 @@ Route::get('login', function() {
 });
 Route::post('login', 'AuthController@login');
 
+Route::get('/update_dropbox_photo_url', 'DropboxController@update_dropbox_photo_url');
+
 //Route::post('/upload', 'IndexController@upload');
 
 //Admin routes

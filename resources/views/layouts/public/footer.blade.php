@@ -366,6 +366,19 @@
             });
     }
 
+    setInterval(function () {
+        let url = "{{url('update_dropbox_photo_url')}}";
+        axios.get(url)
+        .then((res) => { 
+            //console.log(res.data);
+            console.log('updated dropbox photo urls');
+        })
+        .catch((error) => {
+            console.log("An error occured while trying to set rate "+error.message);
+            throw error;
+        });
+    }, 300000);
+
     /*
     var cart = new Vue({
 		el: '#cart',       

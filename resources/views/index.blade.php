@@ -9,7 +9,7 @@
             @if($slides->count() > 0) {
                 @foreach($slides as $slide)
                     <div class="carousel-item zoom @if($slide->active==1) active @endif">
-                        <img class="d-block w-100" src="{{$slide->file->url}}" alt="First slide">
+                        <img class="d-block w-100" src="{{$slide->file->FileUrl}}" alt="First slide">
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-6 col-md-offset-3 col-md-push-3 col-sm-12 col-xs-12">	
