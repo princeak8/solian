@@ -13,14 +13,27 @@ class DropboxPhotoUrlUpdate extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'DropboxPhoto:update';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Update dropbox photo url every  hour';
+
+    private $dropboxService;
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->dropboxService = new DropboxService;
+    }
 
     /**
      * Execute the console command.
@@ -29,6 +42,7 @@ class DropboxPhotoUrlUpdate extends Command
      */
     public function handle()
     {
-        return 0;
+        \Log::stack(['project'])->info('about to update url');
+        $this->dropboxService->refreshPhotoUrls();
     }
 }

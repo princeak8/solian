@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Http;
+
 use Illuminate\Http\Request;
 use session;
 
@@ -33,6 +35,32 @@ class IndexController extends BaseController
         $this->collectionService = new CollectionService;
         $this->photoService = new PhotoService;
         $this->fileService = new FileService;
+    }
+
+    public function getMyAddresses()
+    {
+        // $params = $this->get_header_params('/v1/addresses/me/broker', 'get');
+        // //dd($params);
+
+        // $url = $this->baseUrl."/v1/addresses/me/broker";
+
+        // $curl = curl_init($url);
+        // curl_setopt($curl, CURLOPT_URL, $url);
+        // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        // curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+        //     'X-API-TIMESTAMP: '.$params['time'],
+        //     'X-API-SIGNATURE: ' . $params['signature'],
+        //     'X-API-KEY: ' . $this->apiSecretKey)
+        // );
+
+        //for debug only!
+        // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = Http::get('https://api.dropboxapi.com/oauth2/token'); //curl_exec($curl);
+        //curl_close($curl);
+        dd($resp);
     }
     
     public function index()

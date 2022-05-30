@@ -36,11 +36,24 @@ class DropboxService
 
     public static function refreshPhotoUrls()
     {
+        // \Log::stack(['project'])->info('about to update url1');
         $photos = Photo::all();
         if($photos->count() > 0) {
+            // \Log::stack(['project'])->info('about to update url2');
             foreach($photos as $photo) {
-                
+                // \Log::stack(['project'])->info('about to update url3');
+                if($photo->file) {
+                    // \Log::stack(['project'])->info('about to update url4: '.Storage::disk('dropbox')->url($photo->file->path));
+                    $photo->file->url = Storage::disk('dropbox')->url($photo->file->path);
+                    // \Log::stack(['project'])->info('about to update url5');
+                    $photo->file->update();
+                    //dd((time() + (60*60)));
+                    Helper::setEnvironmentValue('UPDATE_DROPBOX_PHOTOS__url_EXPIRY', (time() + (60*60)) );
+                    // \Log::stack(['project'])->info('updated url');
+                }
             }
+        }else{
+            \Log::stack(['project'])->info('no photos');
         }
     }
 }
