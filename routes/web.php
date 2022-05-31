@@ -41,7 +41,7 @@ Route::get('login', function() {
 });
 Route::post('login', 'AuthController@login');
 
-Route::get('user/index', function() {
+Route::get('user/', function() {
     return view('user/index');
 });
 
