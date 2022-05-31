@@ -21,6 +21,7 @@ return new class extends Migration
             $table->tinyInteger('deleted');
             $table->timestamps();
         });
+        \Artisan::call('db:seed', array('--class' => 'NewArrivalsSeeder'));
     }
 
     /**

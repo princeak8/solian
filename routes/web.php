@@ -37,6 +37,9 @@ Route::get('login', function() {
     return view('login');
 });
 Route::post('login', 'AuthController@login');
+Route::get('register', function() {
+    return view('register');
+});
 
 Route::get('/update_dropbox_photo_url', 'DropboxController@update_dropbox_photo_url');
 
