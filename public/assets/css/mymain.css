@@ -128,9 +128,40 @@ border-radius: 2px;
   margin-left: 7em;
   margin-top: 1em;
 }
+/* ..............................
+  LOGIN */	
+/* .............................. */
+
+.login-submit {
+  border: 1px solid rgb(214, 209, 209);
+  border-radius: 10px;
+  /* box-shadow: 2px 2px 1px 0px rgba(0, 0, 0,0.15); */
+  box-shadow: 2px 2px 1px 0px rgba(255, 7, 7, 0.774);
+  -webkit-box-shadow: 2px 2px 1px 0px rgba(255, 7, 7, 0.774);
+  -moz-box-shadow: 2px 2px 1px 0px rgba(255, 7, 7, 0.774);
+  margin-top: 1em;
+}
+.contact__address{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.login-content{
+  width: 25em;
+}
+.login-content a{
+  display: flex;
+  justify-content: end;
+  text-decoration: none; 
+  color: black;
+  font-size: smaller;
+}
+
+
 
 /* ..............................
-PAYMENT */	
+  PAYMENT */	
 /* .............................. */
 .link-progress{
   margin-bottom: 2em;
@@ -164,8 +195,8 @@ PAYMENT */
   border: 2px solid rgb(214, 209, 209);
   border-radius: 10px;
   box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.25);
--webkit-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.25);
--moz-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.25);
+  -webkit-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.25);
+  -moz-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.25);
   padding: 1em 2em;
   width: 7em;
 }
