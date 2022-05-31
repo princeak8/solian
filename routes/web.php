@@ -31,15 +31,15 @@ Route::get('checkout', 'OrderController@checkout_page');
 Route::post('/place_order', 'OrderController@place_order');
 Route::get('/payment/{invoice_no}', 'PaymentController@payment');
 
+Route::get('register', function() {
+    return view('register');
+});
 Route::post('register', 'UserController@create');
 
 Route::get('login', function() {
     return view('login');
 });
 Route::post('login', 'AuthController@login');
-Route::get('register', function() {
-    return view('register');
-});
 
 Route::get('/update_dropbox_photo_url', 'DropboxController@update_dropbox_photo_url');
 
