@@ -41,6 +41,10 @@ Route::get('login', function() {
 });
 Route::post('login', 'AuthController@login');
 
+Route::get('user/', function() {
+    return view('user/index');
+});
+
 Route::get('/update_dropbox_photo_url', 'DropboxController@update_dropbox_photo_url');
 
 //Route::post('/upload', 'IndexController@upload');
