@@ -33,7 +33,7 @@
                                     <input type="number" name="phoneNumber" class="form-control my-3" placeholder="Phone Number"/>
                                     <input type="text" name="email" class="form-control my-3" placeholder="addyours@email.com"/>
                                     <input type="password" name="password" class="form-control my-3" placeholder="password" />
-                                    <input type="submit" class="form-control login-submit" value="Login" />
+                                    <input type="submit" class="form-control login-submit" value="Register" />
                                 </div>
                             {!! Form::close() !!} 
                         </div>
