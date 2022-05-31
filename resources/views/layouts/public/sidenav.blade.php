@@ -164,13 +164,13 @@
                     </nav>
                 </div>
                 @if(!isset($page) || (isset($page) && $page != 'order payment'))
-                <div class="col-lg-3">
+                <div class="col-lg-3" style="border: 1px solid red;">
                     <div class="header__right">
                         <!-- <div class="header__right__auth">
                             <a href="#">Login</a>
                             <a href="#">Register</a>
                         </div> -->
-                        <ul class="header__right__widget" style="min-width:250px; margin-right:20px;">
+                        <ul class="header__right__widget" style="border: 1px solid blue; min-width:250px;">
                             <li>
                                 <a href="javascript::void(0)">
                                     <span id="d-current-currency" data-currency="{{ $baseCurrency->name }}">{{ $baseCurrency->name }}</span>
@@ -188,6 +188,9 @@
                                 <a href="javascript:void(0)"><span class="fas fa-shopping-cart" onclick="open_cart('d-cart')"></span>
                                     <div class="tip cart-no">0</div>
                                 </a>
+                            </li>
+                            <li>
+                                <a href="/">Login</a>|<a href="/">Register</a>
                             </li>
                             <!--
                             <li>

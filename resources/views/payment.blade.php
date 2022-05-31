@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="container-fluid breadcrumb-option">
+    <div class="container breadcrumb-option">
         <div class="row">
             <div class="col-md-7 col-12 mt-5 payment-left">
                 <div class="col-md-8 offset-2 col-12">
