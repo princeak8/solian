@@ -35,6 +35,9 @@
     <!-- Checkout Section Begin -->
     <div class="row" style="padding-left: 4%">
         <section class="checkout spad" style="padding-top:100px;">
+
+            <p id="submitting" class="d-none"><b>...Submitting your order</b></p>
+
             <div class="row my-4">
                 @if(!Auth::user()) 
                     <div class="row">
@@ -212,12 +215,14 @@
             }
             if(loggedIn==1 || validated) {
                 console.log(loggedIn);
+                $('#submitting').removeClass('d-none');
                 const street_address = $('input[name=street_address]').val();
                 const city = $('input[name=city]').val();
                 const postal_code = $('input[name=postal_code]').val();
                 const country_id = $('select[name=country_id]').val();
                 const notes = $('textarea[name=notes]').val();
-                const addressDefault = ($('input[name=make_address_default]').is('checked')) ? 1 : 0; 
+                const addressDefault = ($('input[name=make_address_default]').prop('checked')) ? 1 : 0; 
+                //console.log('address default',addressDefault);
 
                 let url = "{{url('place_order')}}";
                 var token = $('meta[name="csrf-token"]').attr('content');
@@ -232,11 +237,14 @@
                 var formData =  {cart: productQtys, total, street_address, city, postal_code, country_id, notes, addressDefault, _token: token};
                 console.log('formData: ',formData);
                 return axios.post(url, formData)
-                .then((res) => { 
-                    console.log(res.data.statusCode);
-                    if(res.data.statusCode==200) window.location.href = "{{url('payment')}}";
+                .then((res) => {
+                    $('#submitting').addClass('d-none');
+                    let order = res.data.data; 
+                    //console.log('invoice no', order.invoice_no);
+                    if(res.data.statusCode==200) window.location.href = "{{url('payment')}}/"+order.invoice_no;
                 })
                 .catch((error) => {
+                    $('#submitting').addClass('d-none');
                     console.log("An error occured while trying to set rate "+error.message);
                     throw error;
                 });

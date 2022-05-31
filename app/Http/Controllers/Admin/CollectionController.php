@@ -75,18 +75,19 @@ class CollectionController extends Controller
 
     public function save(CollectionRequest $request)
     {
-        $post = $request->all();
-        $post['id'] = $request->get('id');
-        try{
-            $this->collectionService->save($post);
-            if($post['id']==null) {
-                return redirect('admin/collections');
-            }
-            return back()->with("msg", "Collection edited successfully");
-        } catch (\Throwable $th) { dd($th);
-            echo $th->getMessage();
-            //return back()->with('error', $th->getMessage());
-        }
+        dd('here');
+        // $post = $request->all();
+        // $post['id'] = $request->get('id');
+        // try{
+        //     $this->collectionService->save($post);
+        //     if($post['id']==null) {
+        //         return redirect('admin/collections');
+        //     }
+        //     return back()->with("msg", "Collection edited successfully");
+        // } catch (\Throwable $th) { dd($th);
+        //     echo $th->getMessage();
+        //     //return back()->with('error', $th->getMessage());
+        // }
     }
 
     // public function change_photo(Request $request)

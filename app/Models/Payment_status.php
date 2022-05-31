@@ -11,6 +11,16 @@ class Payment_status extends Model
 
     public $timestamps = false;
 
+    public static function paid()
+    {
+        return Self::where('status', 'paid')->first();
+    }
+
+    public static function unpaid()
+    {
+        return Self::where('status', 'unpaid')->first();
+    }
+
     public static function status($status)
     {
         return Self::where('status', $status)->first();

@@ -13,4 +13,24 @@ class Address extends Model
     {
         return $this->belongsTo('App\Models\Country');
     }
+
+    public function orders()
+    {
+        return $this->hasMany('App\Models\Order');
+    }
+
+    public static function boot ()
+    {
+        parent::boot();
+
+        self::deleting(function (Address $address) {
+            if($address->orders->count() > 0) {
+                foreach ($address->orders as $order)
+                {
+                    $order->address_id = 0;
+                    $order->update();
+                }
+            }
+        });
+    }
 }

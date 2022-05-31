@@ -39,18 +39,19 @@ class OrderController extends Controller
         $post = $request->all();
         try{
             if(empty(auth::user()->address_id) || $post['addressDefault']==1) {
-                $address = $this->addressService->save($post);
+                $address = $this->addressService->save($post, auth::user());
                 $post['address_id'] = $address->id;
             }else{
                 $post['address_id'] = auth::user()->address_id;
             }
-            $this->orderService->save($post, auth::user()->id);
+            $order = $this->orderService->save($post, auth::user()->id);
 
             //Send email to Solian and the customer
 
             return response()->json([
                 'statusCode' => 200,
-                'message' => 'order saved successfully'
+                'message' => 'order saved successfully',
+                'data' => $order
             ], 200);
         }catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());

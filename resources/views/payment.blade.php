@@ -2,7 +2,6 @@
 
 @section('content')
 
-    <p>This is the payment page</p>
     <div class="container-fluid breadcrumb-option">
         <div class="row">
             <div class="col-md-7 col-12 mt-5 payment-left">
@@ -12,6 +11,16 @@
                         <i class="fas fa-greater-than fa-sm"></i>
                         <h5>Payment</h5>
                     </div>
+
+                    <div class="mb-4">
+                        <h4>
+                            INVOICE #{{$order->invoice_no}} 
+                            (<span class="@if($order->paymentStatus->status=='paid')alert-success @endif @if($order->paymentStatus->status=='unpaid') alert-danger @endif">
+                                {{$order->paymentStatus->status}}
+                            </span>)
+                        </h4>
+                    </div>
+
                     <div class="card-payment">
                         <h5 style="display:flex; justify-content: center; margin-bottom: 1em;">Card Payment</h5>
                         <div class="payment-links">
@@ -25,16 +34,18 @@
                         <h5><span>Or</span></h5>
                     </div>
                     <h4 class="section-title">Bank Transfer</h4><hr>
-                    <div>
-                        <h5>Bank: First Bank</h5>
-                        <h5>Account Name: Lilian Ekueme</h5>
-                        <h5>Account Name: 3001234567</h5>
-                    </div><hr>
-                    <div>
-                        <h5>Bank: Zenith Bank</h5>
-                        <h5>Account Name: Lilian Ekueme</h5>
-                        <h5>Account Name: 2001234567</h5>
-                    </div><hr>
+                    @if($bankAccounts->count() > 0)
+                        @foreach($bankAccounts as $account)
+                            <div>
+                                <p><b>Bank:</b> {{$account->bank->name}}</p>
+                                <p><b>Account Name:</b> {{$account->name}}</p>
+                                <p><b>Account Name:</b> {{$account->number}}</p>
+                            </div><hr>
+                        @endforeach
+                    @else
+                        <p>Sorry No Account available at the moment. Please contact {{$companyInfo->phone_numbers}} for account to make payment to
+                    @endif
+
                     <div class="upload-evidence">
                         <p>Upload your evidence of payment</p>
                         <form action="/action_page.php">
@@ -74,16 +85,19 @@
            
             <div class="col-md-5 col-12 mt-5" style="height: 100vh; background-color: WhiteSmoke;">
                 <div class="container payment-right">
-                    <div class="row pt-5">
-                        <div class="col-md-2">
-                            <a href="#"><img src="{{asset('assets/img/product/product-2.jpg')}}" class="thumbnail" style="height: 5em;"alt=""></a>
-                        </div>
-                        <div class="col-md-7">
-                            <h6 style="font-weight: bold;">LAGOS MAXI DRESS</h6>
-                            <span style="font-size: 12px;">XL</span> 
-                        </div>
-                        <div class="col-md-3" style="font-weight: bold;">$100</div>
-                    </div> <hr>
+                    @if($order->orderProducts->count() > 0)
+                        @foreach($order->orderProducts as $orderProduct)
+                            <div class="row pt-5">
+                                <div class="col-md-2">
+                                    <a href="#"><img src="{{$orderProduct->product->Mainthumb}}" class="thumbnail" style="height: 5em;"alt=""></a>
+                                </div>
+                                <div class="col-md-7">
+                                    <h6 style="font-weight: bold;">{{$orderProduct->product->name}}</h6>
+                                </div>
+                                <div class="col-md-3" style="font-weight: bold;">{{$orderProduct->order->currency->sign}}{{number_format($orderProduct->price)}}</div>
+                            </div> <hr>
+                        @endforeach
+                    @endif
                     <!-- <div class="contact__form">
                         <form action="#">
                             <input type="text" class="w-50" placeholder="Gift Card/ Discount Voucher">
@@ -93,16 +107,16 @@
                     <div>
                         <div style="display: flex; justify-content: space-between">
                             <span>Subtotal</span>
-                            <span>$100.00</span>
+                            <span>{{$orderProduct->order->currency->sign}}{{number_format($order->total)}}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between">
                             <span>Shipping</span>
-                            <span>Calculated in the next step</span>
+                            <span>{{$orderProduct->order->currency->sign}}0</span>
                         </div>
                     </div> <hr>
                     <div style="display: flex; justify-content: space-between">
                             <span>Total</span>
-                            <h5 style="font-weight: bold;">$100.00</h5>
+                            <h5 style="font-weight: bold;">{{$orderProduct->order->currency->sign}}{{number_format($order->total)}}</h5>
                     </div>
                 </div>
                
