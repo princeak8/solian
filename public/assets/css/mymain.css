@@ -134,6 +134,12 @@ PAYMENT */
 /* .............................. */
 .link-progress{
   margin-bottom: 2em;
+  display: flex;
+  flex-direction: row;
+}
+.link-progress i {
+  color: rgb(192, 189, 189);
+  margin: 1em 1em 0 1em;
 }
 .login-profile{
   display: flex;
@@ -152,16 +158,36 @@ PAYMENT */
 }
 .payment-links{
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+}
+.payment-links a {
   border: 2px solid rgb(214, 209, 209);
   border-radius: 10px;
-  padding: 1em 3em;
+  box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.25);
+-webkit-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.25);
+-moz-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.25);
+  padding: 1em 2em;
+  width: 7em;
 }
-.express-checkout {
+.payment-links a:active{
+  box-shadow: 0 1px #666;
+  transform: translateY(4px);
+}
+.card-payment{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 2px solid rgb(214, 209, 209); 
+  /* width: 20em;  */
+  padding:1em 2em 2em 2em;
+  border-radius: 10px;
+}
+
+.bank-transfer {
   display: flex;
   justify-content: center;
 }
-.contact-checkout h5 {
+.bank-transfer h5 {
   width: 100%; 
   text-align: center; 
   border-bottom: 1px solid rgb(214, 209, 209); 
@@ -169,11 +195,11 @@ PAYMENT */
   margin: 10px 0 20px; 
 } 
 
-.contact-checkout h5 span { 
+.bank-transfer h5 span { 
   background:#fff; 
   padding:0 10px; 
 }
-.contact-checkout {
+.bank-transfer {
   margin-top: 2em;
 }
 .payment-right{
