@@ -16,9 +16,8 @@ return new class extends Migration
         Schema::create('collections', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
-            $table->string('photo', 255);
             $table->text('description');
-            $table->tinyInteger('deleted');
+            $table->tinyInteger('deleted')->default(0);
             $table->timestamps();
         });
         \Artisan::call('db:seed', array('--class' => 'NewArrivalsSeeder'));
