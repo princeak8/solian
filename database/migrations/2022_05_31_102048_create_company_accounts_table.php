@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('collections', function (Blueprint $table) {
+        Schema::create('company_accounts', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
-            $table->text('description');
-            $table->tinyInteger('deleted')->default(0);
+            $table->foreignId('bank_id');
+            $table->string('name');
+            $table->string('number');
+            $table->boolean('active')->default(1);
             $table->timestamps();
         });
-        \Artisan::call('db:seed', array('--class' => 'NewArrivalsSeeder'));
     }
 
     /**
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('collections');
+        Schema::dropIfExists('company_accounts');
     }
 };

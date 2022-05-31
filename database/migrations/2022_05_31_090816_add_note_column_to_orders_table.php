@@ -13,14 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('collections', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 255);
-            $table->text('description');
-            $table->tinyInteger('deleted')->default(0);
-            $table->timestamps();
+        Schema::table('orders', function (Blueprint $table) {
+            $table->string('notes')->after('address_id');
         });
-        \Artisan::call('db:seed', array('--class' => 'NewArrivalsSeeder'));
     }
 
     /**
@@ -30,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('collections');
+        Schema::table('orders', function (Blueprint $table) {
+            //
+        });
     }
 };

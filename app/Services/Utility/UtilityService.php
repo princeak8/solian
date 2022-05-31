@@ -12,6 +12,7 @@ use App\Helpers\Helper;
 use Cloudinary;
 
 use App\Models\Country;
+use App\Models\Bank;
 
 
 class UtilityService
@@ -20,6 +21,11 @@ class UtilityService
     public static function countries()
     {
         return Country::all();
+    }
+
+    public static function Banks()
+    {
+        return Bank::all();
     }
 }
 

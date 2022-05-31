@@ -30,6 +30,13 @@
   </a>
 </li>
 
+<li class="nav-item">
+  <a class="nav-link" href="{{url('admin/bank_accounts')}}">
+    <i class="fas fa-fw fa-folder"></i>
+    <span>Company Bank Accounts</span>
+  </a>
+</li>
+
 <!--
 <li class="nav-item">
   <a class="nav-link" href="{{url('admin/admins')}}">

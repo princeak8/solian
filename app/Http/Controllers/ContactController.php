@@ -17,7 +17,7 @@ class ContactController extends Controller
 
     public function index()
     {
-        $companyInfo = $this->companyService->comanyInfo();
+        $companyInfo = $this->companyService->companyInfo();
         return view('contact', compact('companyInfo'));
     }
 }

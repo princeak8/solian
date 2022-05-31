@@ -29,8 +29,11 @@ Route::post('currency/switch', 'CurrencyController@set_currency');
 
 Route::get('checkout', 'OrderController@checkout_page');
 Route::post('/place_order', 'OrderController@place_order');
-Route::get('/payment', 'PaymentController@payment');
+Route::get('/payment/{invoice_no}', 'PaymentController@payment');
 
+Route::get('register', function() {
+    return view('register');
+});
 Route::post('register', 'UserController@create');
 
 Route::get('login', function() {
@@ -136,6 +139,14 @@ Route::group([
     Route::get('/sizes', 'SizeController@index');
     Route::get('/size/edit/{id}', 'SizeController@edit');
     Route::post('/size/update', 'SizeController@update');
+
+    //Company Routs
+    Route::get('/company', 'CompanyController@index');
+    Route::get('/bank_accounts', 'CompanyController@bank_accounts');
+    Route::get('/add_bank_account', 'CompanyController@bank_account_form');
+    Route::get('/edit_bank_account/{id}', 'CompanyController@bank_account_form');
+    Route::post('/save_bank_account', 'CompanyController@save_account');
+    Route::post('/toggle_account', 'CompanyController@toggle_activation');
 });
 
 Route::group([

@@ -42,7 +42,10 @@ class OrderService
         return Order::where('order_status_id', $pendingStatus->id)->get();
     }
 
-
+    public function getOrderByInvoiceNo($invoice_no)
+    {
+        return Order::where('invoice_no', $invoice_no)->first();
+    }
 
     public function save($data, $user_id)
     {
@@ -66,8 +69,9 @@ class OrderService
         $orderObj->total = $total;
         $orderObj->currency_id = $baseCurrency->id;
         $orderObj->order_status_id = Order_status::status('pending')->id;
-        $orderObj->payment_status_id = Payment_status::status('unpaid')->id;
+        $orderObj->payment_status_id = Payment_status::unpaid()->id;
         $orderObj->address_id = $data['address_id'];
+        if(isset($data['notes'])) $orderObj->notes = $data['notes'];
         $orderObj->save();
 
 
@@ -78,6 +82,8 @@ class OrderService
         $invoiceNo = $this->generateInvoiceNo($orderObj->id);
         $orderObj->invoice_no = $invoiceNo;
         $orderObj->update();
+
+        return $orderObj;
     }
 
     private function generateInvoiceNo($id)
