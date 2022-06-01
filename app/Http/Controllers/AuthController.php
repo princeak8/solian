@@ -38,7 +38,8 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $redirect = explode('public/', $request->header('referer'))[1];
+        $redirectArr = explode('public/', $request->header('referer'));
+        $redirect = (isset($redirectArr[1])) ? $redirectArr[1] : '';
         //dd($redirect);
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
