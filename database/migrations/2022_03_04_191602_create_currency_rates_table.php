@@ -19,6 +19,7 @@ return new class extends Migration
             $table->float('rate');
             $table->timestamps();
         });
+        \Artisan::call('db:seed', array('--class' => 'CurrencyRateSeeder'));
     }
 
     /**

@@ -20,4 +20,24 @@ class Currency extends Model
     {
         return $this->hasOne('App\Models\Currency_rate');
     }
+
+    public static function naira()
+    {
+        return Self::where('name', 'NGN')->first();
+    }
+    
+    public static function dollar()
+    {
+        return Self::where('name', 'USD')->first();
+    }
+
+    public static function Euro()
+    {
+        return Self::where('name', 'EUR')->first();
+    }
+
+    public static function pounds()
+    {
+        return Self::where('name', 'GBP')->first();
+    }
 }
