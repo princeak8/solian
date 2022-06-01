@@ -1,4 +1,12 @@
  <style type="text/css">
+     #currency-select {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+        margin-left: -1em;
+        margin-top: 0.2em;
+        width: 5em;
+    }
     .header__right__widget li .dropdown {
         visibility: hidden;
         z-index: 9;
