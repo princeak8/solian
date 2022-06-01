@@ -1,9 +1,8 @@
  <style type="text/css">
-    .header__right__widget .dropdown {
+    .header__right__widget li .dropdown {
         visibility: hidden;
         z-index: 9;
         opacity: 0;
-        margin-left: 0;
         -webkit-transition: all, 0.3s;
         -o-transition: all, 0.3s;
         transition: all, 0.3s;
