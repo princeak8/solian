@@ -18,6 +18,7 @@ class DropboxService
 
     public static function refreshToken()
     {
+        //dd('got here');
         $res = Http::withBasicAuth(env('DROPBOX_APP_KEY'), env('DROPBOX_APP_SECRET'))->asForm()->post("https://api.dropboxapi.com/oauth2/token",[
             "refresh_token" => env('DROPBOX_REFRESH_TOKEN'),
             "grant_type"=>"refresh_token"
