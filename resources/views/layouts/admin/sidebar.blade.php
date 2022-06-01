@@ -61,6 +61,12 @@
   </a>
 </li>
 <li class="nav-item">
+  <a class="nav-link"  href="{{url('admin/photos')}}">
+    <i class="fas fa-fw fa-folder"></i>
+    <span>Photos</span>
+  </a>
+</li>
+<li class="nav-item">
   <a class="nav-link"  href="{{url('admin/orders')}}">
     <i class="fas fa-fw fa-folder"></i>
     <span>Orders</span>
@@ -75,23 +81,12 @@
   </a>
 </li>
 <li class="nav-item">
-  <a class="nav-link"  href="{{url('admin/slides')}}">
-    <i class="fas fa-fw fa-folder"></i>
-    <span>Slides</span>
-  </a>
-</li>
-<li class="nav-item">
   <a class="nav-link"  href="{{url('admin/sizes')}}">
     <i class="fas fa-fw fa-folder"></i>
     <span>Sizes</span>
   </a>
 </li>
-<li class="nav-item">
-  <a class="nav-link"  href="{{url('admin/photos')}}">
-    <i class="fas fa-fw fa-folder"></i>
-    <span>Photos</span>
-  </a>
-</li>
+
 
 <!-- Divider -->
 <hr class="sidebar-divider">

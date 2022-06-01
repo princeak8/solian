@@ -45,7 +45,7 @@
                             <div class="divider-text">
                                 <h2 class="accordion-header" id="headingAbout">
                                     <!--<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#about" aria-expanded="true" aria-controls="about">-->
-                                    <button class="accordion-button" data-id="about" type="button" data-open="false">
+                                    <button class="accordion-button btn btn-primary" data-id="about" type="button" data-open="false">
                                         About
                                     </button>
                                 </h2>
@@ -71,7 +71,7 @@
                         <div class="divider divider-left-center">
                             <div class="divider-text">
                                 <h2 class="accordion-header" id="headingReturnPolicy">
-                                    <button class="accordion-button" data-id="returnPolicy" type="button" data-open="false">
+                                    <button class="accordion-button btn btn-primary" data-id="returnPolicy" type="button" data-open="false">
                                         Return Policy
                                     </button>
                                 </h2>
@@ -97,7 +97,7 @@
                         <div class="divider divider-left-center">
                             <div class="divider-text">
                                 <h2 class="accordion-header" id="headingDeliveryPolicy">
-                                    <button class="accordion-button" data-id="deliveryPolicy" type="button" data-open="false">
+                                    <button class="accordion-button btn btn-primary" data-id="deliveryPolicy" type="button" data-open="false">
                                     Delivery Policy
                                     </button>
                                 </h2>
@@ -123,7 +123,7 @@
                         <div class="divider divider-left-center">
                             <div class="divider-text">
                                 <h2 class="accordion-header" id="headingFaq">
-                                    <button class="accordion-button" data-id="faq" type="button" data-open="false">
+                                    <button class="accordion-button btn btn-primary" data-id="faq" type="button" data-open="false">
                                         FAQ
                                     </button>
                                 </h2>
@@ -249,7 +249,7 @@
                         axios.post(url, formData)
                         .then((res) => {
                             console.log('status: ',res.data.status);
-                            if(res.data.status == 200) {
+                            if(res.data.statusCode == 200) {
                                 $('#'+field+'-field').html(val);
                                 $('#'+field+'-input').val(val);
                                 $('#'+field+'-input').addClass('d-none');

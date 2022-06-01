@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use App\Http\Requests\SaveBankAccountRequest;
+use App\Http\Requests\UpdateCompanyFieldRequest;
 
 use App\Services\Utility\CompanyService;
 
@@ -118,6 +119,24 @@ class CompanyController extends Controller
                 ], 404);
             }
         }catch (\Throwable $th) {
+            \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+            return response()->json([
+                'statusCode' => 500,
+                'message' => 'An error occured, please contact the Administrator'
+            ], 500);
+        }
+    }
+
+    public function update_field(UpdateCompanyFieldRequest $request)
+    {
+        try{
+            $post = $request->all();
+            $this->companyService->updateField($request->validated());
+            return response()->json([
+                'statusCode' => 200,
+                'message' => 'successfull operation'
+            ], 200);
+        } catch (\Throwable $th) {
             \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
             return response()->json([
                 'statusCode' => 500,

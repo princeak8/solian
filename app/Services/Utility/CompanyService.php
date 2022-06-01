@@ -78,6 +78,13 @@ class CompanyService
         $account->active = $active;
         $account->update();
     }
+
+    public function updateField($data)
+    {
+        $company = self::companyInfo();
+        $company->{$data['field']} = $data['val'];
+        $company->update();
+    }
 }
 
 ?>
