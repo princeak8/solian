@@ -22,11 +22,10 @@ class PaymentController extends Controller
         $this->companyService = new CompanyService;
     }
 
-    public function payment($invoice_no)
-    {
-        $order = $this->orderService->getOrderByInvoiceNo($invoice_no); 
+    public function payment()
+    { 
         $bankAccounts = $this->companyService->activeBankAccounts();
         $companyInfo = $this->companyService->companyInfo();
-        return view('payment', compact('order', 'bankAccounts', 'companyInfo'));
+        return view('payment', compact('bankAccounts', 'companyInfo'));
     }
 }

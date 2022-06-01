@@ -63,16 +63,16 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3" style="border: solid #000 thin">
             @include('layouts/admin/photos_header')
-                
-            <select name="collection-id" id="collection-select">
-                <option value="">Select Collection</option>
-                @if($collections->count() > 0)
-                    @foreach($collections as $collection) <option value="{{$collection->id}}">{{$collection->name}}</option> @endforeach
-                @endif
-            </select>
-            <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
-
             <a href="{{url('admin/refresh_collection_photos')}}" class="btn btn-primary" style="float:right; color:#fff">Refresh</a> 
+            <div class="row">
+                <select name="collection-id" id="collection-select" class="col-4">
+                    <option value="">Select Collection</option>
+                    @if($collections->count() > 0)
+                        @foreach($collections as $collection) <option value="{{$collection->id}}">{{$collection->name}}</option> @endforeach
+                    @endif
+                </select>
+                <a href="javascript:void(0)" class="btn btn-success btn-sm col-2" onclick="addPhotos()">Save</a>
+            </div>
         </div>
 
         <div class="card-body">

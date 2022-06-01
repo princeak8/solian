@@ -38,6 +38,8 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        $redirect = explode('public/', $request->header('referer'))[1];
+        //dd($redirect);
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required'
@@ -51,7 +53,7 @@ class AuthController extends Controller
             }
         }
 
-        return redirect('/');
+        return back();
     }
 
     /**

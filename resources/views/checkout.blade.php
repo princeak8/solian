@@ -111,7 +111,7 @@
                                     <textarea class="form-control" name="notes"></textarea>
                                 </div>
                             @if(Auth::user())
-                                <button type="submit" class="site-btn" onclick="place_order()">Place oder</button>
+                                <button type="submit" class="site-btn" onclick="place_order()">Proceed to Payment</button>
                             @endif
                         </div>
                     </div>
@@ -137,7 +137,7 @@
                             </div>
                             <input type="hidden" id="cart-input" name="cart" />
                             @if(Auth::user())
-                                <button type="submit" class="site-btn" onclick="place_order()">Place oder</button>
+                                <button type="submit" class="site-btn" onclick="place_order()">Proceed to Payment</button>
                             @endif
                         </div>
                     </div>
@@ -215,39 +215,40 @@
             }
             if(loggedIn==1 || validated) {
                 console.log(loggedIn);
-                $('#submitting').removeClass('d-none');
-                const street_address = $('input[name=street_address]').val();
-                const city = $('input[name=city]').val();
-                const postal_code = $('input[name=postal_code]').val();
-                const country_id = $('select[name=country_id]').val();
-                const notes = $('textarea[name=notes]').val();
-                const addressDefault = ($('input[name=make_address_default]').prop('checked')) ? 1 : 0; 
-                //console.log('address default',addressDefault);
+                window.location.href = "{{url('payment')}}"
+                // $('#submitting').removeClass('d-none');
+                // const street_address = $('input[name=street_address]').val();
+                // const city = $('input[name=city]').val();
+                // const postal_code = $('input[name=postal_code]').val();
+                // const country_id = $('select[name=country_id]').val();
+                // const notes = $('textarea[name=notes]').val();
+                // const addressDefault = ($('input[name=make_address_default]').prop('checked')) ? 1 : 0; 
+                // //console.log('address default',addressDefault);
 
-                let url = "{{url('place_order')}}";
-                var token = $('meta[name="csrf-token"]').attr('content');
-                let cart = JSON.parse(localStorage.cart);
-                var productQtys = [];
-                var total = 0;
-                cart.forEach((cartProduct, i) => {
-                    let productDetail = product_details(cartProduct);
-                    total += productDetail.total;
-                    productQtys.push([cartProduct.id, cartProduct.quantity]);
-                });
-                var formData =  {cart: productQtys, total, street_address, city, postal_code, country_id, notes, addressDefault, _token: token};
-                console.log('formData: ',formData);
-                return axios.post(url, formData)
-                .then((res) => {
-                    $('#submitting').addClass('d-none');
-                    let order = res.data.data; 
-                    //console.log('invoice no', order.invoice_no);
-                    if(res.data.statusCode==200) window.location.href = "{{url('payment')}}/"+order.invoice_no;
-                })
-                .catch((error) => {
-                    $('#submitting').addClass('d-none');
-                    console.log("An error occured while trying to set rate "+error.message);
-                    throw error;
-                });
+                // let url = "{{url('place_order')}}";
+                // var token = $('meta[name="csrf-token"]').attr('content');
+                // let cart = JSON.parse(localStorage.cart);
+                // var productQtys = [];
+                // var total = 0;
+                // cart.forEach((cartProduct, i) => {
+                //     let productDetail = product_details(cartProduct);
+                //     total += productDetail.total;
+                //     productQtys.push([cartProduct.id, cartProduct.quantity]);
+                // });
+                // var formData =  {cart: productQtys, total, street_address, city, postal_code, country_id, notes, addressDefault, _token: token};
+                // console.log('formData: ',formData);
+                // return axios.post(url, formData)
+                // .then((res) => {
+                //     $('#submitting').addClass('d-none');
+                //     let order = res.data.data; 
+                //     //console.log('invoice no', order.invoice_no);
+                //     if(res.data.statusCode==200) window.location.href = "{{url('payment')}}/"+order.invoice_no;
+                // })
+                // .catch((error) => {
+                //     $('#submitting').addClass('d-none');
+                //     console.log("An error occured while trying to set rate "+error.message);
+                //     throw error;
+                // });
             }
         }
 

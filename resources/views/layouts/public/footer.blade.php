@@ -108,6 +108,13 @@
 
     update_cart_section();
 
+    function empty_cart()
+    {
+        localStorage.setItem('cart', []);
+        load_cart_content([]);
+        $('.cart-no').html(0);
+    }
+
     function open_cart(id)
     {
         $('#'+id).css('display', 'block');

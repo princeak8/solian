@@ -69,13 +69,6 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
                 @include('layouts/admin/photos_header')
-                <div class="top-link">
-                <div class="top-link-inner" id="top-linksId" style="display: flex; flex-direction: row;">
-                    <a href="javascript:void(0)" class="top-text" onclick="switchCategory('collection')">Add Photo(s) to Collection</a>
-                    <a href="javascript:void(0)" class="top-text ml-5" onclick="switchCategory('slide')">Add Photo(s) to Slide</a>
-                </div>
-                <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
-            </div>
             <select name="collection-id" id="collection-select" class="categorySelect d-none">
                 <option value="">Select Collection</option>
                 @if($collections->count() > 0)

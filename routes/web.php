@@ -29,7 +29,7 @@ Route::post('currency/switch', 'CurrencyController@set_currency');
 
 Route::get('checkout', 'OrderController@checkout_page');
 Route::post('/place_order', 'OrderController@place_order');
-Route::get('/payment/{invoice_no}', 'PaymentController@payment');
+Route::get('/payment', 'PaymentController@payment');
 
 Route::get('register', function() {
     return view('register');

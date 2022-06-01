@@ -86,15 +86,17 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Product-Gallery</h6>
             @include('layouts/admin/photos_header')
-            <div class="top-link">
-                <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
+            <div class="row">
+                <select name="product-id" id="product-select" class="categorySelect form-control col-4">
+                    <option value="">Select Product</option>
+                    @if($products->count() > 0)
+                        @foreach($products as $product) <option value="{{$product->id}}">{{$product->name}}</option> @endforeach
+                    @endif
+                </select>
+                <div class="top-link col-2">
+                    <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="addPhotos()">Save</a>
+                </div>
             </div>
-            <select name="product-id" id="product-select" class="categorySelect">
-                <option value="">Select Product</option>
-                @if($products->count() > 0)
-                    @foreach($products as $product) <option value="{{$product->id}}">{{$product->name}}</option> @endforeach
-                @endif
-            </select>
 
             <div class="card-body">
                 @include('inc.message')

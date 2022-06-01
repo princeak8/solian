@@ -55,8 +55,11 @@
         </div>
 
         <div class="row modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="close_cart('m-cart')">Close</button>
-            <a class="btn btn-primary" href="{{url('checkout')}}">Check out</a>
+            <div style="display:flex; flex-direction:row">
+                <button type="button" class="btn btn-primary mh-1" data-dismiss="modal" onclick="empty_cart()">Clear</button>
+                <button type="button" class="btn btn-secondary mh-1" data-dismiss="modal" onclick="close_cart('d-cart')">Close</button>
+                <a class="btn btn-primary mh-1" href="{{url('checkout')}}">Check out</a>
+            </div>
         </div>
 
     </div>
@@ -67,15 +70,18 @@
 <!--  DESKTOP VIEW Shop Cart Section BEGINS -->
 
 
-<div id="d-cart" class="container carrt fixed-top" style="width: 20em; font-size: 70%; position: fixed!important; z-index: 10!important;
+<div id="d-cart" class="container carrt fixed-top" style="width: 25em; font-size: 70%; position: fixed!important; z-index: 10!important;
     background-color: black; opacity:0.9; margin-left: 83%; margin-top: 5em; display:none;"
 >
     <div class="content">
         <p>Cart is empty</p>
     </div>
     <div class="row modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="close_cart('d-cart')">Close</button>
-        <a class="btn btn-primary" href="{{url('checkout')}}">Check out</a>
+        <div style="display:flex; flex-direction:row">
+            <button type="button" class="btn btn-primary mh-1" data-dismiss="modal" onclick="empty_cart()">Clear</button>
+            <button type="button" class="btn btn-secondary mh-1" data-dismiss="modal" onclick="close_cart('d-cart')">Close</button>
+            <a class="btn btn-primary mh-1" href="{{url('checkout')}}">Check out</a>
+        </div>
     </div>
  
  </div>

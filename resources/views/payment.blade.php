@@ -2,25 +2,16 @@
 
 @section('content')
 
-    <div class="container breadcrumb-option">
-        <div class="row">
-            <div class="col-md-7 col-12 mt-5 payment-left">
+    <div class="mt-4" style="margin-top: 5em;">
+        <div class="row" style="margin-top: 5em;">
+
+            <div class="col-md-6 col-12 mt-5 payment-left">
                 <div class="col-md-8 offset-2 col-12">
-                    <div class="link-progress">
+                    <div class="link-progress breadcrumb-option">
                         <a href="/">Checkout</a>
                         <i class="fas fa-greater-than fa-sm"></i>
                         <h5>Payment</h5>
                     </div>
-
-                    <div class="mb-4">
-                        <h4>
-                            INVOICE #{{$order->invoice_no}} 
-                            (<span class="@if($order->paymentStatus->status=='paid')alert-success @endif @if($order->paymentStatus->status=='unpaid') alert-danger @endif">
-                                {{$order->paymentStatus->status}}
-                            </span>)
-                        </h4>
-                    </div>
-
                     <div class="card-payment">
                         <h5 style="display:flex; justify-content: center; margin-bottom: 1em;">Card Payment</h5>
                         <div class="payment-links">
@@ -28,8 +19,6 @@
                             <a href="#"><img src="{{asset('assets/img/payment/payment-2.png')}}" alt=""></a>
                         </div>
                     </div>
-                
-                    
                     <div class="bank-transfer">
                         <h5><span>Or</span></h5>
                     </div>
@@ -53,75 +42,88 @@
                             <input type="submit">
                         </form>
                     </div>
-                    <!-- <div class="login-profile">
-                            <a href="#"><img src="{{asset('assets/img/product/product-2.jpg')}}" class="thumbnail" style="border-radius: 50%; height: 3em;"alt=""></a>
-                        <span class="profile-details">
-                            <a href="/"> lilian ekwueme (lilian@email.com)</a>
-                            <a href="/"> Log out</a>
-                        </span>
-                    </div> -->
-                    <!-- <h5 class="my-3">Shipping Address</h5> -->
-
-                    <!-- <div class="contact__form">
-                        <form action="#">
-                            <input type="text" name="savedAddress" placeholder="Saved Address">
-                            <input type="number" name="phoneNumber" placeholder="Phone number">
-                            <span style="display:flex; justify-content: space between;">
-                                <input type="text" name="firstName" placeholder="First Name"class="mr-3 w-75;">
-                                <input type="text" name="lastName" placeholder="Last Name"class="w-75;">
-                            </span>
-                            <textarea  name="address" placeholder="Address"></textarea>
-                            <input type="text" name="city" placeholder="City">
-                            <span style="display:flex; justify-content: space between;">
-                                <input type="text" name="country" placeholder="Country"class="mr-3 w-25;">
-                                <input type="text" name="state" placeholder="State"class="mr-3 w-25;">
-                                <input type="text" name="zipcode" placeholder="Zipcode"class="w-25;">
-                            </span>
-                            <button type="submit" class="site-btn">Continue to Payment</button>
-                        </form>
-                    </div> -->
+                    
                 </div>
             </div>
            
-            <div class="col-md-5 col-12 mt-5" style="height: 100vh; background-color: WhiteSmoke;">
-                <div class="container payment-right">
-                    @if($order->orderProducts->count() > 0)
-                        @foreach($order->orderProducts as $orderProduct)
-                            <div class="row pt-5">
-                                <div class="col-md-2">
-                                    <a href="#"><img src="{{$orderProduct->product->Mainthumb}}" class="thumbnail" style="height: 5em;"alt=""></a>
-                                </div>
-                                <div class="col-md-7">
-                                    <h6 style="font-weight: bold;">{{$orderProduct->product->name}}</h6>
-                                </div>
-                                <div class="col-md-3" style="font-weight: bold;">{{$orderProduct->order->currency->sign}}{{number_format($orderProduct->price)}}</div>
-                            </div> <hr>
-                        @endforeach
-                    @endif
-                    <!-- <div class="contact__form">
-                        <form action="#">
-                            <input type="text" class="w-50" placeholder="Gift Card/ Discount Voucher">
-                            <span class="btn btn-secondary">Apply</span>
-                        </form>
-                    </div> <hr> -->
-                    <div>
-                        <div style="display: flex; justify-content: space-between">
-                            <span>Subtotal</span>
-                            <span>{{$orderProduct->order->currency->sign}}{{number_format($order->total)}}</span>
+
+            <div class="row container-fluid col-md-6 col-12" style="margin-top: 5em;">
+                <div class="checkout__order col-12">
+                    <h5>Your order</h5>
+                            <div class="checkout__order__product">
+                                <ul id="checkout-cart-products">
+                                    <li class="row">
+                                        <p class="col-5 text-center">Product</p>
+                                        <p class="col-3 text-center">Quantity</p>
+                                        <p class="col-4 text-center">Total</p>
+                                    </li>
+                                    <div id="checkout-cart-products-details">
+
+                                    </div>
+                                </ul>
+                            </div>
+                            <div class="checkout__order__total">
+                                <ul id="checkout-cart-total">
+                                </ul>
+                            </div>
+                            <input type="hidden" id="cart-input" name="cart" />
+                            @if(Auth::user())
+                                <button type="submit" class="site-btn" onclick="place_order()">Proceed to Payment</button>
+                            @endif
                         </div>
-                        <div style="display: flex; justify-content: space-between">
-                            <span>Shipping</span>
-                            <span>{{$orderProduct->order->currency->sign}}0</span>
-                        </div>
-                    </div> <hr>
-                    <div style="display: flex; justify-content: space-between">
-                            <span>Total</span>
-                            <h5 style="font-weight: bold;">{{$orderProduct->order->currency->sign}}{{number_format($order->total)}}</h5>
                     </div>
-                </div>
+
+
+
+            
                
             </div>
         </div>
     </div>
 
+@stop
+
+@section('js')
+    <script type="application/javascript">
+        load_checkout_cart();
+
+        function load_checkout_cart()
+        {
+            let cart = JSON.parse(localStorage.cart);
+            let content = "<p>Cart is empty</p>";
+            if(cart.length > 0) {
+                content = '';
+                let total = 0;
+                console.log('checkout cart',cart);
+                cart.forEach((cartProduct, i) => {
+                    let p = product_details(cartProduct);
+                    total += p.total;
+                    content += `<li class="row">
+                                    <p class="col-5 text-center">${cartProduct.name}</p> 
+                                    <p class="col-3 d-flex flex-direction-row text-center">
+                                        <button type="button" class="py-0 px-2 btn btn-danger btn-sm ${p.display}" onclick="update_checkout_qty('minus', ${cartProduct.id})" style="height:1.5em">-</button>
+                                        <span class="mx-1">${cartProduct.quantity}</span>
+                                    </p>
+                                    <p class="col-4 text-center">
+                                        
+                                        <span class="currency" data-value="${cartProduct.price}">${p.price}</span>
+                                        <span class="currency-sign">${localStorage.currencySign}</span> 
+                                    </p>
+                                </li>`;
+                })
+                $('#checkout-cart-products-details').html(content)
+                convertedTotal = cart_total(total);
+                contentTotal = `<li>Subtotal 
+                                <span class="currency" data-value="${total}">${convertedTotal}</span>
+                                <span class="currency-sign">${localStorage.currencySign}</span> 
+                            </li>
+                            <li>Total 
+                                <span class="currency" data-value="${total}">${convertedTotal}</span>
+                                <span class="currency-sign">${localStorage.currencySign}</span> 
+                            </li>`;
+                
+                $('#checkout-cart-total').html(contentTotal);
+            }
+        }
+    </script>
 @stop
