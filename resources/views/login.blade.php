@@ -1,4 +1,4 @@
-@extends('layouts/public')
+@extends('layouts/public', ['page'=>'login'])
 
 @section('content')
     <!-- Breadcrumb Begin -->
