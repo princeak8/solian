@@ -331,7 +331,7 @@ ol {
 }
 
 .header__menu {
-	padding: 30px 0 27px;
+	padding: 27px 0;
 }
 
 .header__menu ul li {
@@ -423,8 +423,7 @@ ol {
 }
 
 .header__right {
-	text-align: right;
-	/* padding: 30px 0 27px; */
+	text-align: left;
 }
 
 .header__right ul li .dropdown {
@@ -521,6 +520,14 @@ ol {
 
 .header__right__widget {
 	display: inline-block;
+	display: flex; 
+	flex-direction: row;
+	align-items: flex-end!important;
+	padding-right:0; 
+	margin-left:0; 
+	padding-left: 0; 
+	min-width:280px;
+	
 }
 
 .header__right__widget li {
@@ -1860,7 +1867,7 @@ ol {
 	text-transform: uppercase;
 	padding: 14px 30px 15px;
 	border-radius: 50px;
-	float: left;
+	/* float: left; */
 	margin-right: 10px;
 	margin-bottom: 10px;
 }
@@ -1915,7 +1922,7 @@ ol {
 	font-weight: 600;
 	color: #111111;
 	width: 150px;
-	float: left;
+	/* float: left; */
 }
 
 .product__details__widget ul li .stock__checkbox {

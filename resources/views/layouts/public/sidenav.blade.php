@@ -3,6 +3,7 @@
         visibility: hidden;
         z-index: 9;
         opacity: 0;
+        margin-left: 0;
         -webkit-transition: all, 0.3s;
         -o-transition: all, 0.3s;
         transition: all, 0.3s;
@@ -164,13 +165,14 @@
                     </nav>
                 </div>
                 @if(!isset($page) || (isset($page) && $page != 'order payment'))
-                <div class="col-lg-3" style="border: 1px solid red;">
-                    <div class="header__right">
+                <div class="col-lg-3">
+                    <div class="header__right header__menu">
                         <!-- <div class="header__right__auth">
                             <a href="#">Login</a>
                             <a href="#">Register</a>
                         </div> -->
-                        <ul class="header__right__widget" style="border: 1px solid blue; min-width:250px;">
+	 
+                        <ul class="header__right__widget">
                             <li>
                                 <a href="javascript::void(0)">
                                     <span id="d-current-currency" data-currency="{{ $baseCurrency->name }}">{{ $baseCurrency->name }}</span>
@@ -189,8 +191,8 @@
                                     <div class="tip cart-no">0</div>
                                 </a>
                             </li>
-                            <li>
-                                <a href="/">Login</a>|<a href="/">Register</a>
+                            <li style="display: flex; flex-direction: row; padding-right:0;">
+                                <a style="padding-right:4px;" href="{{url('login')}}">Login</a> | <a style="padding-left:4px;" href="{{url('register')}}">Register</a>
                             </li>
                             <!--
                             <li>

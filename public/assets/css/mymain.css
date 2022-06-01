@@ -243,7 +243,7 @@ border-radius: 2px;
       @media only screen and (max-width: 768px) {
        
         .mobile-carrt{
-          margin-left: 36%;
+          margin-left: 60%;
         }
         .mobile-carrt img{
           width: 2em;
