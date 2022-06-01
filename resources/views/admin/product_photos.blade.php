@@ -103,7 +103,7 @@
                                             <img src="{{$photo->file->thumb}}" height="150" alt="">
                                             <div class="container" style="display: flex; justify-content: space-around; padding-right:2em; padding-left:2em">
                                                 <span class="icons">
-                                                    <a href="javascript:void(0)"><i class="fa fa-trash remove" aria-hidden="true" data-id="{{$photo->id}}" onclick="confirm('Are you Sure you want to remove this photo?')"></i></a>
+                                                    <a href="javascript:void(0)"><i class="fa fa-trash remove" aria-hidden="true" data-id="{{$photo->id}}"></i></a>
                                                 </span>
                                             </div>
                                         </div>
@@ -131,24 +131,26 @@
     <script type="application/javascript">
 
         $('.remove').click(function() {
-            const id = $(this).data('id');
-            console.log('id:',id);
-            isDeleting(true);
-            let url = "{{url('admin/photo/remove/')}}/"+id;
-            axios.get(url)
-            .then((res) => {
-                console.log('response: ',res);
-                isDeleting(false);
-                if(res.status == 200) {
-                    let ele = $(this).parent().parent().parent().parent();
-                    ele.remove();
-                }
-                refreshPhotos();
-            })
-            .catch((error) => {
-                console.log(error);
-                isDeleting(false);
-            })
+            if(confirm('Are you Sure you want to remove this photo?')) {
+                const id = $(this).data('id');
+                console.log('id:',id);
+                isDeleting(true);
+                let url = "{{url('admin/photo/remove/')}}/"+id;
+                axios.get(url)
+                .then((res) => {
+                    console.log('response: ',res);
+                    isDeleting(false);
+                    if(res.status == 200) {
+                        let ele = $(this).parent().parent().parent().parent();
+                        ele.remove();
+                    }
+                    refreshPhotos();
+                })
+                .catch((error) => {
+                    console.log(error);
+                    isDeleting(false);
+                })
+            }
         })
 
         function isDeleting(status)
@@ -171,6 +173,7 @@
             let url = "{{url('admin/photo/refresh/product')}}";
             axios.get(url)
             .then((res) => {
+                console.log('refreshed photos')
                 console.log('response: ',res);
             })
             .catch((error) => {

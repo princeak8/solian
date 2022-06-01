@@ -71,7 +71,7 @@ use App\Models\Currency_rate;
             $fp = fopen($envFile, 'w');
             fwrite($fp, $str);
             fclose($fp);
-            //dd(env($envKey));
+            // dd(env($envKey));
         }
 
         public static function setMultiEnvironmentValue($envVars)
@@ -90,7 +90,6 @@ use App\Models\Currency_rate;
             $fp = fopen($envFile, 'w');
             fwrite($fp, $str);
             fclose($fp);
-            //dd(env($envKey));
         }
 
     }

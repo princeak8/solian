@@ -113,7 +113,7 @@ class PhotoController extends Controller
                 case 'slide' : $session = 'dropBoxSlidePhotos'; $photos = $this->photoService->getDropboxSlidePhotos(); break;
             }
             
-            //dd($photos);
+            // dd($photos);
             //dd(session('dropBoxPhotos'));
             return response()->json([
                 'statusCode' => 200,

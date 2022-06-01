@@ -168,11 +168,11 @@ class PhotoService
     public function getDropboxProductPhotos($page=1, $force=false)
     {
         $dropBoxProductPhotosArr = [];
-        if(!$force && (time() < env('FETCH_DROPBOX_PRODUCT_PHOTOS_EXPIRY') && session('dropBoxProductPhotos') != null)) {
-            // dd('here1');
+        if(!$force && ((time() < env('FETCH_DROPBOX_PRODUCT_PHOTOS_EXPIRY')) && session('dropBoxProductPhotos') != null)) {
+            //dd('here1');
             foreach(session('dropBoxProductPhotos')[$page-1] as $photo) $dropBoxProductPhotosArr[] = $photo;
         }else{
-            // dd('here2');
+            //dd('here2');
             $dropBoxProductPhotosArr = $this->getDropboxPhotos('product', $page);
             session(['dropBoxProductPhotos' => null]);
             if(session('dropBoxProductPhotos') == null) session(['dropBoxProductPhotos' => []]);

@@ -121,7 +121,7 @@
         var checkedPhotosArr = [];
         
         $(document).on('click', '.checkbox', function(e){
-            console.log('clicked');
+            //console.log('clicked');
             if(this.checked == true) {
                 let id = this.id;
                 let file = this.value;
@@ -129,11 +129,12 @@
                 let url = $(this).data("url");
                 let size = $(this).data("size");
                 checkedPhotosArr.push({file, thumb, url, size, id});
-                console.log(checkedPhotosArr);
+                
             } else {
                     // REMOVE VALUE FROM ARRAY WHEN IT IS UNCHECKED
-                checkedPhotosArr = checkedPhotosArr.filter(e => e !== this.value);
+                checkedPhotosArr = checkedPhotosArr.filter(e => e.file !== this.value);
             }
+            console.log(checkedPhotosArr);
         });
 
         $("#top-linksId").on('click', 'a', function () {
