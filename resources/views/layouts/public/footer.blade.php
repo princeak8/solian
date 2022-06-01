@@ -231,12 +231,13 @@
     //localStorage.removeItem('cart');
     function add_to_cart(product, qty=1)
     {
-        //console.log('quantity', qty);
+        console.log('photo', product);
         var productObj = {
             id: product.id,
             name: product.name,
             price: product.price,
-            quantity: qty
+            quantity: qty,
+            photo: product.photo
         };
         
         var cart;
@@ -252,8 +253,8 @@
             cart.forEach(function(p, i) {
                 if(p.id == productObj.id) {
                     productExists = true;
-                    console.log('qty: ',productObj.quantity);
-                    console.log('qty2: ',p.quantity);
+                    // console.log('qty: ',productObj.quantity);
+                    // console.log('qty2: ',p.quantity);
                     p.quantity = parseInt(p.quantity) + parseInt(productObj.quantity);
                 }
             })

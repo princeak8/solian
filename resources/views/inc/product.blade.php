@@ -14,6 +14,7 @@
             <ul class="product__hover">
                 <li><a href="{{$product->main}}" class="image-popup"><span class="arrow_expand"></span></a></li>
                 <!--<li><a href="#"><span class="icon_heart_alt"></span></a></li>-->
+                <?php $product->photo = $product->mainThumb; ?>
                 <li><a href="javascript:void(0)" onclick="add_to_cart({{$product}})"><span class="icon_bag_alt"></span></a></li>
             </ul>
         </div>

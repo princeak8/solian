@@ -53,7 +53,7 @@ class AuthController extends Controller
             }
         }
 
-        return back();
+        return ($redirect=='checkout') ? redirect('checkout') : redirect('user/');
     }
 
     /**

@@ -19,11 +19,10 @@ class CustomerAuth
     {
         if ((Auth::user() != null) && Auth::check())
         {
-            if(Auth::user()->role->role=='customer') {
+            // if(Auth::user()->role->role=='customer' || Auth::user()->role->role=='admin') {
                 return $next($request);
-            }
-            return redirect('/');
+            // }
         }
-        return redirect('/');
+        return redirect('login');
     }
 }

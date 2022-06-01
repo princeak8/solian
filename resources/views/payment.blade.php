@@ -51,16 +51,16 @@
                 <div class="checkout__order col-12">
                     <h5>Your order</h5>
                             <div class="checkout__order__product">
-                                <ul id="checkout-cart-products">
-                                    <li class="row">
-                                        <p class="col-5 text-center">Product</p>
-                                        <p class="col-3 text-center">Quantity</p>
-                                        <p class="col-4 text-center">Total</p>
-                                    </li>
-                                    <div id="checkout-cart-products-details">
+                                <table id="checkout-cart-products">
+                                    <thead>
+                                        <th class="col-5 text-center">Product</th>
+                                        <th class="col-3 text-center">Quantity</th>
+                                        <th class="col-4 text-center">Total</th>
+                                    </thead>
+                                    <tbody id="checkout-cart-products-details">
 
-                                    </div>
-                                </ul>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="checkout__order__total">
                                 <ul id="checkout-cart-total">
@@ -98,18 +98,19 @@
                 cart.forEach((cartProduct, i) => {
                     let p = product_details(cartProduct);
                     total += p.total;
-                    content += `<li class="row">
-                                    <p class="col-5 text-center">${cartProduct.name}</p> 
-                                    <p class="col-3 d-flex flex-direction-row text-center">
-                                        <button type="button" class="py-0 px-2 btn btn-danger btn-sm ${p.display}" onclick="update_checkout_qty('minus', ${cartProduct.id})" style="height:1.5em">-</button>
+                    content += `<tr class="table">
+                                    <td class="row">
+                                        <p class="col-6">${cartProduct.name}</p>
+                                        <img src="${cartProduct.photo}" class="col-6" style="height: 7em; width: 3em;"alt=""></a>
+                                    </td> 
+                                    <td class="text-center">
                                         <span class="mx-1">${cartProduct.quantity}</span>
-                                    </p>
-                                    <p class="col-4 text-center">
-                                        
+                                    </td>
+                                    <td class="text-center">
                                         <span class="currency" data-value="${cartProduct.price}">${p.price}</span>
                                         <span class="currency-sign">${localStorage.currencySign}</span> 
-                                    </p>
-                                </li>`;
+                                    </td>
+                                </tr>`;
                 })
                 $('#checkout-cart-products-details').html(content)
                 convertedTotal = cart_total(total);

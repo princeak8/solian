@@ -40,10 +40,9 @@ Route::get('login', function() {
     return view('login');
 });
 Route::post('login', 'AuthController@login');
+Route::get('logout', 'AuthController@logout');
 
-Route::get('user/', function() {
-    return view('user/index');
-});
+Route::get('user/', 'UserController@index');
 
 Route::get('/update_dropbox_photo_url', 'DropboxController@update_dropbox_photo_url');
 

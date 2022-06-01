@@ -191,13 +191,21 @@
                                     @endforeach
                                 </ul>
                             </li>
-                            <li>
-                                <a href="javascript:void(0)"><span class="fas fa-shopping-cart" onclick="open_cart('d-cart')"></span>
-                                    <div class="tip cart-no">0</div>
-                                </a>
-                            </li>
+                            @if(($page != 'checkout') && ($page != 'payment'))
+                                <li>
+                                    <a href="javascript:void(0)"><span class="fas fa-shopping-cart" onclick="open_cart('d-cart')"></span>
+                                        <div class="tip cart-no">0</div>
+                                    </a>
+                                </li>
+                            @endif
+
                             <li style="display: flex; flex-direction: row; padding-right:0;">
-                                <a style="padding-right:4px;" href="{{url('login')}}">Login</a> | <a style="padding-left:4px;" href="{{url('register')}}">Register</a>
+                                @if(Auth::user())
+                                    <a href="{{url('user/')}}" class="mr-2">{{Auth::user()->name}}</a> |
+                                    <a style="color: blue" href="{{url('logout')}}" class="ml-2">Logout</a>
+                                @else
+                                    <a style="padding-right:4px;" href="{{url('login')}}">Login</a> | <a style="padding-left:4px;" href="{{url('register')}}">Register</a>
+                                @endif
                             </li>
                             <!--
                             <li>

@@ -36,9 +36,15 @@ class UserController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('customerAuth');
         $this->authService = new AuthService;
         $this->userService = new UserService;
         $this->roleService = new RoleService;
+    }
+
+    public function index()
+    {
+        return view('user/index'); 
     }
 
     public function create(RegisterRequest $request)

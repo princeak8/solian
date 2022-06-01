@@ -26,11 +26,10 @@
                             <h5>Register Here</h5>
                             <p>Please fill the information below:</p>
                             
-                            {!! Form::open(['url' => "login",'method' => 'post', 'class'=>'form-horizontal', ]) !!}
+                            {!! Form::open(['url' => "register",'method' => 'post', 'class'=>'form-horizontal', ]) !!}
                                 <div class="login-content">
-                                    <input type="text" name="firstName" class="form-control my-3" placeholder="First Name"/>
-                                    <input type="text" name="lastName" class="form-control my-3" placeholder="Last Name"/>
-                                    <input type="number" name="phoneNumber" class="form-control my-3" placeholder="Phone Number"/>
+                                    <input type="text" name="name" class="form-control my-3" placeholder="Name"/>
+                                    <input type="number" name="phone_number" class="form-control my-3" placeholder="Phone Number"/>
                                     <input type="text" name="email" class="form-control my-3" placeholder="addyours@email.com"/>
                                     <input type="password" name="password" class="form-control my-3" placeholder="password" />
                                     <input type="submit" class="form-control login-submit" value="Register" />
