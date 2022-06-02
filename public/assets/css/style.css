@@ -3470,6 +3470,10 @@ ol {
 /* Wide Mobile = 480px */
 
 @media only screen and (max-width: 767px) {
+	.mobile-menu-wrap{
+		display: flex;
+		flex-direction: column;
+	}
 	.canvas__open {
 		display: block;
 		font-size: 22px;
@@ -3552,6 +3556,8 @@ ol {
 	}
 	.slicknav_nav .slicknav_row,
 	.slicknav_nav a {
+		display: flex;
+		flex-direction: column;
 		padding: 7px 0;
 		margin: 0;
 		color: #111111;
@@ -3569,6 +3575,10 @@ ol {
 	}
 	.slicknav_nav {
 		display: block !important;
+	}
+	.slicknav_item {
+		display: flex!important;
+		flex-direction: column!important;
 	}
 	.offcanvas__logo {
 		margin-bottom: 25px;

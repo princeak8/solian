@@ -24,7 +24,7 @@ class CurrencyRateSeeder extends Seeder
         }
 
         foreach($currencyRates as $rate) {
-            DB::table('currency_rate')->insert([
+            DB::table('currency_rates')->insert([
                 'currency_id' => $rate['currency_id'],
                 'rate' => 1
             ]);

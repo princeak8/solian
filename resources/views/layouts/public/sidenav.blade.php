@@ -121,7 +121,7 @@
                     <span id="m-current-currency" data-currency="{{ Session::get('currency')}}">{{ Session::get('currency')}}</span>
                     <span class="fas fa-caret-down down"></span>
                 </a>
-                <ul class="dropdown">
+                <ul id="currency-select" class="dropdown">
                     @foreach($currencies as $currency)
                         <li id="m-{{$currency->name}}" @if($currency->active==1) class="d-none" @endif>
                             <a href="javascript::void(0)" onclick="switch_currency('{{$currency->name}}')">{{$currency->name}}</a>
@@ -131,7 +131,8 @@
             </li>
             @endif
         </ul>
-        <div id="mobile-menu-wrap"></div>
+        <div id="mobile-menu-wrap">
+        </div>
         <!-- <div class="offcanvas__auth">
             <a href="#">Login</a>
             <a href="#">Register</a>
@@ -161,7 +162,7 @@
                 
                 <div class="col-lg-6">
                     <nav class="header__menu">
-                        <ul style="display: flex; justify-content: space-around;">
+                        <ul>
                             <li class="active"><a href="{{url('/')}}">Home</a></li>
                             <li><a href="{{url('collection/'.$newArrivals->name)}}">New Arrivals</a></li>
                             <li><a href="#">Collections<span class="fas fa-caret-down down"></span></a>
