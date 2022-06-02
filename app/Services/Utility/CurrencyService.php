@@ -18,9 +18,9 @@ use App\Models\Currency_rate;
 class CurrencyService
 {
 
-    public function currencies()
+    public function currencies($includeBase=true)
     {
-        return Currency::all();
+        return ($includeBase) ? Currency::all() : Currency::where('name', '!=', 'NGN')->get();
     }
 
     public function baseCurrency()
@@ -44,9 +44,16 @@ class CurrencyService
         return Currency_rate::where('currency_id', $baseCurrency->id)->first();
     }
 
-    public function rates()
+    public function getRateById($id)
     {
-        return Currency_rate::all();
+        return Currency_rate::find($id);
+    }
+
+    public function rates($includeBase=true)
+    {
+        return ($includeBase) ? Currency_rate::all() : Currency_rate::whereHas('currency', function($query) use ($includeBase) {
+            $query->where('name', '!=', 'NGN');
+        })->get();
     }
 
     public function switchCurrency($currency)
@@ -58,6 +65,12 @@ class CurrencyService
             $baseCurrency->active = 0;
             $baseCurrency->update();
         }
+    }
+
+    public function updateRate($data, $rate)
+    {
+        $rate->rate = $data['rate'];
+        $rate->update();
     }
 }
 
