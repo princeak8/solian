@@ -150,6 +150,9 @@ Route::group([
     Route::get('/edit_bank_account/{id}', 'CompanyController@bank_account_form');
     Route::post('/save_bank_account', 'CompanyController@save_account');
     Route::post('/toggle_account', 'CompanyController@toggle_activation');
+
+    Route::get('/rates', 'CurrencyController@rates');
+    Route::post('/update_rate', 'CurrencyController@update_rate');
 });
 
 Route::group([
