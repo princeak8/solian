@@ -56,17 +56,17 @@
      <!--  MOBILE VIEW Shop Cart Section Begin -->
 
      <div id="m-cart" class="container mobile-carrt fixed-top" style="width: 20em; font-size: 70%; position: fixed!important; z-index: 10!important;
-            background-color: black; opacity:0.9; margin-top: 5em; margin-left: 50%; display:none;"
+            background-color: black; opacity:0.9; margin-top: 5em; margin-left: 40%; display:none;"
     >
         <div class="content">
             <p>Cart is empty</p>
         </div>
 
-        <div class="row modal-footer">
-            <div style="display:flex; flex-direction:row">
-                <button type="button" class="btn btn-primary mh-1" data-dismiss="modal" onclick="empty_cart()">Clear</button>
-                <button type="button" class="btn btn-secondary mh-1" data-dismiss="modal" onclick="close_cart('d-cart')">Close</button>
-                <a class="btn btn-primary mh-1" href="{{url('checkout')}}">Check out</a>
+        <div class="row modal-footer" style="display:flex; justify-content: center;">
+            <div style="display:flex; flex-direction:row;">
+                <button type="button" class=" p-2 mr-2 btn-xs btn-light mh-1" style="border-radius: 5px; border-bottom: 2px solid red;" data-dismiss="modal" onclick="empty_cart()">Clear</button>
+                <button type="button" class="p-2 mr-2 btn-xs btn-secondary mh-1"style="border-radius: 5px;" data-dismiss="modal" onclick="close_cart('d-cart')">Close</button>
+                <a class="p-2 btn-xs btn-light mh-1"style="border-radius: 5px; border-bottom: 2px solid red;" href="{{url('checkout')}}">Check out</a>
             </div>
         </div>
 
@@ -79,16 +79,16 @@
 
 
 <div id="d-cart" class="container carrt fixed-top" style="width: 25em; font-size: 70%; position: fixed!important; z-index: 10!important;
-    background-color: black; opacity:0.9; margin-left: 83%; margin-top: 5em; display:none;"
+    background-color: black; opacity:0.9; margin-left: 80%; margin-top: 5em; display:none;"
 >
     <div class="content">
         <p>Cart is empty</p>
     </div>
-    <div class="row modal-footer">
+    <div class="row modal-footer" style="display:flex; justify-content: flex-start;">
         <div style="display:flex; flex-direction:row">
-            <button type="button" class="btn btn-primary mh-1" data-dismiss="modal" onclick="empty_cart()">Clear</button>
-            <button type="button" class="btn btn-secondary mh-1" data-dismiss="modal" onclick="close_cart('d-cart')">Close</button>
-            <a class="btn btn-primary mh-1" href="{{url('checkout')}}">Check out</a>
+            <button type="button" class="mr-2 btn btn-sm btn-light mh-1" style="border-radius: 7px; border-bottom: 2px solid red;" data-dismiss="modal" onclick="empty_cart()">Clear</button>
+            <button type="button" class="mr-2 btn btn-sm btn-secondary mh-1" style="border-radius: 7px;" data-dismiss="modal" onclick="close_cart('d-cart')">Close</button>
+            <a class="btn btn-light mh-1" style="border-radius: 7px; border-bottom: 2px solid red;" href="{{url('checkout')}}">Check out</a>
         </div>
     </div>
  

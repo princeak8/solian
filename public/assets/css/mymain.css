@@ -290,6 +290,9 @@ border-radius: 2px;
         .carrt{
           display: none!important;
         }
+        .login-content{
+          padding: 2em;
+        }
          
       }
   

@@ -17,14 +17,14 @@
     <!-- Breadcrumb End -->
 
     <!-- Contact Section Begin -->
-    <section class="contact spad">
+    <section class="container contact spad">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="contact__content">
                         <div class="contact__address">
                             <h5>Login Here</h5>
-                            @include('inc.message');
+                            @include('inc.message')
                             <p>Please enter your e-mail and password:</p>
                             
                             {!! Form::open(['url' => "login",'method' => 'post', 'class'=>'form-horizontal', ]) !!}
