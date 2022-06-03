@@ -48,10 +48,14 @@ class DropboxService
                     $photo->file->url = Storage::disk('dropbox')->url($photo->file->path);
                     // \Log::stack(['project'])->info('about to update url5');
                     $photo->file->update();
+                    // \Log::stack(['project'])->info('updated: '.$photo->file->path.' - '.Storage::disk('dropbox')->url($photo->file->path));
                     //dd((time() + (60*60)));
-                    Helper::setEnvironmentValue('UPDATE_DROPBOX_PHOTOS__url_EXPIRY', (time() + (60*60)) );
                     // \Log::stack(['project'])->info('updated url');
                 }
+            }
+            if(time() >= env('UPDATE_DROPBOX_PHOTOS__url_EXPIRY')) {
+                Helper::setEnvironmentValue('UPDATE_DROPBOX_PHOTOS__url_EXPIRY', (time() + (int)(60*60)) );
+                \Log::stack(['project'])->info('updated: time'.(time() + (int)(60*60)));
             }
         }else{
             \Log::stack(['project'])->info('no photos');
