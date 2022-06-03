@@ -260,18 +260,23 @@ border-radius: 2px;
         .offcanvas-menu-wrapper {
             margin-top: 5em!important;
         }
+        .carousel-item img{
+          height: 23em;
+          object-fit: cover;
+        }
+       
         .carousel-caption {
-            padding: 5px 20px 0 0;
+          padding: 5px 20px 0 0;
 	        margin-left: 0;
 	        margin-top: -200px;
-            width: 10em!important;
+          width: 10em!important;
     
           }
           .carousel-caption h4{
-            font-size: 90%!important;
+            font-size: 80%!important;
           }
           .carousel-caption h5{
-            font-size: 90%!important;
+            font-size: 70%!important;
           }
           .box{
             position: relative;
@@ -293,6 +298,11 @@ border-radius: 2px;
         .login-content{
           padding: 2em;
         }
+        /* .mobile-currency-select .down {
+          display:flex;
+           flex-direction: row;
+           border: 1px solid red;
+        } */
          
       }
   

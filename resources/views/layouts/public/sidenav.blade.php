@@ -233,4 +233,3 @@
                 <i class="fa fa-bars"></i>
             </div>
         </div>
-    </header>
