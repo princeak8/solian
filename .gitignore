@@ -18,4 +18,5 @@ yarn-error.log
 error_log
 web.config
 docs/
+public/assets/js/update_dropbox_photos_urls.js
 
