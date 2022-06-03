@@ -71,6 +71,7 @@
 <script type="application/javascript">
     lazyload();
 </script>
+<script src="{{asset('assets/js/update_dropbox_photos_urls.js')}}"></script>
 <script type="application/javascript">
     console.log('working');
     var sessionId = "{{Session::getId()}}";
@@ -374,19 +375,7 @@
                 throw error;
             });
     }
-    // n=0
-    // setInterval(function () { n++
-    //     let url = "{{url('update_dropbox_photo_url')}}";
-    //     axios.get(url)
-    //     .then((res) => { 
-    //         //console.log(res.data);
-    //         console.log('updated dropbox photo urls'+n);
-    //     })
-    //     .catch((error) => {
-    //         console.log("An error occured while trying to set rate "+error.message);
-    //         throw error;
-    //     });
-    // }, 100000);
+    
 
     /*
     var cart = new Vue({
