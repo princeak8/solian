@@ -1,7 +1,11 @@
 @include('layouts.public.header')           
 
 <body>
-@include('layouts.public.sidenav')           
+@include('layouts.public.sidenav') 
+
+@yield('css')
+
+</header>
    
     <!-- ========================================================================================== -->
     <!-- ======================== B O D Y === B E G I N S ===================================== -->

@@ -1,23 +1,32 @@
 @extends('layouts/public', ['page'=>'index'])
 
+@section('css')
+ <style type="text/css">
+    .carousel-item img{
+            display: none;
+         }
+</style>
+
+@stop
+
 @section('content')
 
 
 <section style="position: relative!important; z-index: 1!important;">
-    <div id="carouselExampleFade" class="carousel slide carousel-fade mt-4 pt-5" data-ride="carousel">
+    <div id="carouselExampleFade" class="carousel slide carousel-fade mt-4 pt-5" data-ride="carousel" >
         <div class="carousel-inner">
             @if($slides->count() > 0) {
                 @foreach($slides as $slide)
-                    <div class="carousel-item zoom @if($slide->active==1) active @endif">
+                    <div class="carousel-item @if($slide->active==1) active @endif">
                         <img class="d-block w-100" src="{{$slide->file->FileUrl}}" alt="First slide">
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-6 col-md-offset-3 col-md-push-3 col-sm-12 col-xs-12">	
-                                        <div class="carousel-caption one" style="opacity:0.7;">
-                                            <h4>Awesome Outfits:</h4>
-                                            <h5>For your memorable occasions</h5>
-                                            <!--<p><a  href="#" class="btn btn-sm btn-primary btn-learn">SHOP NOW <i class="icon-arrow-right3"></i> </a></p>-->
-                                        </div>
+                                    <div class="carousel-caption one" style="opacity:0.7;">
+                                        <h4>Awesome Outfits:</h4>
+                                        <h5>For your memorable occasions</h5>
+                                        <!--<p><a  href="#" class="btn btn-sm btn-primary btn-learn">SHOP NOW <i class="icon-arrow-right3"></i> </a></p>-->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +78,6 @@
             </div>
         </div> -->
 
-           
         <div>
             @if($newArrivals->products && $newArrivals->products->count() > 0)
                 @include('inc.new_arrivals')
@@ -77,10 +85,10 @@
             
             @foreach($collections as $collection)
                 @if($collection->products->count() > 0)
-                    <div class="section-title ml-5">
+                    <div class="section-title ml-3">
                         <h4>{{strtoupper($collection->name)}} Collection</h4>
                     </div>
-                    <div class="row property__gallery space"  style="display: flex; justify-content: center;">
+                    <div class="row property__gallery space ml-3" style="display: flex; justify-content: center;"> 
                     
                         @foreach($collection->products as $product)
                             @include('inc.product')
@@ -104,7 +112,7 @@
             @foreach($collections as $collection)
                     <div class="col-md-6 col-12">
                         <div class="content-wrapper" style=" display: flex; justify-content: center;">
-                            <img class="lazyload" data-src="{{$collection->image}}" alt="" style="border: solid 1px red; height: 28em; margin: 3em 3em;">     
+                            <img class="lazyload" data-src="{{$collection->image}}" alt="" style="height: 28em; margin: 3em 3em;">     
                         </div>
                         <div class="text-wrapper">
                             <span class="text-underline"><h5>{{$collection->name}}</h5></span>
