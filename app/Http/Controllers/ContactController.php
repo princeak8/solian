@@ -43,4 +43,9 @@ class ContactController extends Controller
             return redirect('contact')->with('error', $th->getMessage());
         }
     }
+
+    public function refreshCaptcha()
+    {
+        return response()->json(['captcha'=> captcha_img()]);
+    }
 }

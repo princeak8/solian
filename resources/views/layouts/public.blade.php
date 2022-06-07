@@ -21,7 +21,9 @@
 
 <!-- Footer Section Begin -->
 
-@include('layouts.public.footer')           
+@include('layouts.public.footer')   
+
+@yield('js')
 
 </body>
 

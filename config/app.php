@@ -166,6 +166,7 @@ return [
 
         CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class,
 
         /*
          * Package Service Providers...

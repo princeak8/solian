@@ -27,6 +27,7 @@ class ContactMessageRequest extends FormRequest
             'name' => 'required|string',
             'email' => 'email|required',
             'message' => 'string|required',
+            'captcha' => 'required|captcha'
         ];
     }
 }
