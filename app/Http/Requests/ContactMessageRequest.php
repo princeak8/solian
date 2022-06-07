@@ -26,7 +26,7 @@ class ContactMessageRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'email|required',
-            'message' => 'text|required',
+            'message' => 'string|required',
         ];
     }
 }

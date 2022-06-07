@@ -21,6 +21,7 @@ Route::get('/', 'IndexController@index');
 Route::get('/collection/{name}', 'CollectionController@show');
 Route::get('/product/{name}', 'ProductController@show');
 Route::get('/contact', 'ContactController@index');
+Route::post('/contact', 'ContactController@save_message');
 
 Route::get('currency/fetch_rates', 'CurrencyController@get_rates');
 Route::get('currency/fetch_rate', 'CurrencyController@get_rate');

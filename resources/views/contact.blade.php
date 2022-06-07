@@ -41,10 +41,11 @@
                         </div>
                         <div class="contact__form">
                             <h5>SEND MESSAGE</h5>
-                            <form action="#">
-                                <input type="text" placeholder="Name" name="name" required>
-                                <input type="text" placeholder="Email" name="email" required>
-                                <textarea placeholder="Message" name="message" required></textarea>
+                            @include('inc.message')
+                            {!! Form::open(["url"=>"contact", "method"=>"post"]) !!}
+                                <input type="text" placeholder="Name" name="name" required value="{{old('name')}}">
+                                <input type="text" placeholder="Email" name="email" required value="{{old('email')}}">
+                                <textarea placeholder="Message" name="message" required>{{old('message')}}</textarea>
                                 <button type="submit" class="site-btn">Send Message</button>
                             </form>
                         </div>
