@@ -31,7 +31,9 @@ class ContactController extends Controller
     public function save_message(ContactMessageRequest $request)
     {
         try{
-            $message = $this->messageService->save($request->validated());
+            $post = $request->validated();
+            unset($post['captcha']);
+            $message = $this->messageService->save($post);
             try{
                 Mail::to('akalodave@gmail')->send(new ContactMail($message));
             } catch(\Exception $e) {
