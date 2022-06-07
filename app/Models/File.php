@@ -41,7 +41,12 @@ class File extends Model
 
     public function getFileUrlAttribute()
     {
-        return (time() >= env('UPDATE_DROPBOX_PHOTOS__url_EXPIRY')) ? Storage::disk('dropbox')->url($this->path) : $this->url;
+        try{
+            return (time() >= env('UPDATE_DROPBOX_PHOTOS__url_EXPIRY')) ? Storage::disk('dropbox')->url($this->path) : $this->url;
+        }catch (\Throwable $th) {
+            \Log::stack(['project'])->info($th->getMessage().' in '.$th->getFile().' at Line '.$th->getLine());
+            return $this->url;
+        }
         //return Storage::disk('dropbox')->url($this->path);
     }
 }

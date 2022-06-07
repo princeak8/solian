@@ -106,11 +106,11 @@ class FileService
             if($collection->photo->file) $fileObj = $collection->photo->file;
         }
         
-        // $fileObj->url = $photo['url'];
         $fileObj->thumb = $photo['thumb'];
         $fileObj->path = $photo['file'];
         $fileObj->user_id = $user_id;
-        // $fileObj->secure_url = $fileObj->url;
+        $fileObj->url = $photo['url'];
+        $fileObj->secure_url = $fileObj->url;
         $fileObj->file_type = 'image';
         $filePathParts = pathinfo($photo['file']);
         // $dimension = getimagesize($fileObj->url);
