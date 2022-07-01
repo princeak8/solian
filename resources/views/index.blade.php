@@ -116,7 +116,6 @@
                         </div>
                         <div class="text-center" style="border: solid thin #000;">
                             <span class="text-underline"><h5 class="text-underline">{{$collection->name}}</h5></span>
-                            <br/><br/>
                             <a href="{{url('collection/'.$collection->name)}}" class="btn btn-warning">Shop now</a>
                         </div>
                     </div> 
