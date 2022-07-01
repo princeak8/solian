@@ -111,8 +111,8 @@
         <div class="container-fluid row mb-5">
             @foreach($collections as $collection)
                     <div class="col-md-6 col-12">
-                        <div class="content-wrapper" style="display: flex; justify-content: center;" class="mb-1">
-                            <img class="lazyload" data-src="{{$collection->image}}" alt="" style="height: 28em; margin: 3em 3em;">     
+                        <div class="content-wrapper" style="display: flex; justify-content: center;">
+                            <img class="lazyload" data-src="{{$collection->image}}" alt="" style="height: 28em; margin: 3em">     
                         </div>
                         <div class="text-wrapper" style="border: solid thin #000;">
                             <span class="text-underline"><h5>{{$collection->name}}</h5></span>
