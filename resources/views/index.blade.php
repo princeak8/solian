@@ -114,7 +114,7 @@
                         <div class="content-wrapper" style="display: flex; justify-content: center;">
                             <img class="lazyload" data-src="{{$collection->image}}" alt="" style="height: 28em; margin: 3em">     
                         </div>
-                        <div class="text-wrapper" style="border: solid thin #000;">
+                        <div class="text-wrapper" style="border: solid thin #000; padding-top:5px">
                             <span class="text-underline"><h5>{{$collection->name}}</h5></span>
                             <a href="{{url('collection/'.$collection->name)}}" class="btn btn-warning">Shop now</a>
                         </div>
