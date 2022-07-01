@@ -73,9 +73,9 @@ class CollectionService
             // if($uploadedPhoto && $uploadedPhoto != null) {
             //     $collection->photo = $uploadedPhoto->url;
             // }
-            //$collection->save();
+            $collection->save();
         }else{
-            //$collection->update();
+            $collection->update();
         }
         $existingProducts = [];
         if($collection->product_collections->count() > 0 && $id != null) {
