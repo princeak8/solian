@@ -12,9 +12,7 @@
             @foreach($collections as $collection)
               <div class="col-4">
                 @if($collection->photo)
-                    <!-- <img src="{{ $collection->photo->file->url }}" alt="" title="" style="width:100%; height:15em;" />
-                    <img src="{{$collection->image}}" alt="" style="height: 28em; margin: 3em"> -->
-                    <img src="https://uce7b90fd525807ecf3e7370d409.dl.dropboxusercontent.com/cd/0/get/BoSKWscqw1VwI5psOMiAs5OknltoNmVzdLS-LDO0ZYpBuKnfNZysr8sLCM_93oH9KgklpYou3Qcv_qOk9ViL9mAqxIA7WS3pRZ_NvN2jGc-sveOwXJ4BK1EMS1oEj9pfKTFlJyH4OuSoFQK0fhDJ85TOp8YdCeoEUr3iAZDS42wnj-8wFv5Hgfu-cTZFm91XSSk/file" alt="" style="height: 28em; margin: 3em" src="https://uce7b90fd525807ecf3e7370d409.dl.dropboxusercontent.com/cd/0/get/BoSKWscqw1VwI5psOMiAs5OknltoNmVzdLS-LDO0ZYpBuKnfNZysr8sLCM_93oH9KgklpYou3Qcv_qOk9ViL9mAqxIA7WS3pRZ_NvN2jGc-sveOwXJ4BK1EMS1oEj9pfKTFlJyH4OuSoFQK0fhDJ85TOp8YdCeoEUr3iAZDS42wnj-8wFv5Hgfu-cTZFm91XSSk/file">
+                    <img src="{{ $collection->photo->file->url }}" alt="" title="" style="width:100%; height:15em;" />
                 @else
                     <img src="{{ asset('uploads/collections/thumbnails/no_pic.png') }}" alt="" title="" style="width:100%; height:15em;" />
                 @endif
