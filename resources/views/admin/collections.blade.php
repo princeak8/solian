@@ -13,7 +13,7 @@
               <div class="col-4">
                 @if($collection->photo)
                     <img src="{{ $collection->photo->file->url }}" alt="" title="" style="width:100%; height:15em;" />
-                    <img class="lazyload" data-src="{{$collection->image}}" alt="" style="height: 28em; margin: 3em">
+                    <img src="{{$collection->image}}" alt="" style="height: 28em; margin: 3em">
                 @else
                     <img src="{{ asset('uploads/collections/thumbnails/no_pic.png') }}" alt="" title="" style="width:100%; height:15em;" />
                 @endif
