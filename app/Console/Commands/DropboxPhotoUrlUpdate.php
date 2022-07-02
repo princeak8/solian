@@ -43,6 +43,7 @@ class DropboxPhotoUrlUpdate extends Command
     public function handle()
     {
         \Log::stack(['project'])->info('about to update url');
+        $this->dropboxService->refreshToken();
         $this->dropboxService->refreshPhotoUrls();
     }
 }
