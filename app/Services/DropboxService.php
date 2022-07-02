@@ -19,6 +19,7 @@ class DropboxService
     public static function refreshToken()
     {
         //dd('got here');
+        \Log::stack(['project'])->info('Check token expiry');
         if(time() > env('DROPBOX_TOKEN_EXPIRY') || ((env('DROPBOX_TOKEN_EXPIRY') - time()) <= 60)) {
             $res = Http::withBasicAuth(env('DROPBOX_APP_KEY'), env('DROPBOX_APP_SECRET'))->asForm()->post("https://api.dropboxapi.com/oauth2/token",[
                 "refresh_token" => env('DROPBOX_REFRESH_TOKEN'),
