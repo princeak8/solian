@@ -6,9 +6,12 @@
             <div class="col-lg-4 col-md-6 col-sm-7">
                 <div class="footer__about">
                     <div class="footer__logo">
-                        <a href="{{url('/')}}"><img src="{{asset('assets/img/solian logo.png')}}" alt=""></a>
+                        <!-- <a href="{{url('/')}}"><img src="{{asset('assets/img/solian logo.png')}}" alt=""></a> -->
+                        <a href="{{url('/')}}">
+                            <img src="{{asset('images/logo.png')}}" alt="" style="width: 30%; height: 5em;">
+                        </a>
                     </div>
-                    <div class="footer__payment">
+                    <div class="footer__payment" style="margin-top:-20px">
                         <a href="#"><img src="{{asset('assets/img/payment/payment-1.png')}}" alt=""></a>
                         <a href="#"><img src="{{asset('assets/img/payment/payment-2.png')}}" alt=""></a>
                     </div>

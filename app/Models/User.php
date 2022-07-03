@@ -58,6 +58,14 @@ class User extends Authenticatable
         return [];
     }
 
+    public function getFirstnameAttribute()
+    {
+        if (isset($this->name)) {
+            return explode(' ', $this->name)[0];
+        }
+        return '';
+    }
+
     public function admins()
     {
         return Self::all()->where('role_id', Role::role('admin')->id);

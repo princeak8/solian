@@ -141,22 +141,24 @@
     <!-- Offcanvas Menu End -->
     
     <!-- Header Section Begin -->
-    <header class="header fixed-top" style="z-index:5">
+    <header class="header fixed-top" style="z-index:5;">
         <div class="container-fluid">
             <div class="row">
-                
-            <div class="col-lg-3">
+                <div class="col-lg-3">
                     <div class="header__logo row">
-                        <a href="{{url('/')}}"><img src="{{asset('assets/img/solian logo.png')}}" alt=""></a>
+                        <!-- <a href="{{url('/')}}"><img src="{{asset('assets/img/solian logo.png')}}" alt=""></a> -->
+                        <a href="{{url('/')}}" style="width: 40%; padding-top:0">
+                            <img src="{{asset('images/logo.png')}}" alt="" style="width: 100%; height: 5em;">
+                        </a>
                         @if(!isset($page) || (isset($page) && $page != 'order payment'))
                         <ul class="offcanvas__widget mobile-carrt">
-                                <li>
-                                    <a href="javascript:void(0)"><span class="fas fa-shopping-cart" onclick="open_cart('m-cart')"></span>
-                                        <span class="tip cart-no">0</span>
-                                    </a>
-                                </li>
-                            </ul> 
-                            @endif
+                            <li>
+                                <a href="javascript:void(0)"><span class="fas fa-shopping-cart" onclick="open_cart('m-cart')"></span>
+                                    <span class="tip cart-no">0</span>
+                                </a>
+                            </li>
+                        </ul> 
+                        @endif
                     </div> 
                 </div>
                 
@@ -210,7 +212,7 @@
 
                             <li style="display: flex; flex-direction: row; padding-right:0;">
                                 @if(Auth::user())
-                                    <a href="{{url('user/')}}" class="mr-2">{{Auth::user()->name}}</a> |
+                                    <a href="{{url('user/')}}" class="mr-2">{{Auth::user()->firstname}}</a> |
                                     <a style="color: blue" href="{{url('logout')}}" class="ml-2">Logout</a>
                                 @else
                                     <a style="padding-right:4px;" href="{{url('login')}}">Login</a> | <a style="padding-left:4px;" href="{{url('register')}}">Register</a>
