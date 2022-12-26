@@ -18,7 +18,7 @@ class Collection extends Model
 
     public function getImageAttribute()
     {
-        $photo = ($this->photo && $this->photo->file) ? $this->photo->file->url : env('APP_URL')."public/images/no_pic.PNG";
+        $photo = ($this->photo && $this->photo->file) ? $this->photo->file->url : asset("images/no_pic.PNG");
         return $photo;
     }
 
