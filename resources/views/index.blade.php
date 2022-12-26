@@ -432,7 +432,8 @@
         <div class="row home-blog pb-5 mt-5">
 
             <div class="container-fluid col-6 col-xs-12">
-                <img src="{{asset('uploads/company/fashion-photographer-reading-berkshire-large-1400x800-20210308154131.jpg')}}" alt="">    
+                <!-- <img src="{{asset('uploads/company/fashion-photographer-reading-berkshire-large-1400x800-20210308154131.jpg')}}" alt="">     -->
+                <img src="{{asset('images/logo.png')}}" alt="" style="height:30em">
             </div>
             
             <div class="container-fluid col-6 col-xs-12">

@@ -65,7 +65,7 @@ class FileService
             // $rSize = $uploadedPhoto->getReadableSize(); // Get the size of the uploaded file in bytes, megabytes, gigabytes or terabytes. E.g 1.5 MB
         }
         //dd('here6')
-        dd($uploadedPhoto);
+        //dd($uploadedPhoto);
         if($uploadedPhoto && $uploadedPhoto != null) {
             $fileObj = new File;
             $fileObj->user_id = $user_id;

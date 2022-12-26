@@ -103,9 +103,9 @@
                                         data-id="{{$photo->collection_id}}" data-thumb="{{$photo->thumb}}" data-url="{{$photo->url}}" data-size="{{$photo->size}}"
                                     />
                                 </span>
-                                <span class="icons">
+                                <!-- <span class="icons">
                                     <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                </span>
+                                </span> -->
                             </div>
                         </div>
                     @endforeach
